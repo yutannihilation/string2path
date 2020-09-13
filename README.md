@@ -5,6 +5,9 @@ string2path
 ===========
 
 <!-- badges: start -->
+
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
 This is an experimental R package using some Rust code to extract path
@@ -24,8 +27,6 @@ After that, you should be able to install this package from GitHub.
 
 Example
 -------
-
-This is a basic example which shows you how to solve a common problem:
 
     library(string2path)
     library(ggplot2)
@@ -50,7 +51,7 @@ This is a basic example which shows you how to solve a common problem:
     d <- tibble::rowid_to_column(d)
 
     ggplot(d) +
-      geom_path(aes(x, y, group = id), size = 2, colour = "purple2") +
+      geom_path(aes(x, y, group = id), size = 2, colour = "purple2", lineend = "round") +
       theme_minimal() +
       coord_equal() +
       transition_reveal(rowid)
@@ -76,7 +77,7 @@ resources might help:
 -   [An answer to the question “How to return byte array from Rust
     function to FFI
     C?”](https://users.rust-lang.org/t/how-to-return-byte-array-from-rust-function-to-ffi-c/18136/4).
-    This might be very obvious to those who are familiar with C, bit it
+    This might be very obvious to those who are familiar with C, but it
     takes some time for me to figure out that I need to pass the data
     and the length at the same time, otherwise C side cannot know the
     size of the data.
