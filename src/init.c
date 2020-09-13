@@ -2,17 +2,7 @@
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 
-// Import C headers for rust API
 #include "string2path/api.h"
-
-SEXP glyph2digit_impl(SEXP str, SEXP ttf_file) {
-  return Rf_ScalarInteger(
-    glyph2digit(
-      Rf_translateCharUTF8(STRING_ELT(str, 0)),
-      Rf_translateCharUTF8(STRING_ELT(ttf_file, 0))
-    )
-  );
-}
 
 SEXP string2path_impl(SEXP str, SEXP ttf_file) {
   Result res = string2path(
@@ -20,17 +10,32 @@ SEXP string2path_impl(SEXP str, SEXP ttf_file) {
     Rf_translateCharUTF8(STRING_ELT(ttf_file, 0))
   );
 
-  SEXP out = PROTECT(Rf_allocVector(REALSXP, res.length));
+  // Convert the result to SEXP vectors
+  SEXP x = PROTECT(Rf_allocVector(REALSXP, res.length));
   for (int i = 0; i < res.length; i++) {
-    SET_REAL_ELT(out, i, res.data[i]);
+    SET_REAL_ELT(x, i, res.x[i]);
   }
-  UNPROTECT(1);
+  SEXP y = PROTECT(Rf_allocVector(REALSXP, res.length));
+  for (int i = 0; i < res.length; i++) {
+    SET_REAL_ELT(y, i, res.y[i]);
+  }
+  SEXP id = PROTECT(Rf_allocVector(INTSXP, res.length));
+  for (int i = 0; i < res.length; i++) {
+    SET_INTEGER_ELT(id, i, res.id[i]);
+  }
+
+  // bundle the result to one list
+  SEXP out = PROTECT(allocVector(VECSXP, 3));
+  SET_VECTOR_ELT(out, 0, x);
+  SET_VECTOR_ELT(out, 1, y);
+  SET_VECTOR_ELT(out, 2, id);
+
+  UNPROTECT(4);
   return out;
 }
 
 // Standard R package stuff
 static const R_CallMethodDef CallEntries[] = {
-  {"glyph2digit_impl", (DL_FUNC) &glyph2digit_impl, 2},
   {"string2path_impl", (DL_FUNC) &string2path_impl, 2},
   {NULL, NULL, 0}
 };

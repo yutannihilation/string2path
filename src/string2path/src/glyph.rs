@@ -3,9 +3,12 @@ use std::os::raw::{c_char, c_double, c_uint};
 
 const HEIGHT: f32 = 10.0;
 
+// A struct to pass the results from Rust to C
 #[repr(C)]
 pub struct Result {
-    data: *mut c_double,
+    x: *mut c_double,
+    y: *mut c_double,
+    id: *mut c_uint,
     length: c_uint,
 }
 
@@ -82,14 +85,33 @@ impl Builder {
     }
 
     // fn to_path(mut self) -> Vec<[f32; 3]> {
-    fn to_path(mut self) -> Vec<c_double> {
+    fn to_path(mut self) -> Result {
         self.finish_cur_glyph();
 
-        self.points
-            .iter()
-            .map(|p| p.x.into())
-            // .map(|p| [p.x, p.y, p.id as f32])
-            .collect()
+        let length = self.points.len();
+        let mut x_vec: Vec<c_double> = vec![0.0; length];
+        let mut y_vec: Vec<c_double> = vec![0.0; length];
+        let mut id_vec: Vec<c_uint> = vec![0; length];
+
+        for (i, p) in self.points.iter().enumerate() {
+            x_vec[i] = p.x as _;
+            y_vec[i] = p.y as _;
+            id_vec[i] = p.id as _;
+        }
+
+        let x = x_vec.as_mut_ptr();
+        std::mem::forget(x_vec);
+        let y = y_vec.as_mut_ptr();
+        std::mem::forget(y_vec);
+        let id = id_vec.as_mut_ptr();
+        std::mem::forget(id_vec);
+
+        Result {
+            x,
+            y,
+            id,
+            length: length as _,
+        }
     }
 }
 
@@ -138,24 +160,6 @@ fn c_char_to_string(c: *const c_char) -> String {
 }
 
 #[no_mangle]
-pub extern "C" fn glyph2digit(c_glyph: *const c_char, c_ttf_file: *const c_char) -> u32 {
-    let glyph = c_char_to_string(c_glyph);
-
-    let ttf_file = c_char_to_string(c_ttf_file);
-    let font = {
-        if let Ok(data) = std::fs::read(ttf_file.clone()) {
-            rusttype::Font::try_from_vec(data).unwrap()
-        } else {
-            eprintln!("Failed to read {}", ttf_file);
-            return 0;
-        }
-    };
-
-    let c = glyph.chars().next().unwrap();
-    font.glyph(c).id().0.into()
-}
-
-#[no_mangle]
 pub extern "C" fn string2path(c_str: *const c_char, c_ttf_file: *const c_char) -> Result {
     let str = c_char_to_string(c_str);
 
@@ -169,7 +173,9 @@ pub extern "C" fn string2path(c_str: *const c_char, c_ttf_file: *const c_char) -
             let ptr = res.as_mut_ptr();
             std::mem::forget(res);
             return Result {
-                data: ptr,
+                x: ptr,
+                y: ptr,
+                id: ptr as _,
                 length: 0,
             };
         }
@@ -189,11 +195,5 @@ pub extern "C" fn string2path(c_str: *const c_char, c_ttf_file: *const c_char) -
             println!("empty");
         }
     }
-
-    let mut res = builder.to_path();
-    let length = res.len() as _;
-    let ptr = res.as_mut_ptr();
-    std::mem::forget(res);
-
-    Result { data: ptr, length }
+    builder.to_path()
 }
