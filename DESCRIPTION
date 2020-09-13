@@ -1,0 +1,17 @@
+Package: string2path
+Title: Convert a string to path
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Hiroaki",
+           family = "Yutani",
+           role = c("aut", "cre"),
+           email = "yutani.ini@gmail.com",
+           comment = c(ORCID = "0000-0002-3385-7233"))
+Description: An experimental package to use Rust crates; rusttype <https://crates.io/crates/rusttype> for
+    reading and extracting TTF file, and lyon <https://crates.io/crates/lyon> to translate curves to
+    flattened paths.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1

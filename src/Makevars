@@ -1,0 +1,14 @@
+CRATE = string2path
+LIBDIR = $(CRATE)/target/release
+STATLIB = $(LIBDIR)/lib$(CRATE).a
+PKG_LIBS = -L$(LIBDIR) -l$(CRATE) -lresolv
+
+all: clean
+
+$(SHLIB): $(STATLIB)
+
+$(STATLIB):
+	cargo build --release --manifest-path=$(CRATE)/Cargo.toml
+
+clean:
+	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) $(CRATE)/target
