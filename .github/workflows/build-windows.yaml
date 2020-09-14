@@ -36,7 +36,7 @@ jobs:
           args: --release --target=${{ matrix.target }} --manifest-path=src/string2path/Cargo.toml
 
       - name: List files
-        run: ls ./target/${{ matrix.target }}/release/
+        run: ls ./src/string2path/target/${{ matrix.target }}/release/
         shell: bash
 
   create-release:
