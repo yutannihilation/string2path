@@ -35,6 +35,10 @@ jobs:
           command: build
           args: --release --target=${{ matrix.target }} --manifest-path=src/string2path/Cargo.toml
 
+      - name: List files
+        run: ls ./target/${{ matrix.target }}/release/
+        shell: bash
+
   create-release:
     name: build-${{ matrix.target }}
     runs-on: ubuntu-latest
