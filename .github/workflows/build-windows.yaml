@@ -28,11 +28,11 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+          target: ${{ matrix.target }}
           override: true
 
-      - name: Run cargo check
+      - name: Run cargo build
         uses: actions-rs/cargo@v1
-        continue-on-error: true  # WARNING: only for this example, remove it!
         with:
           command: build
           args: --release --target=${{ matrix.target }} --manifest-path=src/string2path/Cargo.toml
