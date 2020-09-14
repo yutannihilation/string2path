@@ -1,9 +1,7 @@
 on:
   push:
-    branches:
-      - master
-  release:
-    types: [published]
+    tags:
+      - 'windows*'
 
 name: Build Windows
 
