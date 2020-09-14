@@ -14,7 +14,8 @@ $(SHLIB): $(STATLIB)
 
 $(STATLIB):
 	mkdir -p $(LIBDIR)
-	curl -L -o $@ https://github.com/yutannihilation/$(CRATE)/releases/download/$(BASE_TAG)-$(TARGET)/lib$(CRATE).a
+	# Not sure, but $@ doesn't seem to work here...
+	curl -L -o $(STATLIB) https://github.com/yutannihilation/$(CRATE)/releases/download/$(BASE_TAG)-$(TARGET)/lib$(CRATE).a
 
 clean:
 	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS)
