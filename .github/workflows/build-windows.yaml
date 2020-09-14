@@ -8,7 +8,7 @@ on:
 name: Build Windows
 
 jobs:
-  check:
+  build:
     strategy:
       matrix:
         target:
