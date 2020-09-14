@@ -16,11 +16,14 @@ information from TTF font file.
 Installation
 ------------
 
-You need to have Rust toolchain installed. See
+If you are using Windows, you are lucky. Because this repository
+provides pre-compiled binary for you, you don’t need to install Rust
+toolchain.
+
+Otherwise, you need to have Rust toolchain installed before trying to
+install this package. See
 <a href="https://www.rust-lang.org/tools/install" class="uri">https://www.rust-lang.org/tools/install</a>
 for the installation instructions.
-
-After that, you should be able to install this package from GitHub.
 
     # install.packages("devtools")
     devtools::install_github("yutannihilation/string2path")

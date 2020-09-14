@@ -23,9 +23,11 @@ This is an experimental R package using some Rust code to extract path informati
 
 ## Installation
 
-You need to have Rust toolchain installed. See <https://www.rust-lang.org/tools/install> for the installation instructions.
+If you are using Windows, you are lucky. Because this repository provides pre-compiled
+binary for you, you don't need to install Rust toolchain.
 
-After that, you should be able to install this package from GitHub.
+Otherwise, you need to have Rust toolchain installed before trying to install this package. 
+See <https://www.rust-lang.org/tools/install> for the installation instructions. 
 
 ``` r
 # install.packages("devtools")
