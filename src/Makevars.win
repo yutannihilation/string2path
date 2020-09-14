@@ -1,4 +1,8 @@
 CRATE = string2path
+
+# Change this when created a new tag
+BASE_TAG = windows7
+
 TARGET = $(subst 64,x86_64,$(subst 32,i686,$(WIN)))
 LIBDIR = windows
 STATLIB = $(LIBDIR)/$(TARGET)/lib$(CRATE).a
@@ -10,7 +14,7 @@ $(SHLIB): $(STATLIB)
 
 $(STATLIB):
 	mkdir -p $(LIBDIR)/$(TARGET)/
-	wget -O $@ https://github.com/yutannihilation/$(CRATE)/releases/download/windows_binary_0/$(TARGET)_lib$(CRATE).a
+	curl -L -o $@ https://github.com/yutannihilation/$(CRATE)/releases/download/$(BASE_TAG)-$(TARGET)/lib$(CRATE).a
 
 clean:
 	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS)

@@ -45,9 +45,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
+          tag_name: ${{ github.ref }}-${{ matrix.target }}
           release_name: Release ${{ github.ref }}-${{ matrix.target }}
-          draft: true
+          draft: false
           prerelease: true
       - name: Upload Release Asset
         id: upload-release-asset
@@ -57,5 +57,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./src/string2path/target/${{ matrix.target }}-pc-windows-gnu/release/libstring2path.a
-          asset_name: ${{ matrix.target }}_libstring2path.a
+          asset_name: libstring2path.a
           asset_content_type: application/octet-stream
