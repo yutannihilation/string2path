@@ -34,6 +34,7 @@ jobs:
         with:
           command: build
           args: --release --target=${{ matrix.target }} --manifest-path=src/string2path/Cargo.toml
+          use-cross: true
 
       - name: List files
         run: ls ./src/string2path/target/${{ matrix.target }}/release/
@@ -54,13 +55,24 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: true
           prerelease: true
-      - name: Upload Release Asset
+      - name: Upload Release Asset (x86_64)
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/x86_64-pc-windows-gnu/release/libstring2path.lib
+          asset_path: ./src/string2path/target/x86_64-pc-windows-gnu/release/libstring2path.a
           asset_name: libstring2path_64.lib
+          asset_content_type: application/octet-stream
+
+      - name: Upload Release Asset (i686)
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./src/string2path/target/i686-pc-windows-gnu/release/libstring2path.a
+          asset_name: libstring2path_32.lib
           asset_content_type: application/octet-stream
