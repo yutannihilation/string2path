@@ -1,0 +1,38 @@
+on:
+  push:
+    branches:
+      - master
+  release:
+    types: [published]
+
+name: Build Windows
+
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - x86_64-pc-windows-gnu
+          - i686-pc-windows-gnu
+
+    name: build-${{ matrix.target }}
+
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Run cargo check
+        uses: actions-rs/cargo@v1
+        continue-on-error: true  # WARNING: only for this example, remove it!
+        with:
+          command: build
+          args: --release --target=${{ matrix.target }} --manifest-path=src/string2path/Cargo.toml
