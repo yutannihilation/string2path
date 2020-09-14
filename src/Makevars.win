@@ -1,0 +1,16 @@
+CRATE = string2path
+TARGET = $(subst 64,x86_64,$(subst 32,i686,$(WIN)))
+LIBDIR = windows
+STATLIB = $(LIBDIR)/$(TARGET)/lib$(CRATE).a
+PKG_LIBS = -L$(LIBDIR) -l$(CRATE) -lws2_32 -ladvapi32 -luserenv
+
+all: clean
+
+$(SHLIB): $(STATLIB)
+
+$(STATLIB):
+	mkdir -p $(LIBDIR)/$(TARGET)/
+	wget -O $@ https://github.com/yutannihilation/$(CRATE)/releases/download/windows_binary_0/$(TARGET)_lib$(CRATE).a
+
+clean:
+	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS)
