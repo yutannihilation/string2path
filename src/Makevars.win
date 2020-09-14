@@ -13,7 +13,7 @@ all: clean
 $(SHLIB): $(STATLIB)
 
 $(STATLIB):
-	mkdir -p $(LIBDIR)/$(TARGET)/
+	mkdir -p $(LIBDIR)
 	curl -L -o $@ https://github.com/yutannihilation/$(CRATE)/releases/download/$(BASE_TAG)-$(TARGET)/lib$(CRATE).a
 
 clean:
