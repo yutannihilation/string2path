@@ -14,6 +14,8 @@ extern "C"
         uint32_t length;
     } Result;
 
+    void free_result(Result);
+
     Result string2path(const char *, const char *);
 
 #ifdef __cplusplus

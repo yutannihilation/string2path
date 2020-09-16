@@ -4,6 +4,8 @@
 
 #include "string2path/api.h"
 
+#include <strings.h>
+
 SEXP string2path_impl(SEXP str, SEXP ttf_file) {
   Result res = string2path(
     Rf_translateCharUTF8(STRING_ELT(str, 0)),
@@ -12,17 +14,13 @@ SEXP string2path_impl(SEXP str, SEXP ttf_file) {
 
   // Convert the result to SEXP vectors
   SEXP x = PROTECT(Rf_allocVector(REALSXP, res.length));
-  for (int i = 0; i < res.length; i++) {
-    SET_REAL_ELT(x, i, res.x[i]);
-  }
+  memcpy(REAL(x), res.x, res.length * sizeof(double));
   SEXP y = PROTECT(Rf_allocVector(REALSXP, res.length));
-  for (int i = 0; i < res.length; i++) {
-    SET_REAL_ELT(y, i, res.y[i]);
-  }
+  memcpy(REAL(y), res.y, res.length * sizeof(double));
   SEXP id = PROTECT(Rf_allocVector(INTSXP, res.length));
-  for (int i = 0; i < res.length; i++) {
-    SET_INTEGER_ELT(id, i, res.id[i]);
-  }
+  memcpy(INTEGER(id), res.id, res.length * sizeof(uint32_t));
+
+  free_result(res);
 
   // bundle the result to one list
   SEXP out = PROTECT(allocVector(VECSXP, 3));

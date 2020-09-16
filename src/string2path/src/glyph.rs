@@ -197,3 +197,18 @@ pub extern "C" fn string2path(c_str: *const c_char, c_ttf_file: *const c_char) -
     }
     builder.to_path()
 }
+
+#[no_mangle]
+pub extern "C" fn free_result(res: Result) {
+    free_vec(res.x, res.length as _);
+    free_vec(res.y, res.length as _);
+    free_vec(res.id, res.length as _);
+}
+
+fn free_vec<T>(data: *mut T, len: usize) {
+    let s: &mut [T] = unsafe { std::slice::from_raw_parts_mut(data, len) };
+    let s = s.as_mut_ptr();
+    unsafe {
+        Box::from_raw(s);
+    }
+}
