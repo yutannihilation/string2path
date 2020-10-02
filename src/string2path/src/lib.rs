@@ -1,5 +1,5 @@
 extern crate libc;
-extern crate rusttype;
 extern crate lyon;
+extern crate rusttype;
 
-mod glyph;
+mod stroke;
