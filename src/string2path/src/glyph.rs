@@ -9,6 +9,7 @@ pub struct Result {
     x: *mut c_double,
     y: *mut c_double,
     id: *mut c_uint,
+    glyph_id: *mut c_uint,
     length: c_uint,
 }
 
@@ -16,10 +17,12 @@ struct Point {
     x: f32,
     y: f32,
     id: u32,
+    glyph_id: u32,
 }
 
 struct Builder {
     cur_path_id: u32,
+    cur_glyph_id: u32,
     base_position: rusttype::Point<f32>,
     tolerance: f32,
     points_cur_glyph: Vec<Point>,
@@ -30,6 +33,7 @@ impl Builder {
     fn new(tolerance: f32) -> Self {
         Self {
             cur_path_id: 0,
+            cur_glyph_id: 0,
             base_position: rusttype::point(0.0, 0.0),
             points_cur_glyph: vec![],
             points: vec![],
@@ -63,11 +67,13 @@ impl Builder {
                             x: p.x + self.base_position.x,
                             y: y_reverse,
                             id: p.id,
+                            glyph_id: self.cur_glyph_id,
                         }
                     })
                     .collect(),
             );
             self.points_cur_glyph.clear();
+            self.cur_glyph_id += 1;
         }
     }
 
@@ -81,6 +87,7 @@ impl Builder {
             x,
             y,
             id: self.cur_path_id,
+            glyph_id: self.cur_glyph_id,
         });
     }
 
@@ -92,11 +99,13 @@ impl Builder {
         let mut x_vec: Vec<c_double> = vec![0.0; length];
         let mut y_vec: Vec<c_double> = vec![0.0; length];
         let mut id_vec: Vec<c_uint> = vec![0; length];
+        let mut glyph_id_vec: Vec<c_uint> = vec![0; length];
 
         for (i, p) in self.points.iter().enumerate() {
             x_vec[i] = p.x as _;
             y_vec[i] = p.y as _;
             id_vec[i] = p.id as _;
+            glyph_id_vec[i] = p.glyph_id as _;
         }
 
         let x = x_vec.as_mut_ptr();
@@ -105,11 +114,14 @@ impl Builder {
         std::mem::forget(y_vec);
         let id = id_vec.as_mut_ptr();
         std::mem::forget(id_vec);
+        let glyph_id = glyph_id_vec.as_mut_ptr();
+        std::mem::forget(glyph_id_vec);
 
         Result {
             x,
             y,
             id,
+            glyph_id,
             length: length as _,
         }
     }
@@ -180,6 +192,7 @@ pub extern "C" fn string2path(
                 x: ptr,
                 y: ptr,
                 id: ptr as _,
+                glyph_id: ptr as _,
                 length: 0,
             };
         }

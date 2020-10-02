@@ -11,6 +11,7 @@ extern "C"
         double *x;
         double *y;
         uint32_t *id;
+        uint32_t *glyph_id;
         uint32_t length;
     } Result;
 

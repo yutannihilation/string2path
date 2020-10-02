@@ -20,16 +20,19 @@ SEXP string2path_impl(SEXP str, SEXP ttf_file, SEXP tolerance) {
   memcpy(REAL(y), res.y, res.length * sizeof(double));
   SEXP id = PROTECT(Rf_allocVector(INTSXP, res.length));
   memcpy(INTEGER(id), res.id, res.length * sizeof(uint32_t));
+  SEXP glyph_id = PROTECT(Rf_allocVector(INTSXP, res.length));
+  memcpy(INTEGER(glyph_id), res.glyph_id, res.length * sizeof(uint32_t));
 
   free_result(res);
 
   // bundle the result to one list
-  SEXP out = PROTECT(allocVector(VECSXP, 3));
+  SEXP out = PROTECT(allocVector(VECSXP, 4));
   SET_VECTOR_ELT(out, 0, x);
   SET_VECTOR_ELT(out, 1, y);
   SET_VECTOR_ELT(out, 2, id);
+  SET_VECTOR_ELT(out, 3, glyph_id);
 
-  UNPROTECT(4);
+  UNPROTECT(5);
   return out;
 }
 

@@ -42,9 +42,10 @@ Example
     d <- tibble::rowid_to_column(d)
 
     ggplot(d) +
-      geom_path(aes(x, y, group = id)) +
+      geom_path(aes(x, y, group = id, colour = factor(glyph_id))) +
       theme_minimal() +
-      coord_equal()
+      coord_equal() +
+      theme(legend.position = "top")
 
 <img src="man/figures/README-example-1.png" width="100%" />
 

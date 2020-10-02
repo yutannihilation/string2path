@@ -8,6 +8,6 @@ string2path <- function(str, ttf_file, tolerance =  0.001) {
   }
 
   out <- .Call(string2path_impl, str, ttf_file, tolerance)
-  names(out) <- c("x", "y", "id")
+  names(out) <- c("x", "y", "id", "glyph_id")
   tibble::as_tibble(out)
 }

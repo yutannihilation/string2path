@@ -48,9 +48,10 @@ d <- string2path("地獄お", "./fonts/ipam.ttf")
 d <- tibble::rowid_to_column(d)
 
 ggplot(d) +
-  geom_path(aes(x, y, group = id)) +
+  geom_path(aes(x, y, group = id, colour = factor(glyph_id))) +
   theme_minimal() +
-  coord_equal()
+  coord_equal() +
+  theme(legend.position = "top")
 
 library(gganimate)
 d <- string2path("蹴", "./fonts/ipam.ttf")
