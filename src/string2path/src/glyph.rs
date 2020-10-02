@@ -160,7 +160,11 @@ fn c_char_to_string(c: *const c_char) -> String {
 }
 
 #[no_mangle]
-pub extern "C" fn string2path(c_str: *const c_char, c_ttf_file: *const c_char) -> Result {
+pub extern "C" fn string2path(
+    c_str: *const c_char,
+    c_ttf_file: *const c_char,
+    tolerance: c_double,
+) -> Result {
     let str = c_char_to_string(c_str);
 
     let ttf_file = c_char_to_string(c_ttf_file);
@@ -187,7 +191,7 @@ pub extern "C" fn string2path(c_str: *const c_char, c_ttf_file: *const c_char) -
 
     let q_glyph = font.layout(&str, scale, offset);
 
-    let mut builder = Builder::new(0.0001);
+    let mut builder = Builder::new(tolerance as _);
     for g in q_glyph {
         builder.next_glyph(&g.position());
         // println!("{:?}", g);
