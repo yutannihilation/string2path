@@ -70,8 +70,9 @@ Example
       coord_equal() +
       transition_reveal(rowid)
 
-<img src="man/figures/README-example-1.gif" width="100%" /> \#\#\#
-`string2fill()`
+<img src="man/figures/README-example-1.gif" width="100%" />
+
+### `string2fill()`
 
     # Sorry for my laziness, please replace the font path to the appropriate location in your system...
     ttf_file <- "/usr/share/fonts/TTF/iosevka-heavyitalic.ttf"

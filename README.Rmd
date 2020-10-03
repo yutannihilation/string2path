@@ -70,6 +70,7 @@ ggplot(d) +
   coord_equal() +
   transition_reveal(rowid)
 ```
+
 ### `string2fill()`
 
 ```{r example2}
