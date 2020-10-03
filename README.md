@@ -13,6 +13,14 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 This is an experimental R package using some Rust code to extract path
 information from TTF font file.
 
+Used Rust crates
+----------------
+
+-   [rusttype](https://gitlab.redox-os.org/redox-os/rusttype/): For
+    reading TTF data.
+-   [lyon](https://github.com/nical/lyon/): For tessellation of polygons
+    and flattening the curves.
+
 Installation
 ------------
 
@@ -62,14 +70,13 @@ Example
       coord_equal() +
       transition_reveal(rowid)
 
-<img src="man/figures/README-example-1.gif" width="100%" />
-
-### `string2vertex()`
+<img src="man/figures/README-example-1.gif" width="100%" /> \#\#\#
+`string2fill()`
 
     # Sorry for my laziness, please replace the font path to the appropriate location in your system...
     ttf_file <- "/usr/share/fonts/TTF/iosevka-heavyitalic.ttf"
 
-    d <- string2vertex("abc", ttf_file)
+    d <- string2fill("abc", ttf_file)
 
     ggplot(d) +
       geom_polygon(aes(x, y, group = id, fill = factor(id %% 3)), colour = "grey", size = 0.1) +
@@ -81,13 +88,30 @@ Example
 
 <img src="man/figures/README-example2-1.png" width="100%" />
 
-### `tolerance`
+### `string2stroke()`
+
+    for (w in 1:9 / 4) {
+      d <- string2stroke("abc", ttf_file, line_width = w)
+      
+      p <- ggplot(d) +
+        geom_polygon(aes(x, y, group = id, fill = factor(id %% 2)), colour = "grey", size = 0.1) +
+        theme_minimal() +
+        coord_equal() +
+        theme(legend.position = "none") +
+        scale_fill_manual(values = c("purple", "pink"))
+      plot(p)
+    }
+
+<img src="man/figures/README-string2stroke-.gif" width="100%" />
+
+`tolerance`
+-----------
 
 `tolerance` controls resolution of the tessellation. You can reduce
 tolerance to get higher resolutions.
 
     for (tolerance in c(0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0001, 0.00001)) {
-      d <- string2vertex("abc", ttf_file, tolerance = tolerance)
+      d <- string2fill("abc", ttf_file, tolerance = tolerance)
       
       p <- ggplot(d) +
         geom_polygon(aes(x, y, group = id), fill = "transparent", colour = "black", size = 0.5) +
@@ -98,6 +122,24 @@ tolerance to get higher resolutions.
     }
 
 <img src="man/figures/README-example3-.gif" width="100%" />
+
+Note that `tolerance` parameter behaves differently depending on the
+types of the result. Maybe this is somehow related to whether
+intersection is allowed or not? I’m not sure…
+
+    for (tolerance in c(0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0001, 0.00001)) {
+      d <- string2path("abc", ttf_file, tolerance = tolerance)
+      
+      p <- ggplot(d) +
+        geom_path(aes(x, y, group = id), colour = "black", size = 0.5) +
+        geom_point(aes(x, y, group = id), colour = "black", size = 1.5) +
+        theme_minimal() +
+        coord_equal() +
+        ggtitle(paste0("tolerance: ", tolerance))
+      plot(p)
+    }
+
+<img src="man/figures/README-example4-.gif" width="100%" />
 
 Resources
 ---------
