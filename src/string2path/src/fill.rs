@@ -32,11 +32,12 @@ struct Builder {
     offset_x: f32,
     offset_y: f32,
     tolerance: f32,
+    line_width: f32,
     builder: lyon::path::BuilderWithAttributes,
 }
 
 impl Builder {
-    fn new(tolerance: f32) -> Self {
+    fn new(tolerance: f32, line_width: f32) -> Self {
         let builder = Path::builder_with_attributes(2);
         Self {
             cur_path_id: 0,
@@ -44,6 +45,7 @@ impl Builder {
             offset_x: 0.0,
             offset_y: 0.0,
             tolerance,
+            line_width,
             builder,
         }
     }
@@ -136,6 +138,72 @@ impl Builder {
             x_vec[i] = p.x as _;
             y_vec[i] = (height - p.y) as _;
             id_vec[i] = p.id as _;
+            glyph_id_vec[i] = p.glyph_id as _;
+        }
+
+        let x = x_vec.as_mut_ptr();
+        std::mem::forget(x_vec);
+        let y = y_vec.as_mut_ptr();
+        std::mem::forget(y_vec);
+        let id = id_vec.as_mut_ptr();
+        std::mem::forget(id_vec);
+        let glyph_id = glyph_id_vec.as_mut_ptr();
+        std::mem::forget(glyph_id_vec);
+
+        Result {
+            x,
+            y,
+            id,
+            glyph_id,
+            length: length as _,
+        }
+    }
+
+    fn to_stroke(self, height: f32) -> Result {
+        let path = self.builder.build();
+
+        let mut geometry: VertexBuffers<Point, u16> = VertexBuffers::new();
+        let mut tessellator = StrokeTessellator::new();
+
+        {
+            // Compute the tessellation.
+            let res = tessellator.tessellate_path(
+                &path,
+                &StrokeOptions::tolerance(self.tolerance).with_line_width(self.line_width),
+                &mut BuffersBuilder::new(
+                    &mut geometry,
+                    |pos: lyon::math::Point, mut attr: StrokeAttributes| {
+                        let ids = attr.interpolated_attributes();
+                        Point {
+                            x: pos.x,
+                            y: pos.y,
+                            id: ids[0] as _,
+                            glyph_id: ids[1] as _,
+                        }
+                    },
+                ),
+            );
+            match res {
+                Ok(_) => {}
+                Err(e) => {
+                    eprintln!("tolerance: {:?}, error: {:?}", self.tolerance, e);
+                    return null_result();
+                }
+            }
+        }
+
+        let length = geometry.indices.len();
+        let mut x_vec: Vec<c_double> = vec![0.0; length];
+        let mut y_vec: Vec<c_double> = vec![0.0; length];
+        let mut id_vec: Vec<c_uint> = vec![0; length];
+        let mut glyph_id_vec: Vec<c_uint> = vec![0; length];
+
+        for (i, &idx) in geometry.indices.iter().enumerate() {
+            let p = &geometry.vertices[idx as usize];
+            x_vec[i] = p.x as _;
+            y_vec[i] = (height - p.y) as _;
+            // id_vec[i] = p.id as _;
+            id_vec[i] = (i / 3) as _; // indices form triangles for each 3 ones
             glyph_id_vec[i] = p.glyph_id as _;
         }
 
@@ -285,6 +353,7 @@ pub extern "C" fn string2vertex(
     c_str: *const c_char,
     c_ttf_file: *const c_char,
     tolerance: c_double,
+    line_width: c_double,
     result_type: c_uint,
 ) -> Result {
     let str = c_char_to_string(c_str);
@@ -316,7 +385,7 @@ pub extern "C" fn string2vertex(
 
     let q_glyph = font.layout(&str, scale, offset);
 
-    let mut builder = Builder::new(tolerance_local as _);
+    let mut builder = Builder::new(tolerance_local as _, line_width as _);
 
     let mut bbox_y: Vec<i32> = vec![];
 
@@ -337,6 +406,7 @@ pub extern "C" fn string2vertex(
     let height = bbox_y.into_iter().max().unwrap_or(0);
     match result_type {
         0 => builder.to_vertex(height as _),
+        1 => builder.to_stroke(height as _),
         _ => builder.to_path(height as _),
     }
 }
