@@ -25,13 +25,16 @@ string2path <- function(str, ttf_file, tolerance =  0.001) {
 #' @param tolerance Maximum distance allowed between the curve and its approximation. For more details,
 #'     please refer to [lyon's doc](https://docs.rs/lyon/0.16.2/lyon/index.html#what-is-the-tolerance-variable-in-these-examples).
 #' @export
-string2vertex <- function(str, ttf_file, tolerance =  0.001) {
+string2vertex <- function(str, ttf_file, tolerance =  0.001, result_type = c("fill", "stroke", "path")) {
+  result_type <- match.arg(result_type)
+  result_type <- match(result_type, c("fill", "stroke", "path"))
+
   ttf_file <- path.expand(ttf_file)
   if (!file.exists(ttf_file)) {
     stop(paste("No such file", ttf_file), call. = NULL)
   }
 
-  out <- .Call(string2vertex_impl, str, ttf_file, tolerance)
+  out <- .Call(string2vertex_impl, str, ttf_file, tolerance, as.integer(result_type) - 1L)
 
   if (is.null(out)) {
     warning("Failed to convert", call. = FALSE)

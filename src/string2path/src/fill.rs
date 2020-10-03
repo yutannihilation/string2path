@@ -1,6 +1,8 @@
 use lyon::math::point;
+use lyon::path::iterator::PathIterator;
 use lyon::path::Path;
 use lyon::tessellation::*;
+use path::Event::*;
 use std::ffi::CStr;
 use std::os::raw::{c_char, c_double, c_uint};
 
@@ -58,9 +60,106 @@ impl Builder {
         self.offset_y = bbox.min.y as _;
     }
 
-    // fn to_path(mut self) -> Vec<[f32; 3]> {
     fn to_path(self, height: f32) -> Result {
         let path = self.builder.build();
+
+        let mut points: Vec<Point> = vec![];
+
+        for p in path.iter_with_attributes() {
+            match p {
+                Begin { at } => points.push(Point {
+                    x: at.0.x,
+                    y: at.0.y,
+                    id: at.1[0] as _,
+                    glyph_id: at.1[1] as _,
+                }),
+                Line { from, to } => points.push(Point {
+                    x: to.0.x,
+                    y: to.0.y,
+                    id: from.1[0] as _,
+                    glyph_id: from.1[1] as _,
+                }),
+                Quadratic { from, ctrl, to } => {
+                    let seg = lyon::geom::QuadraticBezierSegment {
+                        from: from.0,
+                        ctrl: ctrl,
+                        to: to.0,
+                    };
+                    // skip the first point as it's already added
+                    for p in seg.flattened(self.tolerance).skip(1) {
+                        points.push(Point {
+                            x: p.x,
+                            y: p.y,
+                            id: from.1[0] as _,
+                            glyph_id: from.1[1] as _,
+                        })
+                    }
+                }
+                Cubic {
+                    from,
+                    ctrl1,
+                    ctrl2,
+                    to,
+                } => {
+                    let seg = lyon::geom::CubicBezierSegment {
+                        from: from.0,
+                        ctrl1: ctrl1,
+                        ctrl2: ctrl2,
+                        to: to.0,
+                    };
+                    // skip the first point as it's already added
+                    for p in seg.flattened(self.tolerance).skip(1) {
+                        points.push(Point {
+                            x: p.x,
+                            y: p.y,
+                            id: from.1[0] as _,
+                            glyph_id: from.1[1] as _,
+                        })
+                    }
+                }
+                End { last, first, close } => points.push(Point {
+                    x: last.0.x,
+                    y: last.0.y,
+                    id: last.1[0] as _,
+                    glyph_id: last.1[1] as _,
+                }),
+            };
+        }
+
+        let length = points.len();
+        let mut x_vec: Vec<c_double> = vec![0.0; length];
+        let mut y_vec: Vec<c_double> = vec![0.0; length];
+        let mut id_vec: Vec<c_uint> = vec![0; length];
+        let mut glyph_id_vec: Vec<c_uint> = vec![0; length];
+
+        for (i, p) in points.iter().enumerate() {
+            x_vec[i] = p.x as _;
+            y_vec[i] = (height - p.y) as _;
+            id_vec[i] = p.id as _;
+            glyph_id_vec[i] = p.glyph_id as _;
+        }
+
+        let x = x_vec.as_mut_ptr();
+        std::mem::forget(x_vec);
+        let y = y_vec.as_mut_ptr();
+        std::mem::forget(y_vec);
+        let id = id_vec.as_mut_ptr();
+        std::mem::forget(id_vec);
+        let glyph_id = glyph_id_vec.as_mut_ptr();
+        std::mem::forget(glyph_id_vec);
+
+        Result {
+            x,
+            y,
+            id,
+            glyph_id,
+            length: length as _,
+        }
+    }
+
+    fn to_vertex(self, height: f32) -> Result {
+        let path = self.builder.build();
+
         let mut geometry: VertexBuffers<Point, u16> = VertexBuffers::new();
         let mut tessellator = FillTessellator::new();
 
@@ -75,7 +174,7 @@ impl Builder {
                         let ids = attr.interpolated_attributes();
                         Point {
                             x: pos.x,
-                            y: height - pos.y,
+                            y: pos.y,
                             id: ids[0] as _,
                             glyph_id: ids[1] as _,
                         }
@@ -100,7 +199,7 @@ impl Builder {
         for (i, &idx) in geometry.indices.iter().enumerate() {
             let p = &geometry.vertices[idx as usize];
             x_vec[i] = p.x as _;
-            y_vec[i] = p.y as _;
+            y_vec[i] = (height - p.y) as _;
             // id_vec[i] = p.id as _;
             id_vec[i] = (i / 3) as _; // indices form triangles for each 3 ones
             glyph_id_vec[i] = p.glyph_id as _;
@@ -158,6 +257,7 @@ impl<'a> rusttype::OutlineBuilder for Builder {
     }
 
     fn close(&mut self) {
+        self.cur_path_id += 1;
         self.builder.close();
     }
 }
@@ -185,6 +285,7 @@ pub extern "C" fn string2vertex(
     c_str: *const c_char,
     c_ttf_file: *const c_char,
     tolerance: c_double,
+    result_type: c_uint,
 ) -> Result {
     let str = c_char_to_string(c_str);
 
@@ -233,7 +334,11 @@ pub extern "C" fn string2vertex(
         }
     }
 
-    builder.to_path(bbox_y.into_iter().max().unwrap_or(0) as _)
+    let height = bbox_y.into_iter().max().unwrap_or(0);
+    match result_type {
+        0 => builder.to_vertex(height as _),
+        _ => builder.to_path(height as _),
+    }
 }
 
 // #[no_mangle]

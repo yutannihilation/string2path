@@ -41,11 +41,12 @@ SEXP string2path_impl(SEXP str, SEXP ttf_file, SEXP tolerance) {
   return out;
 }
 
-SEXP string2vertex_impl(SEXP str, SEXP ttf_file, SEXP tolerance) {
+SEXP string2vertex_impl(SEXP str, SEXP ttf_file, SEXP tolerance, SEXP result_type) {
   Result res = string2vertex(
     Rf_translateCharUTF8(STRING_ELT(str, 0)),
     Rf_translateCharUTF8(STRING_ELT(ttf_file, 0)),
-    Rf_asReal(tolerance)
+    Rf_asReal(tolerance),
+    Rf_asInteger(result_type)
   );
 
   if (res.length == 0) {

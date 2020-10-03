@@ -17,8 +17,8 @@ extern "C"
 
     void free_result(Result);
 
-    Result string2path(const char *, const char *, double tolerance);
-    Result string2vertex(const char *, const char *, double tolerance);
+    Result string2path(const char *, const char *, double);
+    Result string2vertex(const char *, const char *, double, uint32_t);
 
 #ifdef __cplusplus
 }
