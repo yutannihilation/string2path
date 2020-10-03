@@ -86,25 +86,18 @@ Example
 `tolerance` controls resolution of the tessellation. You can reduce
 tolerance to get higher resolutions.
 
-    tmp_gif <- tempfile(fileext = ".gif")
-    gifski::save_gif(
-      for (tolerance in c(0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0001, 0.00001, 0.000001)) {
-        d <- string2vertex("abc", ttf_file, tolerance = tolerance)
-        
-        p <- ggplot(d) +
-          geom_polygon(aes(x, y, group = id), fill = "transparent", colour = "black", size = 0.5) +
-          theme_minimal() +
-          coord_equal() +
-          ggtitle(paste0("tolerance: ", tolerance))
-        plot(p)
-      }
-    , gif_file = tmp_gif, delay = 1)
-    #> Frame 1 (11%)Frame 2 (22%)Frame 3 (33%)Frame 4 (44%)Frame 5 (55%)Frame 6 (66%)Frame 7 (77%)Frame 8 (88%)Frame 9 (100%)
-    #> Finalizing encoding... done!
-    #> [1] "/tmp/RtmpVaimKv/filef01419e6a736.gif"
-    knitr::include_graphics(tmp_gif)
+    for (tolerance in c(0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0001, 0.00001)) {
+      d <- string2vertex("abc", ttf_file, tolerance = tolerance)
+      
+      p <- ggplot(d) +
+        geom_polygon(aes(x, y, group = id), fill = "transparent", colour = "black", size = 0.5) +
+        theme_minimal() +
+        coord_equal() +
+        ggtitle(paste0("tolerance: ", tolerance))
+      plot(p)
+    }
 
-<img src="/tmp/RtmpVaimKv/filef01419e6a736.gif" width="100%" />
+<img src="man/figures/README-example3-.gif" width="100%" />
 
 Resources
 ---------

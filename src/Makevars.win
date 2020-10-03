@@ -1,7 +1,7 @@
 CRATE = string2path
 
 # Change this when created a new tag
-BASE_TAG = windows8
+BASE_TAG = windows9
 
 TARGET = $(subst 64,x86_64,$(subst 32,i686,$(WIN)))
 LIBDIR = windows/$(TARGET)
