@@ -36,6 +36,8 @@ devtools::install_github("yutannihilation/string2path")
 
 ## Example
 
+### `string2path()`
+
 ```{r example}
 library(string2path)
 library(ggplot2)
@@ -63,6 +65,45 @@ ggplot(d) +
   coord_equal() +
   transition_reveal(rowid)
 ```
+
+### `string2vertex()`
+
+```{r example2}
+# Sorry for my laziness, please replace the font path to the appropriate location in your system...
+ttf_file <- "/usr/share/fonts/TTF/iosevka-heavyitalic.ttf"
+
+d <- string2vertex("abc", ttf_file)
+
+ggplot(d) +
+  geom_polygon(aes(x, y, group = id, fill = factor(id %% 3)), colour = "grey", size = 0.1) +
+  theme_minimal() +
+  coord_equal() +
+  theme(legend.position = "none") +
+  # colors are derived from https://colorhunt.co/palette/207313
+  scale_fill_manual(values = c("#ff4b5c", "#056674", "#66bfbf"))
+```
+
+### `tolerance`
+
+`tolerance` controls resolution of the tessellation. You can reduce tolerance to get higher resolutions.
+
+```{r example3}
+tmp_gif <- tempfile(fileext = ".gif")
+gifski::save_gif(
+  for (tolerance in c(0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0001, 0.00001, 0.000001)) {
+    d <- string2vertex("abc", ttf_file, tolerance = tolerance)
+    
+    p <- ggplot(d) +
+      geom_polygon(aes(x, y, group = id), fill = "transparent", colour = "black", size = 0.5) +
+      theme_minimal() +
+      coord_equal() +
+      ggtitle(paste0("tolerance: ", tolerance))
+    plot(p)
+  }
+, gif_file = tmp_gif, delay = 1)
+knitr::include_graphics(tmp_gif)
+```
+
 
 ## Resources
 

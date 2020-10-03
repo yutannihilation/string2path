@@ -13,6 +13,11 @@ SEXP string2path_impl(SEXP str, SEXP ttf_file, SEXP tolerance) {
     Rf_asReal(tolerance)
   );
 
+  if (res.length == 0) {
+    Rf_warning("Failed to convert to path");
+    return NULL;
+  }
+
   // Convert the result to SEXP vectors
   SEXP x = PROTECT(Rf_allocVector(REALSXP, res.length));
   memcpy(REAL(x), res.x, res.length * sizeof(double));
@@ -42,6 +47,12 @@ SEXP string2vertex_impl(SEXP str, SEXP ttf_file, SEXP tolerance) {
     Rf_translateCharUTF8(STRING_ELT(ttf_file, 0)),
     Rf_asReal(tolerance)
   );
+
+  if (res.length == 0) {
+    // TODO: If the length is zero, no memory was mapped, so freeing res causes segfault.
+    //       But, maybe Result struct itself is mapped? I'm not sure how to handle it properly.
+    return NULL;
+  }
 
   // Convert the result to SEXP vectors
   SEXP x = PROTECT(Rf_allocVector(REALSXP, res.length));

@@ -5,6 +5,7 @@ use std::ffi::CStr;
 use std::os::raw::{c_char, c_double, c_uint};
 
 const HEIGHT: f32 = 10.0;
+const DEFAULT_TOLERANCE: f64 = 0.1;
 
 // A struct to pass the results from Rust to C
 #[repr(C)]
@@ -26,10 +27,9 @@ struct Point {
 struct Builder {
     cur_path_id: u32,
     cur_glyph_id: u32,
-    base_position: rusttype::Point<f32>,
+    offset_x: f32,
+    offset_y: f32,
     tolerance: f32,
-    points_cur_glyph: Vec<Point>,
-    points: Vec<Point>,
     builder: lyon::path::BuilderWithAttributes,
 }
 
@@ -39,84 +39,58 @@ impl Builder {
         Self {
             cur_path_id: 0,
             cur_glyph_id: 0,
-            base_position: rusttype::point(0.0, 0.0),
-            points_cur_glyph: vec![],
-            points: vec![],
+            offset_x: 0.0,
+            offset_y: 0.0,
             tolerance,
             builder,
         }
     }
 
-    fn finish_cur_glyph(&mut self) {
-        if self.points_cur_glyph.len() > 0 {
-            let init_y = self.points_cur_glyph.first().unwrap().y;
-            let mut y_range = [init_y, init_y];
-            y_range = self.points_cur_glyph.iter().fold(y_range, |mut sum, p| {
-                if p.y < sum[0] {
-                    sum[0] = p.y;
-                }
-                if p.y > sum[1] {
-                    sum[1] = p.y;
-                }
-                sum
-            });
-
-            self.points.append(
-                &mut self
-                    .points_cur_glyph
-                    .iter()
-                    .map(|p| {
-                        // reverse and move to zero
-                        let y_reverse = (y_range[1] - y_range[0])
-                            * (1.0 - (p.y - y_range[0]) / (y_range[1] - y_range[0]));
-                        Point {
-                            x: p.x + self.base_position.x,
-                            y: y_reverse,
-                            id: p.id,
-                            glyph_id: self.cur_glyph_id,
-                        }
-                    })
-                    .collect(),
-            );
-            self.points_cur_glyph.clear();
-            self.cur_glyph_id += 1;
-        }
+    // rusttype returns the positions to the origin, so we need to
+    // move to each offsets by ourselves
+    fn point(&self, x: f32, y: f32) -> lyon::math::Point {
+        point(x + self.offset_x, y + self.offset_y)
     }
 
-    fn next_glyph(&mut self, position: &rusttype::Point<f32>) {
-        self.finish_cur_glyph();
-        self.base_position = position.clone();
+    fn next_glyph(&mut self, glyph_id: u32, bbox: &rusttype::Rect<i32>) {
+        self.cur_glyph_id = glyph_id;
+        self.offset_x = bbox.min.x as _;
+        self.offset_y = bbox.min.y as _;
     }
 
     // fn to_path(mut self) -> Vec<[f32; 3]> {
-    fn to_path(mut self) -> Result {
-        self.finish_cur_glyph();
-
+    fn to_path(self, height: f32) -> Result {
         let path = self.builder.build();
         let mut geometry: VertexBuffers<Point, u16> = VertexBuffers::new();
         let mut tessellator = FillTessellator::new();
 
         {
             // Compute the tessellation.
-            tessellator
-                .tessellate_path(
-                    &path,
-                    &FillOptions::tolerance(self.tolerance),
-                    &mut BuffersBuilder::new(
-                        &mut geometry,
-                        |pos: lyon::math::Point, mut attr: FillAttributes| {
-                            let ids = attr.interpolated_attributes();
-                            Point {
-                                x: pos.x,
-                                y: pos.y,
-                                id: ids[0] as _,
-                                glyph_id: ids[1] as _,
-                            }
-                        },
-                    ),
-                )
-                .unwrap();
+            let res = tessellator.tessellate_path(
+                &path,
+                &FillOptions::tolerance(self.tolerance),
+                &mut BuffersBuilder::new(
+                    &mut geometry,
+                    |pos: lyon::math::Point, mut attr: FillAttributes| {
+                        let ids = attr.interpolated_attributes();
+                        Point {
+                            x: pos.x,
+                            y: height - pos.y,
+                            id: ids[0] as _,
+                            glyph_id: ids[1] as _,
+                        }
+                    },
+                ),
+            );
+            match res {
+                Ok(_) => {}
+                Err(e) => {
+                    eprintln!("tolerance: {:?}, error: {:?}", self.tolerance, e);
+                    return null_result();
+                }
+            }
         }
+
         let length = geometry.indices.len();
         let mut x_vec: Vec<c_double> = vec![0.0; length];
         let mut y_vec: Vec<c_double> = vec![0.0; length];
@@ -128,7 +102,7 @@ impl Builder {
             x_vec[i] = p.x as _;
             y_vec[i] = p.y as _;
             // id_vec[i] = p.id as _;
-            id_vec[i] = (i / 3) as _;
+            id_vec[i] = (i / 3) as _; // indices form triangles for each 3 ones
             glyph_id_vec[i] = p.glyph_id as _;
         }
 
@@ -154,31 +128,31 @@ impl Builder {
 impl<'a> rusttype::OutlineBuilder for Builder {
     fn move_to(&mut self, x: f32, y: f32) {
         self.builder.move_to(
-            point(x, y),
+            self.point(x, y),
             &[self.cur_path_id as _, self.cur_glyph_id as _],
         );
     }
 
     fn line_to(&mut self, x: f32, y: f32) {
         self.builder.line_to(
-            point(x, y),
+            self.point(x, y),
             &[self.cur_path_id as _, self.cur_glyph_id as _],
         );
     }
 
     fn quad_to(&mut self, x1: f32, y1: f32, x: f32, y: f32) {
         self.builder.quadratic_bezier_to(
-            point(x1, y1),
-            point(x, y),
+            self.point(x1, y1),
+            self.point(x, y),
             &[self.cur_path_id as _, self.cur_glyph_id as _],
         );
     }
 
     fn curve_to(&mut self, x1: f32, y1: f32, x2: f32, y2: f32, x: f32, y: f32) {
         self.builder.cubic_bezier_to(
-            point(x1, y1),
-            point(x2, y2),
-            point(x, y),
+            self.point(x1, y1),
+            self.point(x2, y2),
+            self.point(x, y),
             &[self.cur_path_id as _, self.cur_glyph_id as _],
         );
     }
@@ -191,6 +165,19 @@ impl<'a> rusttype::OutlineBuilder for Builder {
 // Utility function to convert c_char to string
 fn c_char_to_string(c: *const c_char) -> String {
     unsafe { CStr::from_ptr(c).to_string_lossy().into_owned() }
+}
+
+fn null_result() -> Result {
+    let mut res: Vec<c_double> = vec![];
+    let ptr = res.as_mut_ptr();
+    std::mem::forget(res);
+    Result {
+        x: ptr,
+        y: ptr,
+        id: ptr as _,
+        glyph_id: ptr as _,
+        length: 0,
+    }
 }
 
 #[no_mangle]
@@ -207,17 +194,19 @@ pub extern "C" fn string2vertex(
             rusttype::Font::try_from_vec(data).unwrap()
         } else {
             eprintln!("Failed to read {}", ttf_file);
-            let mut res: Vec<c_double> = vec![];
-            let ptr = res.as_mut_ptr();
-            std::mem::forget(res);
-            return Result {
-                x: ptr,
-                y: ptr,
-                id: ptr as _,
-                glyph_id: ptr as _,
-                length: 0,
-            };
+            return null_result();
         }
+    };
+
+    // provided tolerance might be negative, so we need to handle it
+    let tolerance_local = if tolerance <= 0.0 {
+        eprintln!(
+            "Warning: tolerance must be larger than 0: got {}",
+            tolerance
+        );
+        DEFAULT_TOLERANCE
+    } else {
+        tolerance
     };
 
     let scale = rusttype::Scale::uniform(HEIGHT);
@@ -226,15 +215,25 @@ pub extern "C" fn string2vertex(
 
     let q_glyph = font.layout(&str, scale, offset);
 
-    let mut builder = Builder::new(tolerance as _);
-    for g in q_glyph {
-        builder.next_glyph(&g.position());
+    let mut builder = Builder::new(tolerance_local as _);
+
+    let mut bbox_y: Vec<i32> = vec![];
+
+    for (glyph_id, g) in q_glyph.enumerate() {
+        if let Some(bbox) = g.pixel_bounding_box() {
+            bbox_y.push(bbox.max.y);
+            builder.next_glyph(glyph_id as _, &bbox);
+        } else {
+            continue;
+        }
+
         // println!("{:?}", g);
         if !g.build_outline(&mut builder) {
             println!("empty");
         }
     }
-    builder.to_path()
+
+    builder.to_path(bbox_y.into_iter().max().unwrap_or(0) as _)
 }
 
 // #[no_mangle]

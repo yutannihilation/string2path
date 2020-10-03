@@ -31,6 +31,8 @@ for the installation instructions.
 Example
 -------
 
+### `string2path()`
+
     library(string2path)
     library(ggplot2)
 
@@ -61,6 +63,48 @@ Example
       transition_reveal(rowid)
 
 <img src="man/figures/README-example-1.gif" width="100%" />
+
+### `string2vertex()`
+
+    # Sorry for my laziness, please replace the font path to the appropriate location in your system...
+    ttf_file <- "/usr/share/fonts/TTF/iosevka-heavyitalic.ttf"
+
+    d <- string2vertex("abc", ttf_file)
+
+    ggplot(d) +
+      geom_polygon(aes(x, y, group = id, fill = factor(id %% 3)), colour = "grey", size = 0.1) +
+      theme_minimal() +
+      coord_equal() +
+      theme(legend.position = "none") +
+      # colors are derived from https://colorhunt.co/palette/207313
+      scale_fill_manual(values = c("#ff4b5c", "#056674", "#66bfbf"))
+
+<img src="man/figures/README-example2-1.png" width="100%" />
+
+### `tolerance`
+
+`tolerance` controls resolution of the tessellation. You can reduce
+tolerance to get higher resolutions.
+
+    tmp_gif <- tempfile(fileext = ".gif")
+    gifski::save_gif(
+      for (tolerance in c(0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0001, 0.00001, 0.000001)) {
+        d <- string2vertex("abc", ttf_file, tolerance = tolerance)
+        
+        p <- ggplot(d) +
+          geom_polygon(aes(x, y, group = id), fill = "transparent", colour = "black", size = 0.5) +
+          theme_minimal() +
+          coord_equal() +
+          ggtitle(paste0("tolerance: ", tolerance))
+        plot(p)
+      }
+    , gif_file = tmp_gif, delay = 1)
+    #> Frame 1 (11%)Frame 2 (22%)Frame 3 (33%)Frame 4 (44%)Frame 5 (55%)Frame 6 (66%)Frame 7 (77%)Frame 8 (88%)Frame 9 (100%)
+    #> Finalizing encoding... done!
+    #> [1] "/tmp/RtmpVaimKv/filef01419e6a736.gif"
+    knitr::include_graphics(tmp_gif)
+
+<img src="/tmp/RtmpVaimKv/filef01419e6a736.gif" width="100%" />
 
 Resources
 ---------

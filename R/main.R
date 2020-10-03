@@ -10,6 +10,12 @@ string2path <- function(str, ttf_file, tolerance =  0.001) {
   }
 
   out <- .Call(string2path_impl, str, ttf_file, tolerance)
+
+  if (is.null(out)) {
+    warning("Failed to convert", call. = FALSE)
+    return(out)
+  }
+
   names(out) <- c("x", "y", "id", "glyph_id")
   tibble::as_tibble(out)
 }
@@ -26,6 +32,12 @@ string2vertex <- function(str, ttf_file, tolerance =  0.001) {
   }
 
   out <- .Call(string2vertex_impl, str, ttf_file, tolerance)
+
+  if (is.null(out)) {
+    warning("Failed to convert", call. = FALSE)
+    return(out)
+  }
+
   names(out) <- c("x", "y", "id", "glyph_id")
   tibble::as_tibble(out)
 }
