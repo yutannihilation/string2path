@@ -1,8 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-string2path
-===========
+# string2path
 
 <!-- badges: start -->
 
@@ -13,114 +12,120 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 This is an experimental R package using some Rust code to extract path
 information from TTF font file.
 
-Used Rust crates
-----------------
+## Used Rust crates
 
 -   [rusttype](https://gitlab.redox-os.org/redox-os/rusttype/): For
     reading TTF data.
 -   [lyon](https://github.com/nical/lyon/): For tessellation of polygons
     and flattening the curves.
 
-Installation
-------------
+## Installation
 
 If you are using Windows, you are lucky. Because this repository
 provides pre-compiled binary for you, you don’t need to install Rust
 toolchain.
 
 Otherwise, you need to have Rust toolchain installed before trying to
-install this package. See
-<a href="https://www.rust-lang.org/tools/install" class="uri">https://www.rust-lang.org/tools/install</a>
-for the installation instructions.
+install this package. See <https://www.rust-lang.org/tools/install> for
+the installation instructions.
 
-    # install.packages("devtools")
-    devtools::install_github("yutannihilation/string2path")
+``` r
+# install.packages("devtools")
+devtools::install_github("yutannihilation/string2path")
+```
 
-Example
--------
+## Example
 
 ### `string2path()`
 
-    library(string2path)
-    library(ggplot2)
+``` r
+library(string2path)
+library(ggplot2)
 
-    # This TTF file is downloaded from https://ipafont.ipa.go.jp/.
-    # For installed fonts, you can use systemfonts::system_fonts()
-    # to lookup the path.
-    d <- string2path("地獄お", "./fonts/ipam.ttf")
+# This TTF file is downloaded from https://ipafont.ipa.go.jp/.
+# For installed fonts, you can use systemfonts::system_fonts()
+# to lookup the path.
+d <- string2path("地獄お", "./fonts/ipam.ttf")
 
-    d <- tibble::rowid_to_column(d)
+d <- tibble::rowid_to_column(d)
 
-    ggplot(d) +
-      geom_path(aes(x, y, group = id, colour = factor(glyph_id))) +
-      theme_minimal() +
-      coord_equal() +
-      theme(legend.position = "top")
+ggplot(d) +
+  geom_path(aes(x, y, group = id, colour = factor(glyph_id))) +
+  theme_minimal() +
+  coord_equal() +
+  theme(legend.position = "top")
+```
 
 <img src="man/figures/README-example-1.png" width="100%" />
 
+``` r
+library(gganimate)
+d <- string2path("蹴", "./fonts/ipam.ttf")
+d <- tibble::rowid_to_column(d)
 
-    library(gganimate)
-    d <- string2path("蹴", "./fonts/ipam.ttf")
-    d <- tibble::rowid_to_column(d)
-
-    ggplot(d) +
-      geom_path(aes(x, y, group = id), size = 2, colour = "purple2", lineend = "round") +
-      theme_minimal() +
-      coord_equal() +
-      transition_reveal(rowid)
+ggplot(d) +
+  geom_path(aes(x, y, group = id), size = 2, colour = "purple2", lineend = "round") +
+  theme_minimal() +
+  coord_equal() +
+  transition_reveal(rowid)
+```
 
 <img src="man/figures/README-example-1.gif" width="100%" />
 
 ### `string2fill()`
 
-    # Sorry for my laziness, please replace the font path to the appropriate location in your system...
-    ttf_file <- "/usr/share/fonts/TTF/iosevka-heavyitalic.ttf"
+``` r
+# Sorry for my laziness, please replace the font path to the appropriate location in your system...
+ttf_file <- "/usr/share/fonts/TTF/iosevka-heavyitalic.ttf"
 
-    d <- string2fill("abc", ttf_file)
+d <- string2fill("abc", ttf_file)
 
-    ggplot(d) +
-      geom_polygon(aes(x, y, group = id, fill = factor(id %% 3)), colour = "grey", size = 0.1) +
-      theme_minimal() +
-      coord_equal() +
-      theme(legend.position = "none") +
-      # colors are derived from https://colorhunt.co/palette/207313
-      scale_fill_manual(values = c("#ff4b5c", "#056674", "#66bfbf"))
+ggplot(d) +
+  geom_polygon(aes(x, y, group = id, fill = factor(id %% 3)), colour = "grey", size = 0.1) +
+  theme_minimal() +
+  coord_equal() +
+  theme(legend.position = "none") +
+  # colors are derived from https://colorhunt.co/palette/207313
+  scale_fill_manual(values = c("#ff4b5c", "#056674", "#66bfbf"))
+```
 
 <img src="man/figures/README-example2-1.png" width="100%" />
 
 ### `string2stroke()`
 
-    for (w in 1:9 / 4) {
-      d <- string2stroke("abc", ttf_file, line_width = w)
-      
-      p <- ggplot(d) +
-        geom_polygon(aes(x, y, group = id, fill = factor(id %% 2)), colour = "grey", size = 0.1) +
-        theme_minimal() +
-        coord_equal() +
-        theme(legend.position = "none") +
-        scale_fill_manual(values = c("purple", "pink"))
-      plot(p)
-    }
+``` r
+for (w in 1:9 / 4) {
+  d <- string2stroke("abc", ttf_file, line_width = w)
+  
+  p <- ggplot(d) +
+    geom_polygon(aes(x, y, group = id, fill = factor(id %% 2)), colour = "grey", size = 0.1) +
+    theme_minimal() +
+    coord_equal() +
+    theme(legend.position = "none") +
+    scale_fill_manual(values = c("purple", "pink"))
+  plot(p)
+}
+```
 
 <img src="man/figures/README-string2stroke-.gif" width="100%" />
 
-`tolerance`
------------
+## `tolerance`
 
 `tolerance` controls resolution of the tessellation. You can reduce
 tolerance to get higher resolutions.
 
-    for (tolerance in c(0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0001, 0.00001)) {
-      d <- string2fill("abc", ttf_file, tolerance = tolerance)
-      
-      p <- ggplot(d) +
-        geom_polygon(aes(x, y, group = id), fill = "transparent", colour = "black", size = 0.5) +
-        theme_minimal() +
-        coord_equal() +
-        ggtitle(paste0("tolerance: ", tolerance))
-      plot(p)
-    }
+``` r
+for (tolerance in c(0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0001, 0.00001)) {
+  d <- string2fill("abc", ttf_file, tolerance = tolerance)
+  
+  p <- ggplot(d) +
+    geom_polygon(aes(x, y, group = id), fill = "transparent", colour = "black", size = 0.5) +
+    theme_minimal() +
+    coord_equal() +
+    ggtitle(paste0("tolerance: ", tolerance))
+  plot(p)
+}
+```
 
 <img src="man/figures/README-example3-.gif" width="100%" />
 
@@ -128,32 +133,33 @@ Note that `tolerance` parameter behaves differently depending on the
 types of the result. Maybe this is somehow related to whether
 intersection is allowed or not? I’m not sure…
 
-    for (tolerance in c(0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0001, 0.00001)) {
-      d <- string2path("abc", ttf_file, tolerance = tolerance)
-      
-      p <- ggplot(d) +
-        geom_path(aes(x, y, group = id), colour = "black", size = 0.5) +
-        geom_point(aes(x, y, group = id), colour = "black", size = 1.5) +
-        theme_minimal() +
-        coord_equal() +
-        ggtitle(paste0("tolerance: ", tolerance))
-      plot(p)
-    }
+``` r
+for (tolerance in c(0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0001, 0.00001)) {
+  d <- string2path("abc", ttf_file, tolerance = tolerance)
+  
+  p <- ggplot(d) +
+    geom_path(aes(x, y, group = id), colour = "black", size = 0.5) +
+    geom_point(aes(x, y, group = id), colour = "black", size = 1.5) +
+    theme_minimal() +
+    coord_equal() +
+    ggtitle(paste0("tolerance: ", tolerance))
+  plot(p)
+}
+```
 
 <img src="man/figures/README-example4-.gif" width="100%" />
 
-Resources
----------
+## Resources
 
 If you are curious about how you can use R and Rust, the following
 resources might help:
 
 -   [Using Rust code in R packages](https://jeroen.github.io/erum2018)
     by Jeroen Ooms
--   <a href="https://github.com/r-rust/hellorust/" class="uri">https://github.com/r-rust/hellorust/</a>
-    is useful to see the basic structure
--   <a href="https://github.com/clauswilke/sinab" class="uri">https://github.com/clauswilke/sinab</a>
-    is also a cool R package with the power of Rust.
+-   <https://github.com/r-rust/hellorust/> is useful to see the basic
+    structure
+-   <https://github.com/clauswilke/sinab> is also a cool R package with
+    the power of Rust.
 -   [“Calling Rust code from C” section of
     Rustonomicon](https://doc.rust-lang.org/nomicon/ffi.html?highlight=extern#calling-rust-code-from-c).
     This page describes mostly about how to call C code from Rust, but
