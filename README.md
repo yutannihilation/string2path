@@ -45,7 +45,7 @@ library(ggplot2)
 # This TTF file is downloaded from https://ipafont.ipa.go.jp/.
 # For installed fonts, you can use systemfonts::system_fonts()
 # to lookup the path.
-d <- string2path("地獄お", "./fonts/ipam.ttf")
+d <- string2path("地獄お", "./fonts/ipaexg.ttf")
 
 d <- tibble::rowid_to_column(d)
 
@@ -60,7 +60,7 @@ ggplot(d) +
 
 ``` r
 library(gganimate)
-d <- string2path("蹴", "./fonts/ipam.ttf")
+d <- string2path("蹴", "./fonts/ipaexg.ttf")
 d <- tibble::rowid_to_column(d)
 
 ggplot(d) +
@@ -76,7 +76,7 @@ ggplot(d) +
 
 ``` r
 # Sorry for my laziness, please replace the font path to the appropriate location in your system...
-ttf_file <- "/usr/share/fonts/TTF/iosevka-heavyitalic.ttf"
+ttf_file <- "./fonts/iosevka-heavyitalic.ttf"
 
 d <- string2fill("abc", ttf_file)
 
