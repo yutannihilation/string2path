@@ -2,7 +2,7 @@ use crate::builder::LyonPathBuilder;
 use crate::result::PathTibble;
 
 impl LyonPathBuilder {
-    // returns `(x, y, glyphId, pathId)`
+    /// Extract the outline path to PathTibble.
     pub fn into_path(self) -> PathTibble {
         let path = self.builder.build();
 

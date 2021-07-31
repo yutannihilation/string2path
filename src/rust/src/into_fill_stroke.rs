@@ -38,7 +38,7 @@ impl StrokeVertexConstructor<Vertex> for VertexCtor {
 }
 
 impl LyonPathBuilder {
-    // returns `(x, y, glyphId, pathId, triangleId)`
+    /// Convert the outline paths into fill as triangles.
     pub fn into_fill(self) -> PathTibble {
         let path = self.builder.build();
 
@@ -61,7 +61,7 @@ impl LyonPathBuilder {
         extract_vertex_buffer(geometry)
     }
 
-    // returns `(x, y, glyphId, pathId, triangleId)`
+    /// Convert the outline paths into stroke with a specified line width as triangles.
     pub fn into_stroke(self) -> PathTibble {
         let path = self.builder.build();
 

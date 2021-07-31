@@ -2,11 +2,17 @@ use extendr_api::prelude::*;
 
 use std::convert::TryFrom;
 
+/// An intermediate form to convert to tibble.
 pub struct PathTibble {
+    // Unscaled position of x
     pub x: Vec<f32>,
+    // Unscaled position of y
     pub y: Vec<f32>,
+    // IDs to distinguish the glyphs. Note that this is a different ID than [ttf_parser::GlyphId].
     pub glyph_id: Vec<u32>,
+    // IDs to distinguish one stroke of paths (i.e., `Begin` path event to `End` path event).
     pub path_id: Vec<u32>,
+    // This field is `None` for `ConversionType::Path`
     pub triangle_id: Option<Vec<u32>>,
 }
 
