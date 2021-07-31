@@ -1,7 +1,5 @@
 on:
   push:
-    branch:
-      - 'master'
     tags:
       - 'windows*'
 
