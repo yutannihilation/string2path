@@ -4,7 +4,7 @@
 \alias{string2path}
 \alias{string2stroke}
 \alias{string2fill}
-\title{Convert strings to paths}
+\title{Convert a string to paths.}
 \usage{
 string2path(text, font_file, tolerance = 0.01)
 
@@ -22,6 +22,28 @@ please refer to \href{https://docs.rs/lyon/0.17.5/lyon/#what-is-the-tolerance-va
 
 \item{line_width}{Line width of strokes.}
 }
+\value{
+A \code{tibble()} containing these columns:
+\itemize{
+\item{x}{Unscaled position of x.}
+\item{y}{Unscaled position of y.}
+\item{glyph_id}{IDs to distinguish the glyphs.}
+\item{path_id}{IDs to distinguish the groups of paths.}
+\item{triangle_id}{IDs to distinguish the triangles. \code{string2path()} doesn't contain this column.}
+}
+}
 \description{
-Convert strings to paths
+\code{string2path()} converts a text to
+}
+\examples{
+if (requireNamespace("systemfonts", quietly = TRUE)) {
+  available_fonts <- systemfonts::system_fonts()$path
+
+  ttf_or_otf <- available_fonts[grepl("\\\\.(ttf|otf)$", available_fonts)]
+
+  d_path <- string2path("TEXT", ttf_or_otf[1])
+  plot(d_path$x, d_path$y)
+  lines(d_path$x, d_path$y)
+}
+
 }
