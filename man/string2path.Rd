@@ -6,11 +6,11 @@
 \alias{string2fill}
 \title{Convert a string to paths.}
 \usage{
-string2path(text, font_file, tolerance = 0.01)
+string2path(text, font_file, tolerance = 5e-05)
 
-string2stroke(text, font_file, tolerance = 0.01, line_width = 10)
+string2stroke(text, font_file, tolerance = 5e-05, line_width = 0.01)
 
-string2fill(text, font_file, tolerance = 0.01)
+string2fill(text, font_file, tolerance = 5e-05)
 }
 \arguments{
 \item{text}{A text to convert to paths.}
@@ -26,8 +26,8 @@ approximation. For more details, please refer to \href{https://docs.rs/lyon/0.17
 \value{
 A \code{tibble()} containing these columns:
 \itemize{
-\item{x}{Unscaled position of x.}
-\item{y}{Unscaled position of y.}
+\item{x}{x position of the point on the path, scaled to \code{x / height}.}
+\item{y}{Y position of the point on the path, scaled to \code{y / height}. y=0 is at the base line of the first line.}
 \item{glyph_id}{IDs to distinguish the glyphs.}
 \item{path_id}{IDs to distinguish the groups of paths.}
 \item{triangle_id}{IDs to distinguish the triangles. \code{string2path()} doesn't contain this column.}

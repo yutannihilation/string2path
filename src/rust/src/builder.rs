@@ -9,6 +9,9 @@ pub struct LyonPathBuilder {
     pub cur_glyph_id: u32,
     pub cur_path_id: u32,
 
+    // multiply by this to scale the position into the range of [0, 1].
+    pub scale_factor: f32,
+
     pub offset_x: f32,
     pub offset_y: f32,
 
@@ -28,12 +31,16 @@ impl LyonPathBuilder {
             offset_y: 0.,
             tolerance,
             line_width,
+            scale_factor: 1.,
         }
     }
 
     // adds offsets to x and y
     pub(crate) fn point(&self, x: f32, y: f32) -> lyon::math::Point {
-        point(x + self.offset_x, y + self.offset_y)
+        point(
+            (x + self.offset_x) * self.scale_factor,
+            (y + self.offset_y) * self.scale_factor,
+        )
     }
 
     pub(crate) fn ids(&self) -> [f32; 2] {

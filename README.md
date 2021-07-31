@@ -49,15 +49,16 @@ library(ggplot2)
 # This TTF file is downloaded from https://ipafont.ipa.go.jp/.
 # For installed fonts, you can use systemfonts::system_fonts()
 # to lookup the path.
-d <- string2path("地獄お", "./fonts/ipaexg.ttf")
+d <- string2path("カラテが\n高まる。", "./fonts/ipaexg.ttf")
 
 d <- tibble::rowid_to_column(d)
 
 ggplot(d) +
-  geom_path(aes(x, y, group = path_id, colour = factor(glyph_id))) +
+  geom_path(aes(x, y, group = path_id, colour = factor(glyph_id)), size = 1.5) +
   theme_minimal() +
   coord_equal() +
-  theme(legend.position = "top")
+  theme(legend.position = "top") +
+  scale_colour_viridis_d(option = "H")
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
@@ -97,7 +98,7 @@ ggplot(d) +
 ### `string2stroke()`
 
 ``` r
-for (w in 1:9 * 10) {
+for (w in 1:9 * 0.01) {
   d <- string2stroke("abc", ttf_file, line_width = w)
   
   p <- ggplot(d) +
@@ -118,7 +119,7 @@ for (w in 1:9 * 10) {
 tolerance to get higher resolutions.
 
 ``` r
-for (tolerance in c(50, 10, 5, 1, 0.5, 0.1, 0.01, 0.001)) {
+for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
   d <- string2fill("abc", ttf_file, tolerance = tolerance)
   
   p <- ggplot(d) +
@@ -133,11 +134,11 @@ for (tolerance in c(50, 10, 5, 1, 0.5, 0.1, 0.01, 0.001)) {
 <img src="man/figures/README-example3-.gif" width="100%" />
 
 Note that `tolerance` parameter behaves a bit differently on
-`string2fill()` and `string2stroke()`. But, in either case, 0.1 \~ 0.01
+`string2fill()` and `string2stroke()`. But, in either case, 1e-5 \~ 1e-6
 should be enough.
 
 ``` r
-for (tolerance in c(50, 10, 5, 1, 0.5, 0.1, 0.01, 0.001)) {
+for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
   d <- string2path("abc", ttf_file, tolerance = tolerance)
   
   p <- ggplot(d) +

@@ -18,8 +18,8 @@
 #'
 #' @return A `tibble()` containing these columns:
 #' \itemize{
-#'   \item{x}{Unscaled position of x.}
-#'   \item{y}{Unscaled position of y.}
+#'   \item{x}{x position of the point on the path, scaled to `x / height`.}
+#'   \item{y}{Y position of the point on the path, scaled to `y / height`. y=0 is at the base line of the first line.}
 #'   \item{glyph_id}{IDs to distinguish the glyphs.}
 #'   \item{path_id}{IDs to distinguish the groups of paths.}
 #'   \item{triangle_id}{IDs to distinguish the triangles. `string2path()` doesn't contain this column.}
@@ -61,18 +61,18 @@
 #' }
 #'
 #' @export
-string2path <- function(text, font_file, tolerance = 0.01) {
+string2path <- function(text, font_file, tolerance = 0.00005) {
   string2path_impl(text, font_file, tolerance)
 }
 
 #' @rdname string2path
 #' @export
-string2stroke <- function(text, font_file, tolerance = 0.01, line_width = 10) {
+string2stroke <- function(text, font_file, tolerance = 0.00005, line_width = 0.01) {
   string2stroke_impl(text, font_file, tolerance, line_width)
 }
 
 #' @rdname string2path
 #' @export
-string2fill <- function(text, font_file, tolerance = 0.01) {
+string2fill <- function(text, font_file, tolerance = 0.00005) {
   string2fill_impl(text, font_file, tolerance)
 }

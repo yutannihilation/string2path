@@ -39,7 +39,9 @@ impl LyonPathBuilder {
 
         let subtables = font.kerning_subtables();
 
-        let line_height = font.height() + font.line_gap();
+        let height = font.height() as f32;
+        self.scale_factor = 1. / height;
+        let line_height = height + font.line_gap() as f32;
 
         let mut prev_glyph: Option<GlyphId> = None;
         for c in text.chars() {
@@ -47,7 +49,7 @@ impl LyonPathBuilder {
             if c.is_control() {
                 // If the character is a line break, move to the next line
                 if c == '\n' {
-                    self.offset_y -= line_height as f32;
+                    self.offset_y -= line_height;
                     self.offset_x = 0.;
                 }
                 prev_glyph = None;

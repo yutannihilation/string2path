@@ -69,31 +69,39 @@ mod tests {
 
     #[test]
     fn test_path() {
-        let mut builder = LyonPathBuilder::new(0.01, 0.);
+        let mut builder = LyonPathBuilder::new(0.00001, 0.);
         builder.outline("A", "test/font/test.ttf").unwrap();
         let result = builder.into_path();
 
-        assert_eq!(result.x, vec![0., 100., 0., 0.]);
-        assert_eq!(result.y, vec![0., 100., 100., 0.]);
+        // the height of the test.ttf is 125 (ascent 100 + descent 25)
+        assert_eq!(result.x, vec![0., 100. / 125., 0., 0.]);
+        assert_eq!(result.y, vec![0., 100. / 125., 100. / 125., 0.]);
     }
 
     #[test]
     fn test_stroke() {
-        let mut builder = LyonPathBuilder::new(0.01, 50.);
+        let mut builder = LyonPathBuilder::new(0.00001, 0.2);
         builder.outline("A", "test/font/test.ttf").unwrap();
         let result = builder.into_stroke();
 
-        assert!(result.x.iter().any(|&i| 0. - 25.0 <= i && i <= 100. + 25.0));
-        assert!(result.y.iter().any(|&i| 0. - 25.0 <= i && i <= 100. + 25.0));
+        assert!(result
+            .x
+            .iter()
+            .any(|&i| 0. - 0.1 <= i && i <= 100. / 125. + 0.1));
+        assert!(result
+            .y
+            .iter()
+            .any(|&i| 0. - 0.1 <= i && i <= 100. / 125. + 0.1));
     }
 
     #[test]
     fn test_fill() {
-        let mut builder = LyonPathBuilder::new(0.01, 0.);
+        let mut builder = LyonPathBuilder::new(0.00001, 0.);
         builder.outline("A", "test/font/test.ttf").unwrap();
         let result = builder.into_fill();
 
-        assert_eq!(result.x, vec![0., 100., 0., 0.]);
-        assert_eq!(result.y, vec![0., 100., 100., 0.]);
+        // TODO: Is this correct...?
+        assert_eq!(result.x, vec![0., 0., 100. / 125.]);
+        assert_eq!(result.y, vec![0., 100. / 125., 100. / 125.]);
     }
 }
