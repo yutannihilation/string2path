@@ -113,7 +113,7 @@ jobs:
           path: check
 
       - name: List files (debug)
-        run: ls ./src/rust/target/release/
+        run: ls ./check/src/rust/target/release/
         shell: bash
 
       - name: Upload prebuilt-binaries
@@ -122,8 +122,8 @@ jobs:
         with:
           name: staticlib
           path: |
-            ./src/rust/target/release/libstring2path.a
-            ./src/rust/target/*/release/libstring2path.a
+            ./check/src/rust/target/release/libstring2path.a
+            ./check/src/rust/target/*/release/libstring2path.a
           if-no-files-found: error
 
       - name: Don't use tar from old Rtools to store the cache
