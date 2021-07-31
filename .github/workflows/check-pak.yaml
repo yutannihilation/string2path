@@ -113,7 +113,8 @@ jobs:
           path: check
 
       - name: List files (debug)
-        run: ls ./check/src/rust/target/release/
+        if: always()
+        run: find check -name 'libstring2path.a'
         shell: bash
 
       - name: Upload prebuilt-binaries
