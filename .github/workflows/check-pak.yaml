@@ -44,14 +44,10 @@ jobs:
           default: true
 
       - name: Additional Rust set up for Windows
-        uses: actions-rs/toolchain@v1
         if: runner.os == 'Windows'
-        with:
-          toolchain: ${{ matrix.config.rust }}
-          target:
-            - i686-pc-windows-gnu
-            - x86_64-pc-windows-gnu
-          default: false
+        run: |
+          rustup target add i686-pc-windows-gnu
+          rustup target add x86_64-pc-windows-gnu
 
       - uses: r-lib/actions/setup-r@v1
         id: install-r
