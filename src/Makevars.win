@@ -1,21 +1,17 @@
-CRATE = string2path
+TARGET = $(subst 64,x86_64,$(subst 32,i686,$(WIN)))-pc-windows-gnu
+LIBDIR = ./rust/target/$(TARGET)/release
+STATLIB = $(LIBDIR)/libstring2path.a
+PKG_LIBS = -L$(LIBDIR) -lstring2path -lws2_32 -ladvapi32 -luserenv
 
-# Change this when created a new tag
-BASE_TAG = windows10
-
-TARGET = $(subst 64,x86_64,$(subst 32,i686,$(WIN)))
-LIBDIR = windows/$(TARGET)
-STATLIB = $(LIBDIR)/lib$(CRATE).a
-PKG_LIBS = -L$(LIBDIR) -l$(CRATE) -lws2_32 -ladvapi32 -luserenv
-
-all: clean
+all: C_clean
 
 $(SHLIB): $(STATLIB)
 
 $(STATLIB):
-	mkdir -p $(LIBDIR)
-	# Not sure, but $@ doesn't seem to work here...
-	curl -L -o $(STATLIB) https://github.com/yutannihilation/$(CRATE)/releases/download/$(BASE_TAG)-$(TARGET)/lib$(CRATE).a
+	cargo build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
+
+C_clean:
+	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS)
 
 clean:
-	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS)
+	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) rust/target

@@ -6,16 +6,16 @@
 \alias{string2fill}
 \title{Convert strings to paths}
 \usage{
-string2path(str, ttf_file, tolerance = 0.001)
+string2path(text, font_file, tolerance = 0.001)
 
-string2stroke(str, ttf_file, tolerance = 0.001, line_width = 0.1)
+string2stroke(text, font_file, tolerance = 0.001, line_width = 0.1)
 
-string2fill(str, ttf_file, tolerance = 0.001)
+string2fill(text, font_file, tolerance = 0.001)
 }
 \arguments{
-\item{str}{A string to convert to paths.}
+\item{text}{A text to convert to paths.}
 
-\item{ttf_file}{A path to TTF file.}
+\item{font_file}{A path to TTF or OTF file.}
 
 \item{tolerance}{Maximum distance allowed between the curve and its approximation. For more details,
 please refer to \href{https://docs.rs/lyon/0.16.2/lyon/index.html#what-is-the-tolerance-variable-in-these-examples}{lyon's doc}.}

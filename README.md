@@ -9,13 +9,14 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
-This is an experimental R package using some Rust code to extract path
-information from TTF font file.
+This is an experimental R package, powered by
+[extendr](https://extendr.github.io/) framework, to extract path
+information from TTF or OTF font file.
 
 ## Used Rust crates
 
--   [rusttype](https://gitlab.redox-os.org/redox-os/rusttype/): For
-    reading TTF data.
+-   [ttf-parser](https://github.com/RazrFalcon/ttf-parser): For parsing
+    font data.
 -   [lyon](https://github.com/nical/lyon/): For tessellation of polygons
     and flattening the curves.
 
@@ -50,7 +51,7 @@ d <- string2path("地獄お", "./fonts/ipaexg.ttf")
 d <- tibble::rowid_to_column(d)
 
 ggplot(d) +
-  geom_path(aes(x, y, group = id, colour = factor(glyph_id))) +
+  geom_path(aes(x, y, group = path_id, colour = factor(glyph_id))) +
   theme_minimal() +
   coord_equal() +
   theme(legend.position = "top")
@@ -64,7 +65,7 @@ d <- string2path("蹴", "./fonts/ipaexg.ttf")
 d <- tibble::rowid_to_column(d)
 
 ggplot(d) +
-  geom_path(aes(x, y, group = id), size = 2, colour = "purple2", lineend = "round") +
+  geom_path(aes(x, y, group = path_id), size = 2, colour = "purple2", lineend = "round") +
   theme_minimal() +
   coord_equal() +
   transition_reveal(rowid)
@@ -81,12 +82,11 @@ ttf_file <- "./fonts/iosevka-heavyitalic.ttf"
 d <- string2fill("abc", ttf_file)
 
 ggplot(d) +
-  geom_polygon(aes(x, y, group = id, fill = factor(id %% 3)), colour = "grey", size = 0.1) +
+  geom_polygon(aes(x, y, group = triangle_id, fill = factor(triangle_id %% 7)), colour = "grey", size = 0.1) +
   theme_minimal() +
   coord_equal() +
   theme(legend.position = "none") +
-  # colors are derived from https://colorhunt.co/palette/207313
-  scale_fill_manual(values = c("#ff4b5c", "#056674", "#66bfbf"))
+  scale_fill_viridis_d(option = "H")
 ```
 
 <img src="man/figures/README-example2-1.png" width="100%" />
@@ -94,11 +94,11 @@ ggplot(d) +
 ### `string2stroke()`
 
 ``` r
-for (w in 1:9 / 4) {
+for (w in 1:9 * 10) {
   d <- string2stroke("abc", ttf_file, line_width = w)
   
   p <- ggplot(d) +
-    geom_polygon(aes(x, y, group = id, fill = factor(id %% 2)), colour = "grey", size = 0.1) +
+    geom_polygon(aes(x, y, group = triangle_id, fill = factor(triangle_id %% 2)), colour = "grey", size = 0.1) +
     theme_minimal() +
     coord_equal() +
     theme(legend.position = "none") +
@@ -115,11 +115,11 @@ for (w in 1:9 / 4) {
 tolerance to get higher resolutions.
 
 ``` r
-for (tolerance in c(0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0001, 0.00001)) {
+for (tolerance in c(50, 10, 5, 1, 0.5, 0.1, 0.01, 0.001)) {
   d <- string2fill("abc", ttf_file, tolerance = tolerance)
   
   p <- ggplot(d) +
-    geom_polygon(aes(x, y, group = id), fill = "transparent", colour = "black", size = 0.5) +
+    geom_polygon(aes(x, y, group = triangle_id), fill = "transparent", colour = "black", size = 0.5) +
     theme_minimal() +
     coord_equal() +
     ggtitle(paste0("tolerance: ", tolerance))
@@ -134,12 +134,12 @@ types of the result. Maybe this is somehow related to whether
 intersection is allowed or not? I’m not sure…
 
 ``` r
-for (tolerance in c(0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0001, 0.00001)) {
+for (tolerance in c(50, 10, 5, 1, 0.5, 0.1, 0.01, 0.001)) {
   d <- string2path("abc", ttf_file, tolerance = tolerance)
   
   p <- ggplot(d) +
-    geom_path(aes(x, y, group = id), colour = "black", size = 0.5) +
-    geom_point(aes(x, y, group = id), colour = "black", size = 1.5) +
+    geom_path(aes(x, y, group = path_id), colour = "black", size = 0.5) +
+    geom_point(aes(x, y, group = path_id), colour = "black", size = 1.5) +
     theme_minimal() +
     coord_equal() +
     ggtitle(paste0("tolerance: ", tolerance))
@@ -148,26 +148,3 @@ for (tolerance in c(0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0001, 0.00001)) {
 ```
 
 <img src="man/figures/README-example4-.gif" width="100%" />
-
-## Resources
-
-If you are curious about how you can use R and Rust, the following
-resources might help:
-
--   [Using Rust code in R packages](https://jeroen.github.io/erum2018)
-    by Jeroen Ooms
--   <https://github.com/r-rust/hellorust/> is useful to see the basic
-    structure
--   <https://github.com/clauswilke/sinab> is also a cool R package with
-    the power of Rust.
--   [“Calling Rust code from C” section of
-    Rustonomicon](https://doc.rust-lang.org/nomicon/ffi.html?highlight=extern#calling-rust-code-from-c).
-    This page describes mostly about how to call C code from Rust, but
-    it’s useful to know how it works as the vice versa is very similar.
--   [An answer to the question “How to return byte array from Rust
-    function to FFI
-    C?”](https://users.rust-lang.org/t/how-to-return-byte-array-from-rust-function-to-ffi-c/18136/4).
-    This might be very obvious to those who are familiar with C, but it
-    takes some time for me to figure out that I need to pass the data
-    and the length at the same time, otherwise C side cannot know the
-    size of the data.

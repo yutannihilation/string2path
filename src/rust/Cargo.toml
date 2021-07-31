@@ -1,0 +1,12 @@
+[package]
+name = "string2path"
+version = "0.1.0"
+edition = "2018"
+
+[lib]
+crate-type = [ 'staticlib' ]
+
+[dependencies]
+extendr-api = { git = "https://github.com/extendr/extendr" }
+lyon = "0.17.5"
+ttf-parser = "0.12.3"
