@@ -1,5 +1,5 @@
 CRATE = string2path
-BASE_TAG = windows10
+BASE_TAG = windows_20210801-2
 
 TARGET = $(subst 64,x86_64,$(subst 32,i686,$(WIN)))-pc-windows-gnu
 LIBDIR = ./rust/target/$(TARGET)/release
