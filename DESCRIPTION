@@ -13,6 +13,9 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+SystemRequirements: Cargo (rustc package manager)
+Depends:
+    R (>= 4.0)
 Imports: 
     tibble
 Suggests: 
