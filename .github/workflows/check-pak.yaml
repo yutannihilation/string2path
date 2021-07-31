@@ -124,7 +124,8 @@ jobs:
           name: staticlib
           path: |
             ./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/target/release/libstring2path.a
-            ./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/target/*/release/libstring2path.a
+            ./check/string2path.Rcheck/00_pkg_src/string2path/src-i386/rust/target/i686-pc-windows-gnu/release/libstring2path.a
+            ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a
           if-no-files-found: error
 
       - name: Don't use tar from old Rtools to store the cache
