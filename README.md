@@ -5,19 +5,22 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/yutannihilation/string2path/workflows/R-CMD-check/badge.svg)](https://github.com/yutannihilation/string2path/actions)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/string2path)](https://CRAN.R-project.org/package=string2path)
 <!-- badges: end -->
 
-This is an experimental R package, powered by
-[extendr](https://extendr.github.io/) framework, to extract path
-information from TTF or OTF font file.
+The string2path R package converts a text to paths of the outlines of
+each glyph, based on a font data. Under the hood, this package is
+powered by [extendr](https://extendr.github.io/) framework to use these
+two Rust crates:
 
-## Used Rust crates
-
--   [ttf-parser](https://github.com/RazrFalcon/ttf-parser): For parsing
-    font data.
--   [lyon](https://github.com/nical/lyon/): For tessellation of polygons
+-   [ttf-parser](https://github.com/RazrFalcon/ttf-parser) for parsing
+    font data. TrueType font (`.ttf`) and OpenType font (`.otf`) are
+    supported.
+-   [lyon](https://github.com/nical/lyon/) for tessellation of polygons
     and flattening the curves.
 
 ## Installation
@@ -129,9 +132,9 @@ for (tolerance in c(50, 10, 5, 1, 0.5, 0.1, 0.01, 0.001)) {
 
 <img src="man/figures/README-example3-.gif" width="100%" />
 
-Note that `tolerance` parameter behaves differently depending on the
-types of the result. Maybe this is somehow related to whether
-intersection is allowed or not? I’m not sure…
+Note that `tolerance` parameter behaves a bit differently on
+`string2fill()` and `string2stroke()`. But, in either case, 0.1 \~ 0.01
+should be enough.
 
 ``` r
 for (tolerance in c(50, 10, 5, 1, 0.5, 0.1, 0.01, 0.001)) {
