@@ -6,11 +6,11 @@
 \alias{string2fill}
 \title{Convert strings to paths}
 \usage{
-string2path(text, font_file, tolerance = 0.001)
+string2path(text, font_file, tolerance = 0.01)
 
-string2stroke(text, font_file, tolerance = 0.001, line_width = 0.1)
+string2stroke(text, font_file, tolerance = 0.01, line_width = 10)
 
-string2fill(text, font_file, tolerance = 0.001)
+string2fill(text, font_file, tolerance = 0.01)
 }
 \arguments{
 \item{text}{A text to convert to paths.}

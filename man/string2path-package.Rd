@@ -4,11 +4,10 @@
 \name{string2path-package}
 \alias{string2path}
 \alias{string2path-package}
-\title{string2path: Convert a string to path}
+\title{string2path: Convert a string to paths}
 \description{
-An experimental package to use Rust crates; rusttype <https://crates.io/crates/rusttype> for
-    reading and extracting TTF file, and lyon <https://crates.io/crates/lyon> to translate curves to
-    flattened paths.
+Extract the glyph information from a 'OpenType' or 'TrueType' font 
+    file, and translate curves to flattened paths.
 }
 \author{
 \strong{Maintainer}: Hiroaki Yutani \email{yutani.ini@gmail.com} (\href{https://orcid.org/0000-0002-3385-7233}{ORCID})

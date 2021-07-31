@@ -19,7 +19,7 @@ string2path <- function(text, font_file, tolerance = 0.01) {
 
 #' @rdname string2path
 #' @export
-string2stroke <- function(text, font_file, tolerance = 0.01, line_width = 0.1) {
+string2stroke <- function(text, font_file, tolerance = 0.01, line_width = 10) {
   string2stroke_impl(text, font_file, tolerance, line_width)
 }
 
