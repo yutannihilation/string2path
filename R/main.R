@@ -1,6 +1,6 @@
 #' Convert strings to paths
 #'
-#' @rdname string2path
+#' @name string2path
 #' @param text
 #'   A text to convert to paths.
 #' @param

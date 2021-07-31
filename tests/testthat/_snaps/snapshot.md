@@ -1,7 +1,7 @@
 # the extracted data are expected
 
     Code
-      string2path("A", "../../src/rust/test/font/test.ttf")
+      string2path("A", "./font/test.ttf")
     Output
       # A tibble: 4 x 4
             x     y glyph_id path_id
@@ -14,7 +14,7 @@
 ---
 
     Code
-      string2stroke("A", "../../src/rust/test/font/test.ttf")
+      string2stroke("A", "./font/test.ttf")
     Output
       # A tibble: 18 x 5
              x     y glyph_id path_id triangle_id
@@ -41,7 +41,7 @@
 ---
 
     Code
-      string2fill("A", "../../src/rust/test/font/test.ttf")
+      string2fill("A", "./font/test.ttf")
     Output
       # A tibble: 3 x 5
             x     y glyph_id path_id triangle_id
