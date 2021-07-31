@@ -7,7 +7,8 @@
 #'
 #' @name string2path
 #' @param text A text to convert to paths.
-#' @param font_file A path to TTF or OTF file.
+#' @param font_file A path to a 'TrueType' font file ('.ttf') or an 'OpenType'
+#'   font file ('.otf').
 #' @param tolerance Maximum distance allowed between the curve and its
 #'   approximation. For more details, please refer to [the documentation of the
 #'   underlying Rust
@@ -28,7 +29,7 @@
 #' if (requireNamespace("systemfonts", quietly = TRUE)) {
 #'   available_fonts <- systemfonts::system_fonts()$path
 #'
-#'   # string2path supports only TTF or OTF formats
+#'   # string2path supports only TrueType or OpenType formats
 #'   ttf_or_otf <- available_fonts[grepl("\\.(ttf|otf)$", available_fonts)]
 #'
 #'   # string2path() converts a text to paths

@@ -15,7 +15,8 @@ string2fill(text, font_file, tolerance = 0.01)
 \arguments{
 \item{text}{A text to convert to paths.}
 
-\item{font_file}{A path to TTF or OTF file.}
+\item{font_file}{A path to a 'TrueType' font file ('.ttf') or an 'OpenType'
+font file ('.otf').}
 
 \item{tolerance}{Maximum distance allowed between the curve and its
 approximation. For more details, please refer to \href{https://docs.rs/lyon/0.17.5/lyon/#what-is-the-tolerance-variable-in-these-examples}{the documentation of the underlying Rust library}.}
@@ -42,7 +43,7 @@ to the paths of the filled polygon of each glyph.
 if (requireNamespace("systemfonts", quietly = TRUE)) {
   available_fonts <- systemfonts::system_fonts()$path
 
-  # string2path supports only TTF or OTF formats
+  # string2path supports only TrueType or OpenType formats
   ttf_or_otf <- available_fonts[grepl("\\\\.(ttf|otf)$", available_fonts)]
 
   # string2path() converts a text to paths
