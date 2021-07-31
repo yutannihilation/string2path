@@ -1,5 +1,7 @@
 on:
   push:
+    branch:
+      - 'master'
     tags:
       - 'windows*'
 
@@ -33,10 +35,10 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release --target=${{ matrix.target }}-pc-windows-gnu --manifest-path=src/string2path/Cargo.toml
+          args: --release --target=${{ matrix.target }}-pc-windows-gnu --manifest-path=src/rust/Cargo.toml
 
       - name: List files
-        run: ls ./src/string2path/target/${{ matrix.target }}-pc-windows-gnu/release/
+        run: ls ./src/rust/target/${{ matrix.target }}-pc-windows-gnu/release/
         shell: bash
 
       - name: Create Release
@@ -56,6 +58,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./src/string2path/target/${{ matrix.target }}-pc-windows-gnu/release/libstring2path.a
+          asset_path: ./src/rust/target/${{ matrix.target }}-pc-windows-gnu/release/libstring2path.a
           asset_name: libstring2path.a
           asset_content_type: application/octet-stream
