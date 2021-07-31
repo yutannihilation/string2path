@@ -17,23 +17,23 @@ string2fill(text, font_file, tolerance = 0.01)
 
 \item{font_file}{A path to TTF or OTF file.}
 
-\item{tolerance}{Maximum distance allowed between the curve and its approximation. For more details,
-please refer to \href{https://docs.rs/lyon/0.17.5/lyon/#what-is-the-tolerance-variable-in-these-examples}{the documentation of the underlying Rust library}.}
+\item{tolerance}{Maximum distance allowed between the curve and its
+approximation. For more details, please refer to \href{https://docs.rs/lyon/0.17.5/lyon/#what-is-the-tolerance-variable-in-these-examples}{the documentation of the underlying Rust library}.}
 
 \item{line_width}{Line width of strokes.}
 }
 \value{
-A \code{tibble()} containing these columns:
-\itemize{
-\item{x}{Unscaled position of x.}
-\item{y}{Unscaled position of y.}
-\item{glyph_id}{IDs to distinguish the glyphs.}
-\item{path_id}{IDs to distinguish the groups of paths.}
-\item{triangle_id}{IDs to distinguish the triangles. \code{string2path()} doesn't contain this column.}
-}
+A \code{tibble()} containing these columns: \itemize{ \item{x}{Unscaled
+position of x.} \item{y}{Unscaled position of y.} \item{glyph_id}{IDs to
+distinguish the glyphs.} \item{path_id}{IDs to distinguish the groups of
+paths.} \item{triangle_id}{IDs to distinguish the triangles.
+\code{string2path()} doesn't contain this column.} }
 }
 \description{
-\code{string2path()} converts a text to
+\code{string2path()} converts a text to the paths of the 'width-less' outlines of
+each glyph. \code{string2stroke()} converts a text to the paths of the outlines,
+with the specified line width, of each glyph. \code{string2fill()} converts a text
+to the paths of the filled polygon of each glyph.
 }
 \examples{
 if (requireNamespace("systemfonts", quietly = TRUE)) {

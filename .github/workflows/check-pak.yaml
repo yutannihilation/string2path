@@ -107,7 +107,7 @@ jobs:
           path: check
 
       - name: Upload prebuilt-binaries
-        if: matrix.config.r == 'stable' && startsWith(matrix.config.rust, 'stable'
+        if: matrix.config.r == 'stable' && startsWith(matrix.config.rust, 'stable')
         uses: actions/upload-artifact@main
         with:
           name: staticlib
