@@ -8,6 +8,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - 'windows*'
   pull_request:
     branches:
       - main
@@ -116,8 +118,8 @@ jobs:
       - name: Tweak staticlib
         if: runner.os == 'Windows'
         run: |
-          mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-i386/rust/target/i686-pc-windows-gnu/release/libstring2path.a win32-libstring2path.a
-          mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a win64-libstring2path.a
+          mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-i386/rust/target/i686-pc-windows-gnu/release/libstring2path.a i686-libstring2path.a
+          mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a x86_64-libstring2path.a
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -125,8 +127,8 @@ jobs:
         with:
           fail_on_unmatched_files: true
           files: |
-            win32-libstring2path.a
-            win64-libstring2path.a
+            i686-libstring2path.a
+            x86_64-libstring2path.a
 
       - name: Don't use tar from old Rtools to store the cache
         if: ${{ runner.os == 'Windows' && startsWith(steps.install-r.outputs.installed-r-version, '3.6' ) }}
