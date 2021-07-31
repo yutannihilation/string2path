@@ -1,4 +1,4 @@
-use crate::builder::LyonPathBuilder;
+use crate::{builder::LyonPathBuilder, result::PathTibble};
 
 use lyon::tessellation::*;
 
@@ -39,7 +39,7 @@ impl StrokeVertexConstructor<Vertex> for VertexCtor {
 
 impl LyonPathBuilder {
     // returns `(x, y, glyphId, pathId, triangleId)`
-    pub fn into_fill(self) -> (Vec<f32>, Vec<f32>, Vec<u32>, Vec<u32>, Vec<u32>) {
+    pub fn into_fill(self) -> PathTibble {
         let path = self.builder.build();
 
         // Will contain the result of the tessellation.
@@ -62,7 +62,7 @@ impl LyonPathBuilder {
     }
 
     // returns `(x, y, glyphId, pathId, triangleId)`
-    pub fn into_stroke(self) -> (Vec<f32>, Vec<f32>, Vec<u32>, Vec<u32>, Vec<u32>) {
+    pub fn into_stroke(self) -> PathTibble {
         let path = self.builder.build();
 
         // Will contain the result of the tessellation.
@@ -85,23 +85,28 @@ impl LyonPathBuilder {
     }
 }
 
-fn extract_vertex_buffer(
-    geometry: VertexBuffers<Vertex, usize>,
-) -> (Vec<f32>, Vec<f32>, Vec<u32>, Vec<u32>, Vec<u32>) {
+fn extract_vertex_buffer(geometry: VertexBuffers<Vertex, usize>) -> PathTibble {
     let mut x: Vec<f32> = Vec::new();
     let mut y: Vec<f32> = Vec::new();
-    let mut glyph_ids: Vec<u32> = Vec::new();
-    let mut path_ids: Vec<u32> = Vec::new();
+    let mut glyph_id: Vec<u32> = Vec::new();
+    let mut path_id: Vec<u32> = Vec::new();
     let mut triangle_id: Vec<u32> = Vec::new();
 
     for (n, &i) in geometry.indices.iter().enumerate() {
         if let Some(v) = geometry.vertices.get(i) {
             x.push(v.position.x);
             y.push(v.position.y);
-            glyph_ids.push(v.glyph_id);
-            path_ids.push(v.path_id);
+            glyph_id.push(v.glyph_id);
+            path_id.push(v.path_id);
             triangle_id.push(n as u32 / 3);
         }
     }
-    (x, y, glyph_ids, path_ids, triangle_id)
+
+    PathTibble {
+        x,
+        y,
+        glyph_id,
+        path_id,
+        triangle_id: Some(triangle_id),
+    }
 }

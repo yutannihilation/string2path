@@ -4,55 +4,53 @@ mod builder;
 mod font;
 mod into_fill_stroke;
 mod into_path;
+mod result;
 
-#[extendr(use_try_from = true)]
-fn string2path_impl(text: &str, font_file: &str, tolerance: f32) -> Robj {
-    let mut builder = builder::LyonPathBuilder::new(tolerance, 0.);
-
-    builder.outline(text, font_file).unwrap();
-
-    let result = builder.into_path();
-
-    data_frame!(
-        x = result.0,
-        y = result.1,
-        glyph_id = result.2,
-        path_id = result.3
-    )
+enum ConversionType {
+    Path,
+    Stroke,
+    Fill,
 }
 
-#[extendr(use_try_from = true)]
-fn string2stroke_impl(text: &str, font_file: &str, tolerance: f32, line_width: f32) -> Robj {
+fn string2path_inner(
+    text: &str,
+    font_file: &str,
+    tolerance: f32,
+    line_width: f32,
+    ct: ConversionType,
+) -> Robj {
     let mut builder = builder::LyonPathBuilder::new(tolerance, line_width);
 
     builder.outline(text, font_file).unwrap();
 
-    let result = builder.into_stroke();
+    let result = match ct {
+        ConversionType::Path => builder.into_path(),
+        ConversionType::Stroke => builder.into_stroke(),
+        ConversionType::Fill => builder.into_fill(),
+    };
 
-    data_frame!(
-        x = result.0,
-        y = result.1,
-        glyph_id = result.2,
-        path_id = result.3,
-        triangle_id = result.4
+    result.try_into().unwrap()
+}
+
+#[extendr(use_try_from = true)]
+fn string2path_impl(text: &str, font_file: &str, tolerance: f32) -> Robj {
+    string2path_inner(text, font_file, tolerance, 0., ConversionType::Path)
+}
+
+#[extendr(use_try_from = true)]
+fn string2stroke_impl(text: &str, font_file: &str, tolerance: f32, line_width: f32) -> Robj {
+    string2path_inner(
+        text,
+        font_file,
+        tolerance,
+        line_width,
+        ConversionType::Stroke,
     )
 }
 
 #[extendr(use_try_from = true)]
 fn string2fill_impl(text: &str, font_file: &str, tolerance: f32) -> Robj {
-    let mut builder = builder::LyonPathBuilder::new(tolerance, 0.);
-
-    builder.outline(text, font_file).unwrap();
-
-    let result = builder.into_fill();
-
-    data_frame!(
-        x = result.0,
-        y = result.1,
-        glyph_id = result.2,
-        path_id = result.3,
-        triangle_id = result.4
-    )
+    string2path_inner(text, font_file, tolerance, 0., ConversionType::Fill)
 }
 
 // Macro to generate exports.
