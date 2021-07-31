@@ -118,7 +118,7 @@ jobs:
         with:
           name: staticlib
           path: |
-            ./src/rust/target/libstring2path.a
+            ./src/rust/target/release/libstring2path.a
             ./src/rust/target/*/release/libstring2path.a
           if-no-files-found: error
 
