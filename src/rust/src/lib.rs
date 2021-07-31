@@ -62,3 +62,38 @@ extendr_module! {
     fn string2stroke_impl;
     fn string2fill_impl;
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::builder::LyonPathBuilder;
+
+    #[test]
+    fn test_path() {
+        let mut builder = LyonPathBuilder::new(0.01, 0.);
+        builder.outline("A", "test/font/test.ttf").unwrap();
+        let result = builder.into_path();
+
+        assert_eq!(result.x, vec![0., 100., 0., 0.]);
+        assert_eq!(result.y, vec![0., 100., 100., 0.]);
+    }
+
+    #[test]
+    fn test_stroke() {
+        let mut builder = LyonPathBuilder::new(0.01, 50.);
+        builder.outline("A", "test/font/test.ttf").unwrap();
+        let result = builder.into_stroke();
+
+        assert!(result.x.iter().any(|&i| 0. - 25.0 <= i && i <= 100. + 25.0));
+        assert!(result.y.iter().any(|&i| 0. - 25.0 <= i && i <= 100. + 25.0));
+    }
+
+    #[test]
+    fn test_fill() {
+        let mut builder = LyonPathBuilder::new(0.01, 0.);
+        builder.outline("A", "test/font/test.ttf").unwrap();
+        let result = builder.into_fill();
+
+        assert_eq!(result.x, vec![0., 100., 0., 0.]);
+        assert_eq!(result.y, vec![0., 100., 100., 0.]);
+    }
+}
