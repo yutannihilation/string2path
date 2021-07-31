@@ -7,11 +7,9 @@
 #'   font_file A path to TTF or OTF file.
 #' @param tolerance
 #'   Maximum distance allowed between the curve and its approximation. For more details,
-#'   please refer to [lyon's doc](https://docs.rs/lyon/0.16.2/lyon/index.html#what-is-the-tolerance-variable-in-these-examples).
+#'   please refer to [the documentation of the underlying Rust library](https://docs.rs/lyon/0.17.5/lyon/#what-is-the-tolerance-variable-in-these-examples).
 #' @param line_width
 #'   Line width of strokes.
-#' @param result_type
-#'   Result types.
 #' @export
 string2path <- function(text, font_file, tolerance = 0.01) {
   string2path_impl(text, font_file, tolerance)

@@ -18,11 +18,9 @@ string2fill(text, font_file, tolerance = 0.01)
 \item{font_file}{A path to TTF or OTF file.}
 
 \item{tolerance}{Maximum distance allowed between the curve and its approximation. For more details,
-please refer to \href{https://docs.rs/lyon/0.16.2/lyon/index.html#what-is-the-tolerance-variable-in-these-examples}{lyon's doc}.}
+please refer to \href{https://docs.rs/lyon/0.17.5/lyon/#what-is-the-tolerance-variable-in-these-examples}{the documentation of the underlying Rust library}.}
 
 \item{line_width}{Line width of strokes.}
-
-\item{result_type}{Result types.}
 }
 \description{
 Convert strings to paths
