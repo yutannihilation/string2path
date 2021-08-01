@@ -10,10 +10,6 @@ Authors@R:
 Description: Extract the glyph information from a 'OpenType' or 'TrueType' font 
     file, and translate curves to flattened paths.
 License: MIT + file LICENSE
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
-SystemRequirements: Cargo (rustc package manager)
 Depends:
     R (>= 4.0)
 Imports: 
@@ -21,4 +17,10 @@ Imports:
 Suggests: 
     testthat (>= 3.0.0),
     systemfonts
+URL: https://yutannihilation.github.io/string2path/, https://github.com/yutannihilation/string2path
+BugReports: https://github.com/yutannihilation/string2path/issues
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+SystemRequirements: Cargo (rustc package manager)
 Config/testthat/edition: 3
