@@ -8,7 +8,7 @@
 \usage{
 string2path(text, font_file, tolerance = 5e-05)
 
-string2stroke(text, font_file, tolerance = 5e-05, line_width = 0.01)
+string2stroke(text, font_file, tolerance = 5e-05, line_width = 0.03)
 
 string2fill(text, font_file, tolerance = 5e-05)
 }
@@ -25,16 +25,16 @@ approximation. For more details, please refer to \href{https://docs.rs/lyon/0.17
 }
 \value{
 A \code{tibble()} containing these columns:
-\itemize{
-\item{x}{x position of the point on the path, scaled to \code{x / height}.}
-\item{y}{Y position of the point on the path, scaled to \code{y / height}. y=0 is at the base line of the first line.}
+\describe{
+\item{x}{x position of the point on the path, scaled to x / line height. The left side of the first glyph is at x = 0.}
+\item{y}{Y position of the point on the path, scaled to y / line height. The baseline of the first line is at y = 0.}
 \item{glyph_id}{IDs to distinguish the glyphs.}
 \item{path_id}{IDs to distinguish the groups of paths.}
 \item{triangle_id}{IDs to distinguish the triangles. \code{string2path()} doesn't contain this column.}
 }
 }
 \description{
-\code{string2path()} converts a text to the paths of the 'width-less' outlines of
+\code{string2path()} converts a text to the paths of the width-less outlines of
 each glyph. \code{string2stroke()} converts a text to the paths of the outlines,
 with the specified line width, of each glyph. \code{string2fill()} converts a text
 to the paths of the filled polygon of each glyph.
@@ -54,7 +54,7 @@ if (requireNamespace("systemfonts", quietly = TRUE)) {
   }
 
   # string2stroke() converts a text to strokes
-  d_stroke <- string2stroke("TEXT", ttf_or_otf[1], line_width = 50)
+  d_stroke <- string2stroke("TEXT", ttf_or_otf[1])
   plot(d_stroke$x, d_stroke$y)
 
   # The stroke is split into triangles, which can be distinguished by `triangle_id`
