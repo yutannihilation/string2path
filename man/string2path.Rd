@@ -4,7 +4,7 @@
 \alias{string2path}
 \alias{string2stroke}
 \alias{string2fill}
-\title{Convert a string to paths.}
+\title{Convert a String to Paths}
 \usage{
 string2path(text, font_file, tolerance = 5e-05)
 

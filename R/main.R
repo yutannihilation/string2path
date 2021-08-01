@@ -1,4 +1,4 @@
-#' Convert a string to paths.
+#' Convert a String to Paths
 #'
 #' `string2path()` converts a text to the paths of the width-less outlines of
 #' each glyph. `string2stroke()` converts a text to the paths of the outlines,
