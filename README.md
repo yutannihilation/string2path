@@ -8,6 +8,8 @@
 [![R-CMD-check](https://github.com/yutannihilation/string2path/workflows/R-CMD-check/badge.svg)](https://github.com/yutannihilation/string2path/actions)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/string2path)](https://CRAN.R-project.org/package=string2path)
 <!-- badges: end -->
 
 The string2path R package converts a text to paths of the outlines of
