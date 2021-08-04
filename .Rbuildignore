@@ -5,3 +5,4 @@
 ^\.github$
 ^fonts$
 ^cran-comments\.md$
+^CRAN-RELEASE$
