@@ -18,7 +18,7 @@ $(SHLIB): $(STATLIB)
 
 $(STATLIB):
 ifdef CARGO_EXISTS
-	cargo build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
+	PATH="$(HOME)/.cargo/bin:$(PATH)" cargo build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
 	rm -Rf $(CARGO_HOME)
 	rm -Rf $(LIBDIR)/build
 else

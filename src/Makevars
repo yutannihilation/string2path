@@ -10,7 +10,7 @@ all: C_clean
 $(SHLIB): $(STATLIB)
 
 $(STATLIB):
-	cargo build --lib --release --manifest-path=./rust/Cargo.toml
+	PATH="$(HOME)/.cargo/bin:$(PATH)" cargo build --lib --release --manifest-path=./rust/Cargo.toml
 	rm -Rf $(CARGO_HOME)
 	rm -Rf $(LIBDIR)/build
 
