@@ -62,17 +62,20 @@
 #'
 #' @export
 string2path <- function(text, font_file, tolerance = 0.00005) {
+  font_file <- path.expand(font_file)
   string2path_impl(text, font_file, tolerance)
 }
 
 #' @rdname string2path
 #' @export
 string2stroke <- function(text, font_file, tolerance = 0.00005, line_width = 0.03) {
+  font_file <- path.expand(font_file)
   string2stroke_impl(text, font_file, tolerance, line_width)
 }
 
 #' @rdname string2path
 #' @export
 string2fill <- function(text, font_file, tolerance = 0.00005) {
+  font_file <- path.expand(font_file)
   string2fill_impl(text, font_file, tolerance)
 }
