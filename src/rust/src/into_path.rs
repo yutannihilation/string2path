@@ -59,7 +59,15 @@ impl LyonPathBuilder {
                         y.push(p.y);
                     }
                 }
-                lyon::path::Event::End { .. } => {}
+                // glyph can be "open path," even when `close` is true. In that case, `first` should point to the begin point.
+                lyon::path::Event::End { last, first, close } => {
+                    if close && last != first {
+                        glyph_id.push(first.1[0] as _);
+                        path_id.push(first.1[1] as _);
+                        x.push(first.0.x);
+                        y.push(first.0.y);
+                    }
+                }
             }
         }
 
