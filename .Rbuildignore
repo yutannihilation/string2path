@@ -6,3 +6,4 @@
 ^fonts$
 ^cran-comments\.md$
 ^CRAN-RELEASE$
+^src/.cargo

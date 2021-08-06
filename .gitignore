@@ -4,4 +4,4 @@
 .Ruserdata
 /fonts
 
-node_modules
+src/.cargo
