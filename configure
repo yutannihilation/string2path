@@ -1,0 +1,41 @@
+# NOTE:
+# This is based on the configure script of the gifski package, (https://github.com/r-rust/gifski/),
+# distributed under the MIT license, authored by Jeroen Ooms.
+
+# Even when `cargo` is on `PATH`, `rustc` might not (c.f. https://github.com/yutannihilation/string2path/issues/4).
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# If cargo command already exists, do nothing.
+cargo --version
+if [ $? -eq 0 ]; then
+  exit 0
+fi
+
+# If the OS is macOS, try installing cargo to a temporary dir on the fly.
+# I feel this is doing too much, but this is needed to let the CRAN build success,
+# (c.f. https://github.com/yutannihilation/string2path/issues/8), so I rely on
+# this for now. Eventually, I will provide staticlib for macOS, just like I do
+# for Windows.
+if [ "`uname`" = "Darwin" ]; then
+  echo "Note: installing cargo to a temporary dir..."
+
+  # autobrew is a "Fork of homebrew for building CRAN packages" (https://github.com/autobrew/)
+  # This also tweaks src/Makevars to use TMPDIR instead of CARGO_HOME.
+  curl "https://autobrew.github.io/scripts/rust" -sSf | sh
+
+  # If the installation succeeds, exit here.
+  if [ $? -eq 0 ]; then
+    exit 0
+  fi
+fi
+
+# If cargo is not found, display a friendly message and exit with error.
+
+echo "------------------ RUST COMPILER NOT FOUND --------------------"
+echo ""
+echo "Please refer to <https://www.rust-lang.org/tools/install>"
+echo ""
+echo "---------------------------------------------------------------"
+echo ""
+
+exit 1
