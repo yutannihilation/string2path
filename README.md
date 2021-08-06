@@ -34,6 +34,9 @@ install this package. See <https://www.rust-lang.org/tools/install> for
 the installation instructions.
 
 ``` r
+install.packages("string2path")
+
+# Or the development version from GitHub:
 # install.packages("devtools")
 devtools::install_github("yutannihilation/string2path")
 ```
