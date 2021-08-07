@@ -20,7 +20,8 @@
 * I would like to request to exclude Solaris from the build targets because
   Solaris is not a supported platform by Rust. This should be in line with the
   treatments of other CRAN packages that use Rust; gifski, baseflow, and
-  salso are not built on Solaris.
+  salso are not built on Solaris. I'm sorry that I didn't write this in the first
+  submission.
 * The build error on r-devel-windows-x86_64-gcc10-UCRT should be solved when the
   dependency package (i.e., tibble) become available.
 * There's no reverse dependency.
