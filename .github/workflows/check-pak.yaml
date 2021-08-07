@@ -141,11 +141,13 @@ jobs:
 
           # R-devel already drops 32bit Windows!
           if ( '${{ matrix.config.r }}' -eq 'devel' ) {
-            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a staticlib/${$CRT_PREFIX}x86_64-pc-windows-gnu-libstring2path.a
+            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a staticlib/${CRT_PREFIX}x86_64-pc-windows-gnu-libstring2path.a
           } else {
             mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a staticlib/x86_64-pc-windows-gnu-libstring2path.a
             mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-i386/rust/target/i686-pc-windows-gnu/release/libstring2path.a staticlib/i686-pc-windows-gnu-libstring2path.a
           }
+
+          ls ./staticlib
         shell: pwsh
 
       - name: Upload staticlib
