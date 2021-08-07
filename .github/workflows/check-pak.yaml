@@ -64,12 +64,6 @@ jobs:
           Start-Process -FilePath "${env:TEMP}\\R-devel-win-ucrt.exe" -ArgumentList @('/VERYSILENT', '/SUPPRESSMSGBOXES', '/DIR=C:\R') -Wait
         shell: pwsh
 
-      - name: Use UCRT
-        if: runner.os == 'Windows' && matrix.config.c_runtime == 'ucrt'
-        run: |
-          "%TEMP%\\R-devel-win-ucrt.exe" /VERYSILENT /SUPPRESSMSGBOXES /DIR=C:\R
-        shell: cmd
-
       - uses: r-lib/actions/setup-pandoc@v1
 
       - name: Install pak and query dependencies
