@@ -133,14 +133,15 @@ jobs:
           # list all staticlibs
           find ./check -name libstring2path.a
 
-          if ( "${{ matrix.config.c_runtime }}" -eq "ucrt" ) {
-            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a ucrt-x86_64-pc-windows-gnu-libstring2path.a
-          } else {
-            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a x86_64-pc-windows-gnu-libstring2path.a
+          if ( '${{ matrix.config.c_runtime }}' -eq 'ucrt' ) {
+            $CRT_PREFIX='ucrt-'
           }
 
           # R-devel already drops 32bit Windows!
-          if ( "${{ matrix.config.r }}" -eq "devel" ) {
+          if ( '${{ matrix.config.r }}' -eq 'devel' ) {
+              mv ./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a ${$CRT_PREFIX}x86_64-pc-windows-gnu-libstring2path.a
+          } else {
+            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a x86_64-pc-windows-gnu-libstring2path.a
             mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-i386/rust/target/i686-pc-windows-gnu/release/libstring2path.a i686-pc-windows-gnu-libstring2path.a
           }
         shell: pwsh
