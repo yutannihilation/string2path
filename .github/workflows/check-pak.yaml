@@ -130,6 +130,9 @@ jobs:
       - name: Tweak staticlib
         if: runner.os == 'Windows'
         run: |
+          # list all staticlibs
+          find ./check -name libstring2path.a
+
           if ( "${{ matrix.config.c_runtime }}" -eq "ucrt" ) {
             mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a ucrt-x86_64-pc-windows-gnu-libstring2path.a
           } else {
