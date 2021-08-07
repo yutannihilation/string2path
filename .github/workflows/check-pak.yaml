@@ -21,7 +21,7 @@ jobs:
       matrix:
         config:
           # - {os: windows-latest, r: 'release', rust: 'stable'}
-          - {os: windows-latest, r: 'devel',   rust: 'stable'}
+          - {os: windows-latest, r: 'devel',   rust: 'stable', ucrt: true}
           # - {os: macOS-latest,   r: 'release', rust: 'stable'}
           # - {os: ubuntu-20.04,   r: 'release', rust: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           # - {os: ubuntu-20.04,   r: 'devel',   rust: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest", http-user-agent: "R/4.1.0 (ubuntu-20.04) R (4.1.0 x86_64-pc-linux-gnu x86_64 linux-gnu) on GitHub Actions" }
@@ -53,7 +53,7 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
 
       - name: Use UCRT
-        if: runner.os == 'Windows' && matrix.config.r == 'devel'
+        if: runner.os == 'Windows' && matrix.config.ucrt
         run: |
           echo "c:/rtools40/ucrt64/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
@@ -63,11 +63,6 @@ jobs:
           # Install (c.f. https://github.com/r-lib/actions/blob/630f4c9d8b813f45d0327a2fc20eb264fd518450/setup-r/src/installer.ts#L314-L318)
           Start-Process 'cmd' @("/c ${env:TEMP}\\R-devel-win-ucrt.exe", '/VERYSILENT', '/SUPPRESSMSGBOXES', '/DIR=C:\R')
         shell: pwsh
-
-      - name: Check UCRT
-        if: runner.os == 'Windows' && matrix.config.r == 'devel'
-        run: |
-          which gcc
 
       - uses: r-lib/actions/setup-pandoc@v1
 
@@ -111,7 +106,12 @@ jobs:
           _R_CHECK_CRAN_INCOMING_: false
         run: |
           options(crayon.enabled = TRUE)
-          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran", "--no-multiarch"), error_on = "warning", check_dir = "check")
+          args <- c("--no-manual", "--as-cran")
+          # Win UCRT build doesn't have i686
+          if (identical("${{ matrix.config.ucrt }}", "true") {
+            args <- c(args, "--no-multiarch")
+          }
+          rcmdcheck::rcmdcheck(args, error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
       - name: Show testthat output
@@ -130,8 +130,12 @@ jobs:
       - name: Tweak staticlib
         if: runner.os == 'Windows'
         run: |
-          mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-i386/rust/target/i686-pc-windows-gnu/release/libstring2path.a i686-pc-windows-gnu-libstring2path.a
-          mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a x86_64-pc-windows-gnu-libstring2path.a
+          if [ "${{ matrix.config.ucrt }}" = "true" ]; then
+            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a ucrt-x86_64-pc-windows-gnu-libstring2path.a
+          else
+            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-i386/rust/target/i686-pc-windows-gnu/release/libstring2path.a i686-pc-windows-gnu-libstring2path.a
+            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a x86_64-pc-windows-gnu-libstring2path.a
+          fi
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -141,6 +145,7 @@ jobs:
           files: |
             i686-pc-windows-gnu-libstring2path.a
             x86_64-pc-windows-gnu-libstring2path.a
+            ucrt-x86_64-pc-windows-gnu-libstring2path.a
 
       - name: Don't use tar from old Rtools to store the cache
         if: ${{ runner.os == 'Windows' && startsWith(steps.install-r.outputs.installed-r-version, '3.6' ) }}

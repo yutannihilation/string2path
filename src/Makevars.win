@@ -23,7 +23,7 @@ ifdef CARGO_EXISTS
 	rm -Rf $(LIBDIR)/build
 else
 	mkdir -p $(LIBDIR)
-	curl -L -o $(STATLIB) https://github.com/yutannihilation/$(CRATE)/releases/download/$(BASE_TAG)/$(TARGET)-lib$(CRATE).a
+	curl -L -o $(STATLIB) https://github.com/yutannihilation/$(CRATE)/releases/download/$(BASE_TAG)/$(CRT_PREFIX)$(TARGET)-lib$(CRATE).a
 endif
 
 C_clean:
