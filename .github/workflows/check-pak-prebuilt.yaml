@@ -20,7 +20,8 @@ jobs:
         config:
           - {os: windows-latest, r: 'release'}
           - {os: windows-latest, r: 'devel'}
-          - {os: windows-latest, r: 'devel',  c_runtime: 'ucrt'}
+          # Uncomment this to test the precompiled binary for Windows UCRT.
+          # - {os: windows-latest, r: 'devel',  c_runtime: 'ucrt'}
           # - {os: macOS-latest,   r: 'release'} # check if configure script works
 
     env:
