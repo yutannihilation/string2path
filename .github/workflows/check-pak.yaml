@@ -32,6 +32,15 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
+      - name: test1
+        run: |
+          Invoke-WebRequest -Uri "https://www.r-project.org/nosvn/winutf8/ucrt3/R-devel-win-80717-4617-4659.exe" -OutFile "R-devel-win.exe"
+
+      - name: test2
+        run: |
+          "R-devel-win.exe" /SUPPRESSMSGBOXES /DIR='C:\R'
+        shell: cmd
+
       - uses: actions/checkout@v2
 
       - name: Set up Rust
