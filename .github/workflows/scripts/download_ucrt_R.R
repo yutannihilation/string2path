@@ -14,4 +14,4 @@ url <- paste0(base_url, file)
 
 message("Downloading ", url, " into ", destfile, "...")
 
-download.file(url, destfile)
+download.file(url, destfile, mode = "wb")
