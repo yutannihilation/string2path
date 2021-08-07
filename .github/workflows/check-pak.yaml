@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          # - {os: windows-latest, r: 'release', rust: 'stable'}
+          - {os: windows-latest, r: 'release', rust: 'stable'}
           - {os: windows-latest, r: 'devel',   rust: 'stable', c_runtime: 'ucrt'}
           # - {os: macOS-latest,   r: 'release', rust: 'stable'}
           # - {os: ubuntu-20.04,   r: 'release', rust: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
@@ -133,30 +133,45 @@ jobs:
           # list all staticlibs
           find ./check -name libstring2path.a
 
+          mkdir ./staticlib
+
           if ( '${{ matrix.config.c_runtime }}' -eq 'ucrt' ) {
             $CRT_PREFIX='ucrt-'
           }
 
           # R-devel already drops 32bit Windows!
           if ( '${{ matrix.config.r }}' -eq 'devel' ) {
-              mv ./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a ${$CRT_PREFIX}x86_64-pc-windows-gnu-libstring2path.a
+            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a staticlib/${$CRT_PREFIX}x86_64-pc-windows-gnu-libstring2path.a
           } else {
-            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a x86_64-pc-windows-gnu-libstring2path.a
-            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-i386/rust/target/i686-pc-windows-gnu/release/libstring2path.a i686-pc-windows-gnu-libstring2path.a
+            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a staticlib/x86_64-pc-windows-gnu-libstring2path.a
+            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-i386/rust/target/i686-pc-windows-gnu/release/libstring2path.a staticlib/i686-pc-windows-gnu-libstring2path.a
           }
         shell: pwsh
 
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: runner.os == 'Windows' && startsWith(github.ref, 'refs/tags/')
+      - name: Upload staticlib
+        uses: actions/upload-artifact@main
         with:
-          fail_on_unmatched_files: true
-          files: |
-            x86_64-pc-windows-gnu-libstring2path.a
-            ucrt-x86_64-pc-windows-gnu-libstring2path.a
-            i686-pc-windows-gnu-libstring2path.a
+          name: staticlib
+          path: staticlib
 
       - name: Don't use tar from old Rtools to store the cache
         if: ${{ runner.os == 'Windows' && startsWith(steps.install-r.outputs.installed-r-version, '3.6' ) }}
         shell: bash
         run: echo "C:/Program Files/Git/usr/bin" >> $GITHUB_PATH
+
+
+  release:
+    needs: R-CMD-check
+    runs-on: ubuntu-latest
+    # Do not run this on pull request
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/download-artifact@v2
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: runner.os == 'Windows' && startsWith(github.ref, 'refs/tags/')
+        with:
+          files: 'staticlib/*'
