@@ -108,7 +108,7 @@ jobs:
           options(crayon.enabled = TRUE)
           args <- c("--no-manual", "--as-cran")
           # Win UCRT build doesn't have i686
-          if (identical("${{ matrix.config.c_runtime }}", "ucrt") {
+          if (identical("${{ matrix.config.c_runtime }}", "ucrt")) {
             args <- c(args, "--no-multiarch")
           }
           rcmdcheck::rcmdcheck(args, error_on = "warning", check_dir = "check")
