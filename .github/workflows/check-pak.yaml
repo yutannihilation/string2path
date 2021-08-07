@@ -55,7 +55,7 @@ jobs:
       - name: Use UCRT
         if: runner.os == 'Windows' && matrix.config.r == 'devel'
         run: |
-          echo 'PATH="${RTOOLS40_HOME}\ucrt64\bin;${RTOOLS40_HOME}\usr\bin;${PATH}"' | Out-File -FilePath 'C:\Program Files\R\R-devel\etc\Renviron.site'
+          echo 'PATH="${RTOOLS40_HOME}\ucrt64\bin;${RTOOLS40_HOME}\usr\bin;${PATH}"' | Out-File -FilePath 'D:\Documents\.Renviron'
 
           # Download UCRT version of R
           Rscript.exe .github/workflows/scripts/download_ucrt_R.R
