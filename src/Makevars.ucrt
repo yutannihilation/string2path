@@ -1,1 +1,2 @@
 CRT_PREFIX=ucrt-
+include Makevars.win
