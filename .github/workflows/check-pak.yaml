@@ -107,8 +107,8 @@ jobs:
         run: |
           options(crayon.enabled = TRUE)
           args <- c("--no-manual", "--as-cran")
-          # Win UCRT build doesn't have i686
-          if (identical("${{ matrix.config.c_runtime }}", "ucrt")) {
+          # R-devel already drops 32bit Windows!
+          if (!identical("${{ matrix.config.r }}", "devel")) {
             args <- c(args, "--no-multiarch")
           }
           rcmdcheck::rcmdcheck(args = args, error_on = "warning", check_dir = "check")
@@ -133,8 +133,12 @@ jobs:
           if [ "${{ matrix.config.c_runtime }}" = "ucrt" ]; then
             mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a ucrt-x86_64-pc-windows-gnu-libstring2path.a
           else
-            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-i386/rust/target/i686-pc-windows-gnu/release/libstring2path.a i686-pc-windows-gnu-libstring2path.a
             mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a x86_64-pc-windows-gnu-libstring2path.a
+          fi
+
+          # R-devel already drops 32bit Windows!
+          if [ "${{ matrix.config.r }}" != "devel" ]; then
+            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-i386/rust/target/i686-pc-windows-gnu/release/libstring2path.a i686-pc-windows-gnu-libstring2path.a
           fi
 
       - name: Release
@@ -143,9 +147,9 @@ jobs:
         with:
           fail_on_unmatched_files: true
           files: |
-            i686-pc-windows-gnu-libstring2path.a
             x86_64-pc-windows-gnu-libstring2path.a
             ucrt-x86_64-pc-windows-gnu-libstring2path.a
+            i686-pc-windows-gnu-libstring2path.a
 
       - name: Don't use tar from old Rtools to store the cache
         if: ${{ runner.os == 'Windows' && startsWith(steps.install-r.outputs.installed-r-version, '3.6' ) }}
