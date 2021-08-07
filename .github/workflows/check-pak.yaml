@@ -20,11 +20,12 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: 'release', rust: 'stable'}
-          - {os: macOS-latest,   r: 'release', rust: 'stable'}
-          - {os: ubuntu-20.04,   r: 'release', rust: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-20.04,   r: 'devel',   rust: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest", http-user-agent: "R/4.1.0 (ubuntu-20.04) R (4.1.0 x86_64-pc-linux-gnu x86_64 linux-gnu) on GitHub Actions" }
-          - {os: ubuntu-20.04,   r: 'release', rust: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          # - {os: windows-latest, r: 'release', rust: 'stable'}
+          - {os: windows-latest, r: 'devel',   rust: 'stable'}
+          # - {os: macOS-latest,   r: 'release', rust: 'stable'}
+          # - {os: ubuntu-20.04,   r: 'release', rust: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          # - {os: ubuntu-20.04,   r: 'devel',   rust: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest", http-user-agent: "R/4.1.0 (ubuntu-20.04) R (4.1.0 x86_64-pc-linux-gnu x86_64 linux-gnu) on GitHub Actions" }
+          # - {os: ubuntu-20.04,   r: 'release', rust: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
 
     env:
       RSPM: ${{ matrix.config.rspm }}
@@ -50,6 +51,18 @@ jobs:
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
+
+      - name: Use UCRT
+        if: runner.os == 'Windows' && matrix.config.r == 'devel'
+        run: |
+          echo 'PATH="${RTOOLS40_HOME}\ucrt64\bin;${RTOOLS40_HOME}\usr\bin;${PATH}"' | Out-File -FilePath 'C:\Program Files\R\R-devel\etc\Renviron.site'
+
+          # Download UCRT version of R
+          Rscript.exe .github/workflows/scripts/download_ucrt_R.R
+
+          # Install (c.f. https://github.com/r-lib/actions/blob/630f4c9d8b813f45d0327a2fc20eb264fd518450/setup-r/src/installer.ts#L314-L318)
+          Start-Process 'C:\actions\temp\R-devel-win-ucrt.exe' @('/VERYSILENT', '/SUPPRESSMSGBOXES', '/DIR=C:\R')
+        shell: pwsh
 
       - uses: r-lib/actions/setup-pandoc@v1
 
