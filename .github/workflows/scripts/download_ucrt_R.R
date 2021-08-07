@@ -1,5 +1,5 @@
 base_url <- "https://www.r-project.org/nosvn/winutf8/ucrt3/"
-destfile <- "./R-devel-win-ucrt.exe"
+destfile <- file.path(Sys.getenv("TEMP", unset = "."), "R-devel-win-ucrt.exe")
 
 l <- readLines(base_url)
 # e.g.)
