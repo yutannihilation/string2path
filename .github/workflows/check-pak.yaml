@@ -61,8 +61,14 @@ jobs:
           Rscript.exe .github/workflows/scripts/download_ucrt_R.R
 
           # Install (c.f. https://github.com/r-lib/actions/blob/630f4c9d8b813f45d0327a2fc20eb264fd518450/setup-r/src/installer.ts#L314-L318)
-          Start-Process 'cmd' @("/c ${env:TEMP}\\R-devel-win-ucrt.exe", '/VERYSILENT', '/SUPPRESSMSGBOXES', '/DIR=C:\R')
+          # Start-Process 'cmd' @("/c ${env:TEMP}\\R-devel-win-ucrt.exe", '/VERYSILENT', '/SUPPRESSMSGBOXES', '/DIR=C:\R')
         shell: pwsh
+
+      - name: Use UCRT
+        if: runner.os == 'Windows' && matrix.config.c_runtime == 'ucrt'
+        run: |
+          "%TEMP%\\R-devel-win-ucrt.exe" /VERYSILENT /SUPPRESSMSGBOXES /DIR='C:\R'
+        shell: cmd
 
       - uses: r-lib/actions/setup-pandoc@v1
 
