@@ -130,16 +130,17 @@ jobs:
       - name: Tweak staticlib
         if: runner.os == 'Windows'
         run: |
-          if [ "${{ matrix.config.c_runtime }}" = "ucrt" ]; then
+          if ( "${{ matrix.config.c_runtime }}" -eq "ucrt" ) {
             mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a ucrt-x86_64-pc-windows-gnu-libstring2path.a
-          else
+          } else {
             mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a x86_64-pc-windows-gnu-libstring2path.a
-          fi
+          }
 
           # R-devel already drops 32bit Windows!
-          if [ "${{ matrix.config.r }}" != "devel" ]; then
+          if ( "${{ matrix.config.r }}" -eq "devel" ) {
             mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-i386/rust/target/i686-pc-windows-gnu/release/libstring2path.a i686-pc-windows-gnu-libstring2path.a
-          fi
+          }
+        shell: pwsh
 
       - name: Release
         uses: softprops/action-gh-release@v1
