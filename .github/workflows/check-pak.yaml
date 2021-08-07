@@ -14,7 +14,7 @@ jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }} ${{ matrix.config.c_runtime }})
+    name: ${{ matrix.config.os }} (R: ${{ matrix.config.r }} ${{ matrix.config.c_runtime }}, Rust: ${{ matrix.config.rust }})
 
     strategy:
       fail-fast: false
