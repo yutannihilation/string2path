@@ -64,6 +64,13 @@ jobs:
           Start-Process "${env:TEMP}\\R-devel-win-ucrt.exe" @('/VERYSILENT', '/SUPPRESSMSGBOXES', '/DIR=C:\R')
         shell: pwsh
 
+      - name: Session info
+        run: |
+          options(width = 100)
+          pkgs <- installed.packages()[, "Package"]
+          sessioninfo::session_info(pkgs, include_base = TRUE)
+        shell: Rscript {0}
+
       - uses: r-lib/actions/setup-pandoc@v1
 
       - name: Install pak and query dependencies
