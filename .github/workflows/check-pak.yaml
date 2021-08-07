@@ -34,7 +34,8 @@ jobs:
     steps:
       - name: test1
         run: |
-          Invoke-WebRequest -Uri "https://www.r-project.org/nosvn/winutf8/ucrt3/R-devel-win-80717-4617-4659.exe" -OutFile "R-devel-win.exe"
+          # Invoke-WebRequest -Uri "https://www.r-project.org/nosvn/winutf8/ucrt3/R-devel-win-80717-4617-4659.exe" -OutFile "R-devel-win.exe"
+          Invoke-WebRequest -Uri "https://cran.r-project.org/bin/windows/base/R-devel-win.exe" -OutFile "R-devel-win.exe"
 
       - name: test2
         run: |
