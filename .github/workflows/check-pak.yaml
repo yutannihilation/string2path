@@ -38,7 +38,7 @@ jobs:
 
       - name: test2
         run: |
-          "R-devel-win.exe" /SUPPRESSMSGBOXES /DIR='C:\R'
+          "R-devel-win.exe" /VERYSILENT /SUPPRESSMSGBOXES /DIR='C:\R'
         shell: cmd
 
       - uses: actions/checkout@v2
