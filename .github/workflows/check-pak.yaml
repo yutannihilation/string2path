@@ -108,7 +108,7 @@ jobs:
           options(crayon.enabled = TRUE)
           args <- c("--no-manual", "--as-cran")
           # R-devel already drops 32bit Windows!
-          if (!identical("${{ matrix.config.r }}", "devel")) {
+          if (identical("${{ matrix.config.r }}", "devel")) {
             args <- c(args, "--no-multiarch")
           }
           rcmdcheck::rcmdcheck(args = args, error_on = "warning", check_dir = "check")
