@@ -111,7 +111,7 @@ jobs:
           if (identical("${{ matrix.config.c_runtime }}", "ucrt")) {
             args <- c(args, "--no-multiarch")
           }
-          rcmdcheck::rcmdcheck(args, error_on = "warning", check_dir = "check")
+          rcmdcheck::rcmdcheck(args = args, error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
       - name: Show testthat output
