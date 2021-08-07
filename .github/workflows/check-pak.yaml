@@ -159,19 +159,19 @@ jobs:
         shell: bash
         run: echo "C:/Program Files/Git/usr/bin" >> $GITHUB_PATH
 
-
   release:
     needs: R-CMD-check
     runs-on: ubuntu-latest
     # Do not run this on pull request
     if: startsWith(github.ref, 'refs/tags/')
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v2
 
       - name: Release
         uses: softprops/action-gh-release@v1
         if: runner.os == 'Windows' && startsWith(github.ref, 'refs/tags/')
         with:
           files: 'staticlib/*'
+
