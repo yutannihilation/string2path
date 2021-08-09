@@ -14,13 +14,15 @@ jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    name: "${{ matrix.config.os }} (R: ${{ matrix.config.r }} ${{ matrix.config.c_runtime }}, Rust: ${{ matrix.config.rust }})"
 
     strategy:
       fail-fast: false
       matrix:
         config:
           - {os: windows-latest, r: 'release', rust: 'stable'}
+          # Uncomment this to test and compile the binary for Windows UCRT.
+          # - {os: windows-latest, r: 'devel',   rust: 'stable', c_runtime: 'ucrt'}
           - {os: macOS-latest,   r: 'release', rust: 'stable'}
           - {os: ubuntu-20.04,   r: 'release', rust: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           - {os: ubuntu-20.04,   r: 'devel',   rust: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest", http-user-agent: "R/4.1.0 (ubuntu-20.04) R (4.1.0 x86_64-pc-linux-gnu x86_64 linux-gnu) on GitHub Actions" }
@@ -50,6 +52,18 @@ jobs:
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
+
+      - name: Use UCRT
+        if: runner.os == 'Windows' && matrix.config.c_runtime == 'ucrt'
+        run: |
+          echo "c:/rtools40/ucrt64/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+          # Download UCRT version of R, and setup ~/.Renviron
+          Rscript.exe .github/workflows/scripts/download_ucrt_R.R
+
+          # Install (c.f. https://github.com/r-lib/actions/blob/630f4c9d8b813f45d0327a2fc20eb264fd518450/setup-r/src/installer.ts#L314-L318)
+          Start-Process -FilePath "${env:TEMP}\\R-devel-win-ucrt.exe" -ArgumentList @('/VERYSILENT', '/SUPPRESSMSGBOXES', '/DIR=C:\R') -Wait
+        shell: pwsh
 
       - uses: r-lib/actions/setup-pandoc@v1
 
@@ -93,7 +107,12 @@ jobs:
           _R_CHECK_CRAN_INCOMING_: false
         run: |
           options(crayon.enabled = TRUE)
-          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+          args <- c("--no-manual", "--as-cran")
+          # R-devel already drops 32bit Windows!
+          if (identical("${{ matrix.config.r }}", "devel")) {
+            args <- c(args, "--no-multiarch")
+          }
+          rcmdcheck::rcmdcheck(args = args, error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
       - name: Show testthat output
@@ -112,19 +131,49 @@ jobs:
       - name: Tweak staticlib
         if: runner.os == 'Windows'
         run: |
-          mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-i386/rust/target/i686-pc-windows-gnu/release/libstring2path.a i686-pc-windows-gnu-libstring2path.a
-          mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a x86_64-pc-windows-gnu-libstring2path.a
+          # list all staticlibs
+          find ./check -name libstring2path.a
 
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: runner.os == 'Windows' && startsWith(github.ref, 'refs/tags/')
+          mkdir ./staticlib
+
+          if ( '${{ matrix.config.c_runtime }}' -eq 'ucrt' ) {
+            $CRT_PREFIX='ucrt-'
+          }
+
+          # R-devel already drops 32bit Windows!
+          if ( '${{ matrix.config.r }}' -eq 'devel' ) {
+            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a staticlib/${CRT_PREFIX}x86_64-pc-windows-gnu-libstring2path.a
+          } else {
+            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a staticlib/x86_64-pc-windows-gnu-libstring2path.a
+            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-i386/rust/target/i686-pc-windows-gnu/release/libstring2path.a staticlib/i686-pc-windows-gnu-libstring2path.a
+          }
+
+          ls ./staticlib
+        shell: pwsh
+
+      - name: Upload staticlib
+        uses: actions/upload-artifact@main
         with:
-          fail_on_unmatched_files: true
-          files: |
-            i686-pc-windows-gnu-libstring2path.a
-            x86_64-pc-windows-gnu-libstring2path.a
+          name: staticlib
+          path: staticlib
 
       - name: Don't use tar from old Rtools to store the cache
         if: ${{ runner.os == 'Windows' && startsWith(steps.install-r.outputs.installed-r-version, '3.6' ) }}
         shell: bash
         run: echo "C:/Program Files/Git/usr/bin" >> $GITHUB_PATH
+
+  release:
+    needs: R-CMD-check
+    runs-on: ubuntu-latest
+    # Do not run this on pull request
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v2
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: 'staticlib/*'
+
