@@ -158,7 +158,7 @@ jobs:
       - name: Checksum
         run: |
           cd staticlib
-          sha256sum . > sha256sums.txt
+          sha256sum * > sha256sums.txt
 
       - name: Release
         uses: softprops/action-gh-release@v1
