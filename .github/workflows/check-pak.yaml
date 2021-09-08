@@ -21,11 +21,16 @@ jobs:
       matrix:
         config:
           - {os: windows-latest, r: 'release',    rust: 'stable'}
-          - {os: windows-latest, r: 'devel-ucrt', rust: 'stable'}
           - {os: macOS-latest,   r: 'release',    rust: 'stable'}
           - {os: ubuntu-20.04,   r: 'release',    rust: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           - {os: ubuntu-20.04,   r: 'devel',      rust: 'stable',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest", http-user-agent: "R/4.1.0 (ubuntu-20.04) R (4.1.0 x86_64-pc-linux-gnu x86_64 linux-gnu) on GitHub Actions" }
           - {os: ubuntu-20.04,   r: 'release',    rust: 'nightly', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          # Note: In the case of pure Rust code, the result binaries have no
+          #       difference between the legacy toolchain and the UCRT toolchain.
+          #       So, this is probably unnecessary, but leave this as-is as this
+          #       might be eventually useful for other package that depends on
+          #       some C/C++ library.
+          - {os: windows-latest, r: 'devel-ucrt', rust: 'stable'}
 
     env:
       RSPM: ${{ matrix.config.rspm }}
