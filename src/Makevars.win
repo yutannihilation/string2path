@@ -4,7 +4,7 @@ BASE_TAG = windows_20210908-3
 HASH64 = 26a05f6ee8c2f625027ffc77c97fc8ac9746a182f5bc53d64235999a02c0b0dc
 HASH32 = ceda54184fb3bf9e4cbba86848cb2091ff5b77870357f94319f9215fadfa5b25
 
-HASH := $(HASH$(WIN))
+HASH := $($(addsuffix $(WIN),HASH))
 
 TARGET = $(subst 64,x86_64,$(subst 32,i686,$(WIN)))-pc-windows-gnu
 LIBDIR = ./rust/target/$(TARGET)/release
