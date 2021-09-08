@@ -12,7 +12,7 @@ jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }} ${{ matrix.config.c_runtime }})
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
 
     strategy:
       fail-fast: false
@@ -21,7 +21,7 @@ jobs:
           - {os: windows-latest, r: 'release'}
           - {os: windows-latest, r: 'devel'}
           # Uncomment this to test the precompiled binary for Windows UCRT.
-          # - {os: windows-latest, r: 'devel',  c_runtime: 'ucrt'}
+          - {os: windows-latest, r: 'devel-ucrt'}
           # - {os: macOS-latest,   r: 'release'} # check if configure script works
 
     env:
@@ -40,18 +40,6 @@ jobs:
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
-
-      - name: Use UCRT
-        if: runner.os == 'Windows' && matrix.config.c_runtime == 'ucrt'
-        run: |
-          echo "c:/rtools40/ucrt64/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-
-          # Download UCRT version of R, and setup ~/.Renviron
-          Rscript.exe .github/workflows/scripts/download_ucrt_R.R
-
-          # Install (c.f. https://github.com/r-lib/actions/blob/630f4c9d8b813f45d0327a2fc20eb264fd518450/setup-r/src/installer.ts#L314-L318)
-          Start-Process -FilePath "${env:TEMP}\\R-devel-win-ucrt.exe" -ArgumentList @('/VERYSILENT', '/SUPPRESSMSGBOXES', '/DIR=C:\R') -Wait
-        shell: pwsh
 
       - uses: r-lib/actions/setup-pandoc@v1
 
