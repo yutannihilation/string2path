@@ -155,6 +155,11 @@ jobs:
 
       - uses: actions/download-artifact@v2
 
+      - name: Checksum
+        run: |
+          cd staticlib
+          sha256sum . > sha256sums.txt
+
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
