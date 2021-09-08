@@ -119,7 +119,7 @@ jobs:
 
           mkdir ./staticlib
 
-          if ( '${{ matrix.config.c_runtime }}'.EndsWith('ucrt') ) {
+          if ( '${{ matrix.config.r }}'.EndsWith('ucrt') ) {
             $CRT_PREFIX='ucrt-'
           }
 
