@@ -1,10 +1,12 @@
 CRATE = string2path
 
 BASE_TAG = windows_20210908-3
-HASH64 = 26a05f6ee8c2f625027ffc77c97fc8ac9746a182f5bc53d64235999a02c0b0dc
-HASH32 = ceda54184fb3bf9e4cbba86848cb2091ff5b77870357f94319f9215fadfa5b25
 
-HASH := $($(addsuffix $(WIN),HASH))
+ifeq "$(WIN)" "64"
+HASH = 26a05f6ee8c2f625027ffc77c97fc8ac9746a182f5bc53d64235999a02c0b0dc
+else
+HASH = ceda54184fb3bf9e4cbba86848cb2091ff5b77870357f94319f9215fadfa5b25
+endif
 
 TARGET = $(subst 64,x86_64,$(subst 32,i686,$(WIN)))-pc-windows-gnu
 LIBDIR = ./rust/target/$(TARGET)/release
@@ -33,7 +35,7 @@ else
 	mkdir -p $(LIBDIR)
 	curl -L -o $(STATLIB) https://github.com/yutannihilation/$(CRATE)/releases/download/$(BASE_TAG)/${CRT_PREFIX}$(TARGET)-lib$(CRATE).a
 	# verify the checksum
-	sha256sum $(STATLIB) | grep -q $(HASH)
+	sha256sum $(STATLIB) | grep -q "$(HASH)"
 endif
 
 C_clean:
