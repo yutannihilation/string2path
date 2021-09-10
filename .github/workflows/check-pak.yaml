@@ -51,7 +51,7 @@ jobs:
           rustup target add i686-pc-windows-gnu
           rustup target add x86_64-pc-windows-gnu
 
-      - uses: r-lib/actions/setup-r@experimental-ucrt
+      - uses: r-lib/actions/setup-r@v1
         id: install-r
         with:
           r-version: ${{ matrix.config.r }}
