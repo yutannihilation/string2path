@@ -30,7 +30,7 @@ jobs:
           #       So, this is probably unnecessary, but leave this as-is as this
           #       might be eventually useful for other package that depends on
           #       some C/C++ library.
-          - {os: windows-latest, r: 'devel-ucrt', rust: 'stable'}
+          - {os: windows-2022, r: 'devel-ucrt', rust: 'stable'}
 
     env:
       RSPM: ${{ matrix.config.rspm }}
