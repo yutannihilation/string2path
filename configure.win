@@ -18,12 +18,6 @@ GITHUB_TAG="windows_20210908-3"
 SHA256SUM_X86_64="26a05f6ee8c2f625027ffc77c97fc8ac9746a182f5bc53d64235999a02c0b0dc"
 SHA256SUM_I686="ceda54184fb3bf9e4cbba86848cb2091ff5b77870357f94319f9215fadfa5b25"
 
-# Even when `cargo` is on `PATH`, `rustc` might not. This should ensure PATH is
-# configured correctly (c.f. https://github.com/yutannihilation/string2path/issues/4).
-if [ -e "$HOME/.cargo/env" ]; then
-  . $HOME/.cargo/env
-fi
-
 # Check if `cargo` command exists ----------------------------------------------
 
 echo "*** Checking if cargo exists and the version is ok"
@@ -42,7 +36,7 @@ if [ $? -eq 0 ]; then
   fi
 
   # Even if the cargo is too old, it's not the end of the world. There might be
-  # a pre-compiled binary
+  # a pre-compiled binary for the platform.
   echo ""
   echo "WARN: The installed version of cargo (${CARGO_VERSION}) is older than the requirement (${MIN_CARGO_VERSION})"
   echo ""

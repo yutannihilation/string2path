@@ -14,7 +14,7 @@ all: C_clean
 $(SHLIB): $(STATLIB)
 
 $(STATLIB):
-	. "$(HOME)/.cargo/env" && cargo build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
+	cargo build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
 ifneq ($(NOT_CRAN),"true")
 	rm -Rf $(CARGO_HOME)
 	rm -Rf $(LIBDIR)/build
