@@ -1,2 +1,0 @@
-CRT_PREFIX=ucrt-
-. ./configure.win
