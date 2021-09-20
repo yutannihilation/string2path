@@ -25,10 +25,10 @@ ifneq ($(NOT_CRAN),"true")
 endif
 
 C_clean:
-ifeq ($(CLEAN_STATLIB),"true")
-	rm -f $(STATLIB)
-endif
-	rm -Rf $(SHLIB) $(OBJECTS)
+	rm -Rf \
+		$(SHLIB) \
+		$(OBJECTS) \
+	  @CREAN_EXTRA@
 
 clean:
 	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) rust/target

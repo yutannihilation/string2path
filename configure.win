@@ -71,7 +71,7 @@ if [ $? -eq 0 ]; then
 
     sed \
       -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
-      -e "s|@CLEAN_STATLIB@|true|" \
+      -e 's|@CREAN_EXTRA@|$(STATLIB)|' \
       src/Makevars.win.in > src/Makevars.win
 
     echo "<<< src/Makevars.win >>>"
@@ -135,7 +135,7 @@ find ./src -name libstring2path.a -print
 
 sed \
   -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
-  -e "s|@CLEAN_STATLIB@|false|" \
+  -e 's|@CREAN_EXTRA@||' \
   src/Makevars.win.in > src/Makevars.win
 
 echo "<<< src/Makevars.win >>>"
