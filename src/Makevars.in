@@ -7,8 +7,8 @@ NOT_CRAN = "@NOT_CRAN@"
 # If there's no cargo, do not clean STATLIB
 CLEAN_STATLIB = "@CLEAN_STATLIB@"
 
-ifeq ($(WINDOWS),"true")
 TARGET = $(subst 64,x86_64,$(subst 32,i686,$(WIN)))-pc-windows-gnu
+ifeq ($(WINDOWS),"true")
 LIBDIR = ./rust/target/$(TARGET)/release
 PKG_LIBS = -L$(LIBDIR) -lstring2path -lws2_32 -ladvapi32 -luserenv
 else
