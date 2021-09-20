@@ -156,7 +156,7 @@ jobs:
 
           # For M1 macOS
           rustup target add aarch64-apple-darwin
-          . "${HOME}/.cargo/env" && cargo build --target=aarch64-apple-darwin --lib --release --manifest-path=./rust/Cargo.toml
+          . "${HOME}/.cargo/env" && cargo build --target=aarch64-apple-darwin --lib --release --manifest-path=./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/Cargo.toml
           mv ./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/target/aarch64-apple-darwin/release/libstring2path.a staticlib/aarch64-apple-darwin-libstring2path.a
 
           ls ./staticlib
