@@ -65,10 +65,10 @@ if [ "`uname`" = "Darwin" ]; then
   SRC="https://github.com/${GITHUB_REPO}/releases/download/${GITHUB_TAG}/${RUST_TARGET}-lib${CRATE_NAME}.a"
   DST="./src/rust/target/${RUST_TARGET}/release/lib${CRATE_NAME}.a"
 
-  # NOTE: if the package requires more complex logic (e.g. different binaries
-  #       depending on the R version), create an external R script file for this
-  #       and place it under tools/ dir.
-  Rscript -e "download.file('${SRC}', destfile = '${DST}', mode = 'wb')"
+  echo "*** Download URL: ${SRC}"
+  echo "*** Dest file: ${DST}"
+
+  "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" ./tools/download_precompiled_binary.R "${SRC}" "${DST}"
   if [ $? -ne 0 ]; then
     echo ""
     echo "ERROR: Failed to download the pre-compiled binary"

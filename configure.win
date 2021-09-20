@@ -67,10 +67,8 @@ DST="./src/rust/target/${RUST_TARGET}/release/lib${CRATE_NAME}.a"
 echo "*** Download URL: ${SRC}"
 echo "*** Dest file: ${DST}"
 
-# NOTE: if the package requires more complex logic (e.g. different binaries
-#       depending on the R version), create an external R script file for this
-#       and place it under tools/ dir.
-"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "download.file('${SRC}', destfile = '${DST}', mode = 'wb')"
+Rscript ./tools/download_precompiled_binary.R "${SRC}" "${DST}"
+
 if [ $? -ne 0 ]; then
   echo ""
   echo "ERROR: Failed to download the pre-compiled binary"
