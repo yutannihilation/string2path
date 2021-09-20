@@ -100,6 +100,9 @@ jobs:
         run: |
           options(crayon.enabled = TRUE)
           args <- c("--no-manual", "--as-cran")
+          if (identical("${{ matrix.config.r }}", "release")) {
+            args <- c(args, "--force-multiarch")
+          }
           rcmdcheck::rcmdcheck(args = args, error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
@@ -116,8 +119,8 @@ jobs:
           path: check
 
       # Upload prebuilt binaries for Windows
-      - name: Tweak staticlib
-        if: runner.os == 'Windows'
+      - name: Tweak staticlib on Windows
+        if: runner.os == 'Windows' || runner.os == 'macOS'
         run: |
           # list all staticlibs
           find ./check -name libstring2path.a
@@ -135,6 +138,26 @@ jobs:
             mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a staticlib/x86_64-pc-windows-gnu-libstring2path.a
             mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-i386/rust/target/i686-pc-windows-gnu/release/libstring2path.a staticlib/i686-pc-windows-gnu-libstring2path.a
           }
+
+          ls ./staticlib
+        shell: pwsh
+
+      # Upload prebuilt binaries for macOS
+      - name: Tweak staticlib on macOS
+        if: runner.os == 'macOS' && matrix.config.r == 'release'
+        run: |
+          # list all staticlibs
+          find ./check -name libstring2path.a
+
+          mkdir ./staticlib
+
+          # Intel macOS
+          mv ./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/target/release/libstring2path.a staticlib/x86_64-apple-darwin-libstring2path.a
+
+          # For M1 macOS
+          rustup target add aarch64-apple-darwin
+          . "${HOME}/.cargo/env" && cargo build --target=aarch64-apple-darwin --lib --release --manifest-path=./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/Cargo.toml
+          mv ./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/target/aarch64-apple-darwin/release/libstring2path.a staticlib/aarch64-apple-darwin-libstring2path.a
 
           ls ./staticlib
         shell: pwsh

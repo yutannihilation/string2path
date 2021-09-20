@@ -5,3 +5,7 @@
 /fonts
 
 src/.cargo
+
+# Generated from src/Makevars.in
+src/Makevars
+src/Makevars.win
