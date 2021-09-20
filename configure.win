@@ -53,49 +53,50 @@ fi
 
 echo "*** Trying to download the precompiled binary"
 
-if [ "`uname`" = "Darwin" ]; then
-  if [ "`uname -m`" = "x86_64" ]; then
-    RUST_TARGET="x86_64-pc-windows-gnu"
-    SHA256SUM_EXPECTED="${SHA256SUM_X86_64}"
-  elif [ "`uname -m`" = "i686" ]; then
-    RUST_TARGET="i686-pc-windows-gnu"
-    SHA256SUM_EXPECTED="${SHA256SUM_I686}"
-  fi
-
-  SRC="https://github.com/${GITHUB_REPO}/releases/download/${GITHUB_TAG}/${CRT_PREFIX}${RUST_TARGET}-lib${CRATE_NAME}.a"
-  DST="./src/rust/target/${RUST_TARGET}/release/lib${CRATE_NAME}.a"
-
-  # NOTE: if the package requires more complex logic (e.g. different binaries
-  #       depending on the R version), create an external R script file for this
-  #       and place it under tools/ dir.
-  "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "download.file('${SRC}', destfile = '${DST}', mode = 'wb')"
-  if [ $? -ne 0 ]; then
-    echo ""
-    echo "ERROR: Failed to download the pre-compiled binary"
-    echo ""
-    exit 2
-  fi
-
-  # Check the hashsum
-  SHA256SUM_ACTUAL=`sha256sum "${DST}" | cut -d' ' -f2`
-  if [ -z "${SHA256SUM_ACTUAL}" ]; then
-    echo ""
-    echo "ERROR: Failed to get the checksum"
-    echo ""
-    exit 3
-  fi
-
-  if [ "${SHA256SUM_ACTUAL}" != "${SHA256SUM_EXPECTED}" ]; then
-    echo ""
-    echo "ERROR: The hashsum of the downloaded binary doesn't match the expectated one"
-    echo ""
-    exit 4
-  fi
-
-  echo "Succeeded to download the precompied binary"
-  echo ""
-  exit 0
+if [ "`uname -m`" = "x86_64" ]; then
+  RUST_TARGET="x86_64-pc-windows-gnu"
+  SHA256SUM_EXPECTED="${SHA256SUM_X86_64}"
+elif [ "`uname -m`" = "i686" ]; then
+  RUST_TARGET="i686-pc-windows-gnu"
+  SHA256SUM_EXPECTED="${SHA256SUM_I686}"
 fi
+
+SRC="https://github.com/${GITHUB_REPO}/releases/download/${GITHUB_TAG}/${CRT_PREFIX}${RUST_TARGET}-lib${CRATE_NAME}.a"
+DST="./src/rust/target/${RUST_TARGET}/release/lib${CRATE_NAME}.a"
+
+echo "*** Download URL: ${SRC}"
+echo "*** Dest file: ${DST}"
+
+# NOTE: if the package requires more complex logic (e.g. different binaries
+#       depending on the R version), create an external R script file for this
+#       and place it under tools/ dir.
+"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "download.file('${SRC}', destfile = '${DST}', mode = 'wb')"
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "ERROR: Failed to download the pre-compiled binary"
+  echo ""
+  exit 2
+fi
+
+# Check the hashsum
+SHA256SUM_ACTUAL=`sha256sum "${DST}" | cut -d' ' -f2`
+if [ -z "${SHA256SUM_ACTUAL}" ]; then
+  echo ""
+  echo "ERROR: Failed to get the checksum"
+  echo ""
+  exit 3
+fi
+
+if [ "${SHA256SUM_ACTUAL}" != "${SHA256SUM_EXPECTED}" ]; then
+  echo ""
+  echo "ERROR: The hashsum of the downloaded binary doesn't match the expectated one"
+  echo ""
+  exit 4
+fi
+
+echo "Succeeded to download the precompied binary"
+echo ""
+exit 0
 
 
 # If cargo is not found, display a friendly message and exit with error. -------
