@@ -8,3 +8,5 @@ URL <- args[1]
 DESTFILE <- args[2]
 
 dir.create(dirname(DESTFILE), showWarnings = FALSE, recursive = TRUE)
+
+download.file(URL, destfile = DESTFILE)
