@@ -38,6 +38,13 @@ if [ $? -eq 0 ]; then
   if printf '%s\n' "${MIN_CARGO_VERSION}" "${CARGO_VERSION}" | sort -C -V; then
     echo "ok"
     echo ""
+
+    sed \
+      -e "s|@WINDOWS@|false|" \
+      -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
+      -e "s|@CLEAN_STATLIB@|true|" \
+      src/Makevars.in > src/Makevars
+
     exit 0
   fi
 
@@ -94,6 +101,13 @@ if [ "`uname`" = "Darwin" ]; then
 
   echo "Succeeded to download the precompied binary"
   echo ""
+
+  sed \
+    -e "s|@WINDOWS@|false|" \
+    -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
+    -e "s|@CLEAN_STATLIB@|false|" \
+    src/Makevars.in > src/Makevars
+
   exit 0
 fi
 

@@ -32,6 +32,13 @@ if [ $? -eq 0 ]; then
   if printf '%s\n' "${MIN_CARGO_VERSION}" "${CARGO_VERSION}" | sort -C -V; then
     echo "ok"
     echo ""
+
+    sed \
+      -e "s|@WINDOWS@|true|" \
+      -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
+      -e "s|@CLEAN_STATLIB@|true|" \
+      src/Makevars.in > src/Makevars.win
+
     exit 0
   fi
 
@@ -88,6 +95,13 @@ fi
 
 echo "Succeeded to download the precompied binary"
 echo ""
+
+sed \
+  -e "s|@WINDOWS@|true|" \
+  -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
+  -e "s|@CLEAN_STATLIB@|true|" \
+  src/Makevars.in > src/Makevars.win
+
 exit 0
 
 
