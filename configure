@@ -26,16 +26,40 @@ fi
 
 # Check if `cargo` command exists ----------------------------------------------
 
-echo "*** Checking if cargo exists and the version is ok"
+check_cargo() {
+  echo "*** Checking if cargo is installed"
 
-cargo --version
-if [ $? -eq 0 ]; then
+  cargo --version
+  if [ $? -ne 0 ]; then
+    echo ""
+    echo "WARN: cargo not found"
+    echo ""
+    return 1
+  fi
+
+  echo "*** Checking if cargo is newer than the required version"
 
   # Check if the version is minimum required one. `-V` option of `sort` does
   # version sort, and `-C` is for silently checking if the input is already
-  # sorted; so, if CARGO_VERSION is smaller than MIN_CARGO_VERSION, it fails.
-  CARGO_VERSION="`cargo --version | cut -d' ' -f2`"
-  if printf '%s\n' "${MIN_CARGO_VERSION}" "${CARGO_VERSION}" | sort -C -V; then
+  # sorted; so, if RUST_VERSION is smaller than MIN_RUST_VERSION, it fails.
+  RUST_VERSION="`cargo --version | cut -d' ' -f2`"
+  if ! printf '%s\n' "${MIN_RUST_VERSION}" "${RUST_VERSION}" | sort -C -V; then
+    echo ""
+    echo "WARN: The installed version of Rust (${RUST_VERSION}) is older than the requirement (${MIN_RUST_VERSION})"
+    echo ""
+    return 2
+  fi
+
+  return 0
+}
+
+check_cargo
+
+# If cargo is confirmed fine, exit here. But, even if the cargo is not available
+# or too old, it's not the end of the world. There might be a pre-compiled
+# binary for the platform.
+if [ $? -eq 0 ]; then
+
     echo "ok"
     echo ""
 
@@ -43,17 +67,11 @@ if [ $? -eq 0 ]; then
       -e "s|@WINDOWS@|false|" \
       -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
       -e "s|@CLEAN_STATLIB@|true|" \
-      src/Makevars.in > src/Makevars
+      src/Makevars.in > src/Makevars.win
 
     exit 0
-  fi
-
-  # Even if the cargo is too old, it's not the end of the world. There might be
-  # a pre-compiled binary
-  echo ""
-  echo "WARN: The installed version of cargo (${CARGO_VERSION}) is older than the requirement (${MIN_CARGO_VERSION})"
-  echo ""
 fi
+
 
 
 # Download the precompiled binary ----------------------------------------------

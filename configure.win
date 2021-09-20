@@ -23,6 +23,8 @@ SHA256SUM_I686="ceda54184fb3bf9e4cbba86848cb2091ff5b77870357f94319f9215fadfa5b25
 echo "*** Checking if cargo exists and the version is ok"
 
 check_cargo() {
+  echo "*** Checking if cargo is installed"
+
   cargo --version
   if [ $? -ne 0 ]; then
     echo ""
@@ -30,6 +32,8 @@ check_cargo() {
     echo ""
     return 1
   fi
+
+  echo "*** Checking if cargo is newer than the required version"
 
   # Check if the version is minimum required one. `-V` option of `sort` does
   # version sort, and `-C` is for silently checking if the input is already
@@ -42,10 +46,20 @@ check_cargo() {
     return 2
   fi
 
-  # TODO: check the toolchain?
+  # Check the required toolchain. Note that this optimisitcally assume i686-*
+  # toolchain is also installed if x86_64-* is installed (or is not required),
+  # which might not always be true.
+  if ! rustup toolchain list | grep -q x86_64-pc-windows-gnu; then
+    echo ""
+    echo "WARN: x86_64-pc-windows-gnu toolchain is not available"
+    echo ""
+    return 3
+  fi
+
+  return 0
 }
 
-check_cargo()
+check_cargo
 
 # If cargo is confirmed fine, exit here. But, even if the cargo is not available
 # or too old, it's not the end of the world. There might be a pre-compiled
