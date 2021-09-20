@@ -9,4 +9,4 @@ DESTFILE <- args[2]
 
 dir.create(dirname(DESTFILE), showWarnings = FALSE, recursive = TRUE)
 
-download.file(URL, destfile = DESTFILE)
+download.file(URL, destfile = DESTFILE, mode = "wb")
