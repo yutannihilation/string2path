@@ -100,9 +100,6 @@ jobs:
         run: |
           options(crayon.enabled = TRUE)
           args <- c("--no-manual", "--as-cran")
-          if (identical("${{ matrix.config.r }}", "devel")) {
-            args <- c(args, "--force-multiarch")
-          }
           rcmdcheck::rcmdcheck(args = args, error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
