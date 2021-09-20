@@ -1,0 +1,155 @@
+# NOTE:
+# This is based on the configure script of the gifski package, (https://github.com/r-rust/gifski/),
+# distributed under the MIT license, authored by Jeroen Ooms.
+
+# 1.41.0 is the min version among Debian and Ubuntu at the time of writing this
+# (c.f. https://github.com/ron-rs/ron/issues/256#issuecomment-657999081)
+# This might need bumped depending on the features the crate uses. cargo-msrv
+# might be helpful to find the actual MSRV.
+MIN_RUST_VERSION="1.41.0"
+
+echo "NOT_CRAN: ${NOT_CRAN}"
+
+GITHUB_REPO="yutannihilation/string2path"
+CRATE_NAME="string2path"
+
+# These need to be updated if the binary is changed
+GITHUB_TAG="windows_20210908-3"
+SHA256SUM_X86_64="26a05f6ee8c2f625027ffc77c97fc8ac9746a182f5bc53d64235999a02c0b0dc"
+SHA256SUM_I686="ceda54184fb3bf9e4cbba86848cb2091ff5b77870357f94319f9215fadfa5b25"
+
+# Check if `cargo` command exists ----------------------------------------------
+
+echo "*** Checking if cargo exists and the version is ok"
+
+check_cargo() {
+  echo "*** Checking if cargo is installed"
+
+  cargo --version
+  if [ $? -ne 0 ]; then
+    echo ""
+    echo "WARN: cargo not found"
+    echo ""
+    return 1
+  fi
+
+  echo "*** Checking if cargo is newer than the required version"
+
+  # Check if the version is minimum required one. `-V` option of `sort` does
+  # version sort, and `-C` is for silently checking if the input is already
+  # sorted; so, if RUST_VERSION is smaller than MIN_RUST_VERSION, it fails.
+  RUST_VERSION="`cargo --version | cut -d' ' -f2`"
+  if ! printf '%s\n' "${MIN_RUST_VERSION}" "${RUST_VERSION}" | sort -C -V; then
+    echo ""
+    echo "WARN: The installed version of Rust (${RUST_VERSION}) is older than the requirement (${MIN_RUST_VERSION})"
+    echo ""
+    return 2
+  fi
+
+  # Check the required toolchain. Note that this optimisitcally assume i686-*
+  # toolchain is also installed if x86_64-* is installed (or is not required),
+  # which might not always be true.
+  if ! rustup toolchain list | grep -q x86_64-pc-windows-gnu; then
+    echo ""
+    echo "WARN: x86_64-pc-windows-gnu toolchain is not available"
+    echo ""
+    return 3
+  fi
+
+  return 0
+}
+
+check_cargo
+
+# If cargo is confirmed fine, exit here. But, even if the cargo is not available
+# or too old, it's not the end of the world. There might be a pre-compiled
+# binary for the platform.
+if [ $? -eq 0 ]; then
+
+    echo "ok"
+    echo ""
+
+    sed \
+      -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
+      -e 's|@CREAN_EXTRA@|$(STATLIB)|' \
+      src/Makevars.win.in > src/Makevars.win
+
+    echo "<<< src/Makevars.win >>>"
+    cat src/Makevars.win
+    exit 0
+fi
+
+# Download the precompiled binary ----------------------------------------------
+
+echo "*** Trying to download the precompiled binary"
+
+download_binary() {
+  RUST_TARGET="$1"
+  SHA256SUM_EXPECTED="$2"
+
+  SRC="https://github.com/${GITHUB_REPO}/releases/download/${GITHUB_TAG}/${CRT_PREFIX}${RUST_TARGET}-lib${CRATE_NAME}.a"
+  DST="./src/rust/target/${RUST_TARGET}/release/lib${CRATE_NAME}.a"
+
+  echo "*** Download URL: ${SRC}"
+  echo "*** Dest file: ${DST}"
+
+  "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" ./tools/download_precompiled_binary.R "${SRC}" "${DST}"
+
+  if [ $? -ne 0 ]; then
+    echo ""
+    echo "ERROR: Failed to download the pre-compiled binary"
+    echo ""
+    exit 2
+  fi
+
+  # Verify the checksum
+  SHA256SUM_ACTUAL=`sha256sum "${DST}" | cut -d' ' -f1`
+  if [ -z "${SHA256SUM_ACTUAL}" ]; then
+    echo ""
+    echo "ERROR: Failed to get the checksum"
+    echo ""
+    exit 3
+  fi
+
+  if [ "${SHA256SUM_ACTUAL}" != "${SHA256SUM_EXPECTED}" ]; then
+    echo ""
+    echo "ERROR: The checksum of the downloaded binary doesn't match the expectated one"
+    echo ""
+    exit 4
+  fi
+}
+
+# Download 64-bit binary
+download_binary "x86_64-pc-windows-gnu" "${SHA256SUM_X86_64}"
+
+# If there are 32-bit version installation, download the binary
+if [ -d "${R_HOME}/bin/i386/" ]; then
+  download_binary "i686-pc-windows-gnu" "${SHA256SUM_I686}"
+fi
+
+echo "Succeeded to download the precompied binary"
+echo ""
+
+echo "DEBUG"
+find ./src -name libstring2path.a -print
+
+sed \
+  -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
+  -e 's|@CREAN_EXTRA@||' \
+  src/Makevars.win.in > src/Makevars.win
+
+echo "<<< src/Makevars.win >>>"
+cat src/Makevars.win
+exit 0
+
+
+# If cargo is not found, display a friendly message and exit with error. -------
+
+echo "------------------ RUST COMPILER NOT FOUND --------------------"
+echo ""
+echo "Please refer to <https://www.rust-lang.org/tools/install>"
+echo ""
+echo "---------------------------------------------------------------"
+echo ""
+
+exit 1
