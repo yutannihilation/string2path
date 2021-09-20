@@ -53,12 +53,10 @@ fi
 
 echo "*** Trying to download the precompiled binary"
 
-echo "DEBUG: ${WIN} / ${R_ARCH}"
-
-if [ "${WIN}" = "64" ]; then
+if [ "${R_ARCH}" = "/x64" ]; then
   RUST_TARGET="x86_64-pc-windows-gnu"
   SHA256SUM_EXPECTED="${SHA256SUM_X86_64}"
-elif [ "${WIN}" = "32" ]; then
+elif [ "${R_ARCH}" = "/i686" ]; then
   RUST_TARGET="i686-pc-windows-gnu"
   SHA256SUM_EXPECTED="${SHA256SUM_I686}"
 fi
@@ -69,7 +67,7 @@ DST="./src/rust/target/${RUST_TARGET}/release/lib${CRATE_NAME}.a"
 echo "*** Download URL: ${SRC}"
 echo "*** Dest file: ${DST}"
 
-Rscript ./tools/download_precompiled_binary.R "${SRC}" "${DST}"
+"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" ./tools/download_precompiled_binary.R "${SRC}" "${DST}"
 
 if [ $? -ne 0 ]; then
   echo ""

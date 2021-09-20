@@ -68,7 +68,7 @@ if [ "`uname`" = "Darwin" ]; then
   echo "*** Download URL: ${SRC}"
   echo "*** Dest file: ${DST}"
 
-  "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" ./tools/download_precompiled_binary.R "${SRC}" "${DST}"
+  Rscript ./tools/download_precompiled_binary.R "${SRC}" "${DST}"
   if [ $? -ne 0 ]; then
     echo ""
     echo "ERROR: Failed to download the pre-compiled binary"
