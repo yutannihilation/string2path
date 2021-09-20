@@ -15,8 +15,8 @@ CRATE_NAME="string2path"
 
 # These need to be updated if the binary is changed
 GITHUB_TAG="windows_20210908-3"
-SHA256SUM_X86_64=
-SHA256SUM_ARM64=
+SHA256SUM_X86_64="26a05f6ee8c2f625027ffc77c97fc8ac9746a182f5bc53d64235999a02c0b0dc"
+SHA256SUM_I686="ceda54184fb3bf9e4cbba86848cb2091ff5b77870357f94319f9215fadfa5b25"
 
 # Even when `cargo` is on `PATH`, `rustc` might not. This should ensure PATH is
 # configured correctly (c.f. https://github.com/yutannihilation/string2path/issues/4).
@@ -55,20 +55,20 @@ echo "*** Trying to download the precompiled binary"
 
 if [ "`uname`" = "Darwin" ]; then
   if [ "`uname -m`" = "x86_64" ]; then
-    RUST_TARGET="x86_64-apple-darwin"
+    RUST_TARGET="x86_64-pc-windows-gnu"
     SHA256SUM_EXPECTED="${SHA256SUM_X86_64}"
-  elif [ "`uname -m`" = "arm64" ]; then
-    RUST_TARGET="aarch64-apple-darwin"
-    SHA256SUM_EXPECTED="${SHA256SUM_ARM64}"
+  elif [ "`uname -m`" = "i686" ]; then
+    RUST_TARGET="i686-pc-windows-gnu"
+    SHA256SUM_EXPECTED="${SHA256SUM_I686}"
   fi
 
-  SRC="https://github.com/${GITHUB_REPO}/releases/download/${GITHUB_TAG}/${RUST_TARGET}-lib${CRATE_NAME}.a"
+  SRC="https://github.com/${GITHUB_REPO}/releases/download/${GITHUB_TAG}/${CRT_PREFIX}${RUST_TARGET}-lib${CRATE_NAME}.a"
   DST="./src/rust/target/${RUST_TARGET}/release/lib${CRATE_NAME}.a"
 
   # NOTE: if the package requires more complex logic (e.g. different binaries
   #       depending on the R version), create an external R script file for this
   #       and place it under tools/ dir.
-  Rscript -e "download.file('${SRC}', destfile = '${DST}', mode = 'wb')"
+  "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "download.file('${SRC}', destfile = '${DST}', mode = 'wb')"
   if [ $? -ne 0 ]; then
     echo ""
     echo "ERROR: Failed to download the pre-compiled binary"
