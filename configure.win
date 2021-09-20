@@ -99,7 +99,7 @@ echo ""
 sed \
   -e "s|@WINDOWS@|true|" \
   -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
-  -e "s|@CLEAN_STATLIB@|true|" \
+  -e "s|@CLEAN_STATLIB@|false|" \
   src/Makevars.in > src/Makevars.win
 
 exit 0
