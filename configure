@@ -64,7 +64,6 @@ if [ $? -eq 0 ]; then
     echo ""
 
     sed \
-      -e "s|@WINDOWS@|false|" \
       -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
       -e "s|@CLEAN_STATLIB@|true|" \
       src/Makevars.in > src/Makevars
@@ -121,7 +120,6 @@ if [ "`uname`" = "Darwin" ]; then
   echo ""
 
   sed \
-    -e "s|@WINDOWS@|false|" \
     -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
     -e "s|@CLEAN_STATLIB@|false|" \
     src/Makevars.in > src/Makevars

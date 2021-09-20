@@ -70,10 +70,9 @@ if [ $? -eq 0 ]; then
     echo ""
 
     sed \
-      -e "s|@WINDOWS@|true|" \
       -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
       -e "s|@CLEAN_STATLIB@|true|" \
-      src/Makevars.in > src/Makevars.win
+      src/Makevars.win.in > src/Makevars.win
 
     echo "<<< src/Makevars.win >>>"
     cat src/Makevars.win
@@ -135,10 +134,9 @@ echo "DEBUG"
 find ./src -name libstring2path.a -print
 
 sed \
-  -e "s|@WINDOWS@|true|" \
   -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
   -e "s|@CLEAN_STATLIB@|false|" \
-  src/Makevars.in > src/Makevars.win
+  src/Makevars.win.in > src/Makevars.win
 
 echo "<<< src/Makevars.win >>>"
 cat src/Makevars.win
