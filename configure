@@ -101,7 +101,7 @@ if [ "`uname`" = "Darwin" ]; then
     exit 2
   fi
 
-  # Check the hashsum
+  # Verify the checksum
   SHA256SUM_ACTUAL=`sha256sum "${DST}" | cut -d' ' -f1`
   if [ -z "${SHA256SUM_ACTUAL}" ]; then
     echo ""
@@ -112,7 +112,7 @@ if [ "`uname`" = "Darwin" ]; then
 
   if [ "${SHA256SUM_ACTUAL}" != "${SHA256SUM_EXPECTED}" ]; then
     echo ""
-    echo "ERROR: The hashsum of the downloaded binary doesn't match the expectated one"
+    echo "ERROR: The checksum of the downloaded binary doesn't match the expectated one"
     echo ""
     exit 4
   fi
