@@ -1,11 +1,11 @@
 # Is Windows, tweak some settings
-WINDOWS = @WINDOWS@
+WINDOWS = "@WINDOWS@"
 
 # If on the local development environment, do not override CARGO_HOME
-NOT_CRAN = @NOT_CRAN@
+NOT_CRAN = "@NOT_CRAN@"
 
 # If there's no cargo, do not clean STATLIB
-CLEAN_STATLIB = @CLEAN_STATLIB@
+CLEAN_STATLIB = "@CLEAN_STATLIB@"
 
 ifeq ($(WINDOWS),"true")
 TARGET = $(subst 64,x86_64,$(subst 32,i686,$(WIN)))-pc-windows-gnu
