@@ -1,7 +1,10 @@
 # If on the local development environment, do not override CARGO_HOME
 NOT_CRAN = "@NOT_CRAN@"
 
-TARGET = $(subst 64,/x64,$(subst 32,/i386,$(R_ARCH)))-pc-windows-gnu
+# WIN is used in the usual rwinlib Makevars, but it seems WIN envvar is not
+# available when configure.win is used. So, R_ARCH is chosen here.
+TARGET = $(subst /x64,x86_64,$(subst /i386,i686,$(R_ARCH)))-pc-windows-gnu
+
 LIBDIR = ./rust/target/$(TARGET)/release
 PKG_LIBS = -L$(LIBDIR) -lstring2path -lws2_32 -ladvapi32 -luserenv
 STATLIB = $(LIBDIR)/libstring2path.a
