@@ -54,43 +54,48 @@ fi
 
 echo "*** Trying to download the precompiled binary"
 
-if [ "${R_ARCH}" = "/x64" ]; then
-  RUST_TARGET="x86_64-pc-windows-gnu"
-  SHA256SUM_EXPECTED="${SHA256SUM_X86_64}"
-elif [ "${R_ARCH}" = "/i686" ]; then
-  RUST_TARGET="i686-pc-windows-gnu"
-  SHA256SUM_EXPECTED="${SHA256SUM_I686}"
-fi
+download_binary() {
+  RUST_TARGET="$1"
+  SHA256SUM_EXPECTED="$2"
 
-SRC="https://github.com/${GITHUB_REPO}/releases/download/${GITHUB_TAG}/${CRT_PREFIX}${RUST_TARGET}-lib${CRATE_NAME}.a"
-DST="./src/rust/target/${RUST_TARGET}/release/lib${CRATE_NAME}.a"
+  SRC="https://github.com/${GITHUB_REPO}/releases/download/${GITHUB_TAG}/${CRT_PREFIX}${RUST_TARGET}-lib${CRATE_NAME}.a"
+  DST="./src/rust/target/${RUST_TARGET}/release/lib${CRATE_NAME}.a"
 
-echo "*** Download URL: ${SRC}"
-echo "*** Dest file: ${DST}"
+  echo "*** Download URL: ${SRC}"
+  echo "*** Dest file: ${DST}"
 
-"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" ./tools/download_precompiled_binary.R "${SRC}" "${DST}"
+  "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" ./tools/download_precompiled_binary.R "${SRC}" "${DST}"
 
-if [ $? -ne 0 ]; then
-  echo ""
-  echo "ERROR: Failed to download the pre-compiled binary"
-  echo ""
-  exit 2
-fi
+  if [ $? -ne 0 ]; then
+    echo ""
+    echo "ERROR: Failed to download the pre-compiled binary"
+    echo ""
+    exit 2
+  fi
 
-# Check the hashsum
-SHA256SUM_ACTUAL=`sha256sum "${DST}" | cut -d' ' -f1`
-if [ -z "${SHA256SUM_ACTUAL}" ]; then
-  echo ""
-  echo "ERROR: Failed to get the checksum"
-  echo ""
-  exit 3
-fi
+  # Check the hashsum
+  SHA256SUM_ACTUAL=`sha256sum "${DST}" | cut -d' ' -f1`
+  if [ -z "${SHA256SUM_ACTUAL}" ]; then
+    echo ""
+    echo "ERROR: Failed to get the checksum"
+    echo ""
+    exit 3
+  fi
 
-if [ "${SHA256SUM_ACTUAL}" != "${SHA256SUM_EXPECTED}" ]; then
-  echo ""
-  echo "ERROR: The hashsum of the downloaded binary doesn't match the expectated one"
-  echo ""
-  exit 4
+  if [ "${SHA256SUM_ACTUAL}" != "${SHA256SUM_EXPECTED}" ]; then
+    echo ""
+    echo "ERROR: The hashsum of the downloaded binary doesn't match the expectated one"
+    echo ""
+    exit 4
+  fi
+}
+
+# Download 64-bit binary
+download_binary "x86_64-pc-windows-gnu" "${SHA256SUM_X86_64}"
+
+# If there are 32-bit version installation, download the binary
+if [ -d "`${R_HOME}/bin/i386/`" ]; then
+  download_binary "i686-pc-windows-gnu" "${SHA256SUM_I686}"
 fi
 
 echo "Succeeded to download the precompied binary"
