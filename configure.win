@@ -53,10 +53,12 @@ fi
 
 echo "*** Trying to download the precompiled binary"
 
-if [ "`uname -m`" = "x86_64" ]; then
+echo "DEBUG: ${WIN} / ${R_ARCH}"
+
+if [ "${WIN}" = "64" ]; then
   RUST_TARGET="x86_64-pc-windows-gnu"
   SHA256SUM_EXPECTED="${SHA256SUM_X86_64}"
-elif [ "`uname -m`" = "i686" ]; then
+elif [ "${WIN}" = "32" ]; then
   RUST_TARGET="i686-pc-windows-gnu"
   SHA256SUM_EXPECTED="${SHA256SUM_I686}"
 fi
