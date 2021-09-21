@@ -20,9 +20,9 @@ jobs:
         config:
           - {os: windows-latest, r: 'release'}
           - {os: windows-latest, r: 'devel'}
-          # Uncomment this to test the precompiled binary for Windows UCRT.
-          - {os: windows-2022, r: 'devel-ucrt'}
-          # - {os: macOS-latest,   r: 'release'} # check if configure script works
+          - {os: windows-2022,   r: 'devel-ucrt'}
+          - {os: macOS-latest,   r: 'release'}
+          # TODO: test M1 macOS
 
     env:
       RSPM: ${{ matrix.config.rspm }}
