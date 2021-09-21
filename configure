@@ -101,7 +101,7 @@ if [ "`uname`" = "Darwin" ]; then
   fi
 
   # Verify the checksum
-  SHA256SUM_ACTUAL=`sha256sum "${DST}" | cut -d' ' -f1`
+  SHA256SUM_ACTUAL=`shasum -a 256 "${DST}" | cut -d' ' -f1`
   if [ -z "${SHA256SUM_ACTUAL}" ]; then
     echo ""
     echo "ERROR: Failed to get the checksum"
