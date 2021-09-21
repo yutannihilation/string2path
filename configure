@@ -42,10 +42,7 @@ if [ $? -eq 0 ]; then
     echo "ok"
     echo ""
 
-    sed \
-      -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
-      -e 's|@CLEAN_EXTRA@|$(STATLIB)|' \
-      src/Makevars.in > src/Makevars
+    sed -e 's|@CLEAN_EXTRA@|$(STATLIB)|' src/Makevars.in > src/Makevars
 
     exit 0
 fi
@@ -95,10 +92,7 @@ if [ "`uname`" = "Darwin" ]; then
   echo "Successfully downloaded the precompied binary"
   echo ""
 
-  sed \
-    -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
-    -e 's|@CLEAN_EXTRA@||' \
-    src/Makevars.in > src/Makevars
+  sed -e 's|@CLEAN_EXTRA@||' src/Makevars.in > src/Makevars
 
   exit 0
 fi

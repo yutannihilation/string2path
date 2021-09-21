@@ -1,5 +1,5 @@
 # If on the local development environment, do not override CARGO_HOME
-NOT_CRAN = "@NOT_CRAN@"
+NOT_CRAN_ENVVAR = "${NOT_CRAN}"
 
 # WIN is used in the usual rwinlib Makevars, but it seems WIN envvar is not
 # available when configure.win is used. So, R_ARCH is chosen here.
@@ -18,7 +18,7 @@ all: C_clean
 $(SHLIB): $(STATLIB)
 
 $(STATLIB):
-ifeq ($(NOT_CRAN),"true")
+ifeq ($(NOT_CRAN_ENVVAR),"true")
 	@echo "Detected NON_CRAN=true"
 	cargo +$(TOOLCHAIN) build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
 else

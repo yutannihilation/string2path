@@ -41,10 +41,7 @@ if [ $? -eq 0 ]; then
     echo "ok"
     echo ""
 
-    sed \
-      -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
-      -e 's|@CLEAN_EXTRA@|$(STATLIB)|' \
-      src/Makevars.win.in > src/Makevars.win
+    sed -e 's|@CLEAN_EXTRA@|$(STATLIB)|' src/Makevars.win.in > src/Makevars.win
 
     echo "<<< src/Makevars.win >>>"
     cat src/Makevars.win
@@ -93,10 +90,7 @@ fi
 echo "Successfully downloaded the precompied binary"
 echo ""
 
-sed \
-  -e "s|@NOT_CRAN@|${NOT_CRAN}|" \
-  -e 's|@CLEAN_EXTRA@||' \
-  src/Makevars.win.in > src/Makevars.win
+sed -e 's|@CLEAN_EXTRA@||' src/Makevars.win.in > src/Makevars.win
 
 echo "<<< src/Makevars.win >>>"
 cat src/Makevars.win
