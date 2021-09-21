@@ -27,10 +27,10 @@ echo "*** Checking if cargo exists and the version is ok"
 check_cargo() {
   echo "*** Checking if cargo is installed"
 
-  cargo --version
+  cargo --version >/dev/null 2>&1
   if [ $? -ne 0 ]; then
     echo ""
-    echo "WARN: cargo not found"
+    echo "WARN: cargo command is not available"
     echo ""
     return 1
   fi
@@ -43,7 +43,7 @@ check_cargo() {
   RUST_VERSION="`cargo --version | cut -d' ' -f2`"
   if ! printf '%s\n' "${MIN_RUST_VERSION}" "${RUST_VERSION}" | sort -C -V; then
     echo ""
-    echo "WARN: The installed version of Rust (${RUST_VERSION}) is older than the requirement (${MIN_RUST_VERSION})"
+    echo "WARN: The installed version of cargo (${RUST_VERSION}) is older than the requirement (${MIN_RUST_VERSION})"
     echo ""
     return 2
   fi
@@ -51,7 +51,7 @@ check_cargo() {
   # Check the required toolchain. Note that this optimisitcally assume i686-*
   # toolchain is also installed if x86_64-* is installed (or is not required),
   # which might not always be true.
-  if ! rustup toolchain list | grep -q x86_64-pc-windows-gnu; then
+  if ! rustup target list --installed | grep -q x86_64-pc-windows-gnu; then
     echo ""
     echo "WARN: x86_64-pc-windows-gnu toolchain is not available"
     echo ""
@@ -131,9 +131,6 @@ fi
 
 echo "Succeeded to download the precompied binary"
 echo ""
-
-echo "DEBUG"
-find ./src -name libstring2path.a -print
 
 sed \
   -e "s|@NOT_CRAN@|${NOT_CRAN}|" \

@@ -31,10 +31,10 @@ fi
 check_cargo() {
   echo "*** Checking if cargo is installed"
 
-  cargo --version
+  cargo --version >/dev/null 2>&1
   if [ $? -ne 0 ]; then
     echo ""
-    echo "WARN: cargo not found"
+    echo "WARN: cargo command is not available"
     echo ""
     return 1
   fi
@@ -47,7 +47,7 @@ check_cargo() {
   RUST_VERSION="`cargo --version | cut -d' ' -f2`"
   if ! printf '%s\n' "${MIN_RUST_VERSION}" "${RUST_VERSION}" | sort -C -V; then
     echo ""
-    echo "WARN: The installed version of Rust (${RUST_VERSION}) is older than the requirement (${MIN_RUST_VERSION})"
+    echo "WARN: The installed version of cargo (${RUST_VERSION}) is older than the requirement (${MIN_RUST_VERSION})"
     echo ""
     return 2
   fi
@@ -73,9 +73,19 @@ if [ $? -eq 0 ]; then
     exit 0
 fi
 
-
-
 # Download the precompiled binary ----------------------------------------------
+
+show_error() {
+  echo "-------------- ERROR: CONFIGURATION FAILED --------------------"
+  echo ""
+  echo "$1"
+  echo "For installing Rust, please refer to <https://www.rust-lang.org/tools/install>"
+  echo ""
+  echo "---------------------------------------------------------------"
+  echo ""
+
+  exit $2
+}
 
 echo "*** Trying to download the precompiled binary"
 
@@ -93,10 +103,7 @@ if [ "`uname`" = "Darwin" ]; then
       SHA256SUM_EXPECTED="${SHA256SUM_ARM64}"
       ;;
     *)
-      echo ""
-      echo "ERROR: Unexpected arch: ${MAC_ARCH}"
-      echo ""
-      exit 5
+      show_error "ERROR: Unexpected arch: ${MAC_ARCH}" 11
   esac
 
   SRC="https://github.com/${GITHUB_REPO}/releases/download/${GITHUB_TAG}/${RUST_TARGET}-lib${CRATE_NAME}.a"
@@ -107,29 +114,20 @@ if [ "`uname`" = "Darwin" ]; then
 
   "${RSCRIPT}" ./tools/download_precompiled_binary.R "${SRC}" "${DST}"
   if [ $? -ne 0 ]; then
-    echo ""
-    echo "ERROR: Failed to download the pre-compiled binary"
-    echo ""
-    exit 2
+    show_error "Failed to download the pre-compiled binary" 12
   fi
 
   # Verify the checksum
   SHA256SUM_ACTUAL=`shasum -a 256 "${DST}" | cut -d' ' -f1`
   if [ -z "${SHA256SUM_ACTUAL}" ]; then
-    echo ""
-    echo "ERROR: Failed to get the checksum"
-    echo ""
-    exit 3
+    show_error "Failed to get the checksum" 13
   fi
 
   if [ "${SHA256SUM_ACTUAL}" != "${SHA256SUM_EXPECTED}" ]; then
-    echo ""
-    echo "ERROR: The checksum of the downloaded binary doesn't match the expectated one"
-    echo ""
-    exit 4
+    show_error "Checksum mismatch for the pre-compiled binary" 14
   fi
 
-  echo "Succeeded to download the precompied binary"
+  echo "Successfully downloaded the precompied binary"
   echo ""
 
   sed \
@@ -140,14 +138,5 @@ if [ "`uname`" = "Darwin" ]; then
   exit 0
 fi
 
-
-# If cargo is not found, display a friendly message and exit with error. -------
-
-echo "------------------ RUST COMPILER NOT FOUND --------------------"
-echo ""
-echo "Please refer to <https://www.rust-lang.org/tools/install>"
-echo ""
-echo "---------------------------------------------------------------"
-echo ""
-
-exit 1
+# No precompiled binary is provided for other OSes than Windows and macOS
+show_error "No precompiled binary is available. Please install Rust." 14
