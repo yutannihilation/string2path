@@ -23,7 +23,7 @@ ifeq ($(NOT_CRAN_ENVVAR),"true")
 	cargo +$(TOOLCHAIN) build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
 else
 	@echo "Using local CARGO_HOME"
-	CARGO_HOME="$(LOCAL_CARGO_HOME)" cargo +$(TOOLCHAIN) build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
+	CARGO_HOME="$(LOCAL_CARGO_HOME)" ccargo +$(TOOLCHAIN) build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
 	rm -Rf $(LOCAL_CARGO_HOME)
 	rm -Rf $(LIBDIR)/build
 endif
