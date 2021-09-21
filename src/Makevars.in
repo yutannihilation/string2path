@@ -19,7 +19,7 @@ ifeq ($(NOT_CRAN_ENVVAR),"true")
 else
 	@echo "Using local CARGO_HOME"
 	. "$(HOME)/.cargo/env" && \
-	  CARGO_HOME="$(LOCAL_CARGO_HOME)" ccargo build --lib --release --manifest-path=./rust/Cargo.toml
+	  CARGO_HOME="$(LOCAL_CARGO_HOME)" cargo build --lib --release --manifest-path=./rust/Cargo.toml
 	rm -Rf $(LOCAL_CARGO_HOME)
 	rm -Rf $(LIBDIR)/build
 endif
