@@ -5,6 +5,8 @@ NOT_CRAN = "@NOT_CRAN@"
 # available when configure.win is used. So, R_ARCH is chosen here.
 TARGET = $(subst /x64,x86_64,$(subst /i386,i686,$(R_ARCH)))-pc-windows-gnu
 
+TOOLCHAIN = stable-msvc
+
 LIBDIR = ./rust/target/$(TARGET)/release
 PKG_LIBS = -L$(LIBDIR) -lstring2path -lws2_32 -ladvapi32 -luserenv
 STATLIB = $(LIBDIR)/libstring2path.a
@@ -18,10 +20,10 @@ $(SHLIB): $(STATLIB)
 $(STATLIB):
 ifeq ($(NOT_CRAN),"true")
 	@echo "Detected NON_CRAN=true"
-	cargo build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
+	cargo +$(TOOLCHAIN) build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
 else
 	@echo "Using local CARGO_HOME"
-	CARGO_HOME="$(LOCAL_CARGO_HOME)" cargo build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
+	CARGO_HOME="$(LOCAL_CARGO_HOME)" cargo +$(TOOLCHAIN) build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
 	rm -Rf $(LOCAL_CARGO_HOME)
 	rm -Rf $(LIBDIR)/build
 endif

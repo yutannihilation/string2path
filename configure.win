@@ -4,6 +4,8 @@
 
 RSCRIPT="${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe"
 
+. tools/configure_utils.sh
+
 # 1.41.0 is the min version among Debian and Ubuntu at the time of writing this
 # (c.f. https://github.com/ron-rs/ron/issues/256#issuecomment-657999081)
 # This might need bumped depending on the features the crate uses. cargo-msrv
@@ -24,44 +26,12 @@ SHA256SUM_I686="ceda54184fb3bf9e4cbba86848cb2091ff5b77870357f94319f9215fadfa5b25
 
 echo "*** Checking if cargo exists and the version is ok"
 
-check_cargo() {
-  echo "*** Checking if cargo is installed"
-
-  cargo --version >/dev/null 2>&1
-  if [ $? -ne 0 ]; then
-    echo ""
-    echo "WARN: cargo command is not available"
-    echo ""
-    return 1
-  fi
-
-  echo "*** Checking if cargo is newer than the required version"
-
-  # Check if the version is minimum required one. `-V` option of `sort` does
-  # version sort, and `-C` is for silently checking if the input is already
-  # sorted; so, if RUST_VERSION is smaller than MIN_RUST_VERSION, it fails.
-  RUST_VERSION="`cargo --version | cut -d' ' -f2`"
-  if ! printf '%s\n' "${MIN_RUST_VERSION}" "${RUST_VERSION}" | sort -C -V; then
-    echo ""
-    echo "WARN: The installed version of cargo (${RUST_VERSION}) is older than the requirement (${MIN_RUST_VERSION})"
-    echo ""
-    return 2
-  fi
-
-  # Check the required toolchain. Note that this optimisitcally assume i686-*
-  # toolchain is also installed if x86_64-* is installed (or is not required),
-  # which might not always be true.
-  if ! rustup target list --installed | grep -q x86_64-pc-windows-gnu; then
-    echo ""
-    echo "WARN: x86_64-pc-windows-gnu toolchain is not available"
-    echo ""
-    return 3
-  fi
-
-  return 0
-}
-
-check_cargo
+if [ -d "${R_HOME}/bin/i386/" ]; then
+  # If there are 32-bit version installation, check the corresponding target is installed already
+  check_cargo stable-msvc x86_64-pc-windows-gnu i686-pc-windows-gnu
+else
+  check_cargo stable-msvc x86_64-pc-windows-gnu
+fi
 
 # If cargo is confirmed fine, exit here. But, even if the cargo is not available
 # or too old, it's not the end of the world. There might be a pre-compiled
@@ -98,26 +68,17 @@ download_binary() {
   "${RSCRIPT}" ./tools/download_precompiled_binary.R "${SRC}" "${DST}"
 
   if [ $? -ne 0 ]; then
-    echo ""
-    echo "ERROR: Failed to download the pre-compiled binary"
-    echo ""
-    exit 2
+    show_error "Failed to download the pre-compiled binary" 12
   fi
 
   # Verify the checksum
   SHA256SUM_ACTUAL=`sha256sum "${DST}" | cut -d' ' -f1`
   if [ -z "${SHA256SUM_ACTUAL}" ]; then
-    echo ""
-    echo "ERROR: Failed to get the checksum"
-    echo ""
-    exit 3
+    show_error "Failed to get the checksum" 13
   fi
 
   if [ "${SHA256SUM_ACTUAL}" != "${SHA256SUM_EXPECTED}" ]; then
-    echo ""
-    echo "ERROR: The checksum of the downloaded binary doesn't match the expectated one"
-    echo ""
-    exit 4
+    show_error "Checksum mismatch for the pre-compiled binary" 14
   fi
 }
 
@@ -141,14 +102,5 @@ echo "<<< src/Makevars.win >>>"
 cat src/Makevars.win
 exit 0
 
-
-# If cargo is not found, display a friendly message and exit with error. -------
-
-echo "------------------ RUST COMPILER NOT FOUND --------------------"
-echo ""
-echo "Please refer to <https://www.rust-lang.org/tools/install>"
-echo ""
-echo "---------------------------------------------------------------"
-echo ""
-
-exit 1
+# This should not happen on Windows.
+show_error "No precompiled binary is available." 14
