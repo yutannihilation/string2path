@@ -43,8 +43,6 @@ if [ $? -eq 0 ]; then
 
     sed -e 's|@CLEAN_EXTRA@|$(STATLIB)|' src/Makevars.win.in > src/Makevars.win
 
-    echo "<<< src/Makevars.win >>>"
-    cat src/Makevars.win
     exit 0
 fi
 
@@ -92,8 +90,6 @@ echo ""
 
 sed -e 's|@CLEAN_EXTRA@||' src/Makevars.win.in > src/Makevars.win
 
-echo "<<< src/Makevars.win >>>"
-cat src/Makevars.win
 exit 0
 
 # This should not happen on Windows.
