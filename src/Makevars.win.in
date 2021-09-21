@@ -9,27 +9,32 @@ LIBDIR = ./rust/target/$(TARGET)/release
 PKG_LIBS = -L$(LIBDIR) -lstring2path -lws2_32 -ladvapi32 -luserenv
 STATLIB = $(LIBDIR)/libstring2path.a
 
-ifneq ($(NOT_CRAN),"true")
-CARGO_HOME=$(PWD)/.cargo
-export $(CARGO_HOME)
-endif
+LOCAL_CARGO_HOME = $(PWD)/.cargo
 
 all: C_clean
 
 $(SHLIB): $(STATLIB)
 
-$(STATLIB):
-	cargo build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
-ifneq ($(NOT_CRAN),"true")
-	rm -Rf $(CARGO_HOME)
-	rm -Rf $(LIBDIR)/build
+ifeq ($(NOT_CRAN),"true")
+$(STATLIB): build_non_cran
+else
+$(STATLIB): build_cran
 endif
 
+build_cran:
+	@echo "Using local CARGO_HOME"
+  CARGO_HOME="$(LOCAL_CARGO_HOME)" cargo build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
+	rm -Rf $(LOCAL_CARGO_HOME)
+	rm -Rf $(LIBDIR)/build
+
+build_non_cran:
+	@echo "Detected NON_CRAN=true"
+  cargo build --lib --release --manifest-path=./rust/Cargo.toml
+
 C_clean:
-	rm -Rf \
-		$(SHLIB) \
-		$(OBJECTS) \
-	  @CREAN_EXTRA@
+	rm -Rf $(SHLIB) $(OBJECTS) @CLEAN_EXTRA@
 
 clean:
-	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) rust/target
+	rm -Rf $(SHLIB) $(OBJECTS) $(STATLIB) rust/target
+
+.PHONY: all build_cran build_non_cran C_clean clean
