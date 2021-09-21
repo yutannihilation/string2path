@@ -18,7 +18,7 @@ GITHUB_REPO="yutannihilation/string2path"
 CRATE_NAME="string2path"
 
 # These need to be updated if the binary is changed
-GITHUB_TAG="build_20210921-1"
+GITHUB_TAG="build_20210921-2"
 SHA256SUM_X86_64="26a05f6ee8c2f625027ffc77c97fc8ac9746a182f5bc53d64235999a02c0b0dc"
 SHA256SUM_I686="ceda54184fb3bf9e4cbba86848cb2091ff5b77870357f94319f9215fadfa5b25"
 
