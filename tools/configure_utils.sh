@@ -76,6 +76,6 @@ check_cargo_target() {
     echo ""
     echo "WARN: target ${EXPECTED_TARGET} is not installed"
     echo ""
-    return 3
+    return 4
   fi
 }

@@ -4,7 +4,7 @@
 
 RSCRIPT="${R_HOME}/bin/Rscript"
 
-. tools/configure_utils.sh
+. ./tools/configure_utils.sh
 
 # 1.41.0 is the min version among Debian and Ubuntu at the time of writing this
 # (c.f. https://github.com/ron-rs/ron/issues/256#issuecomment-657999081)
@@ -29,6 +29,8 @@ if [ -e "$HOME/.cargo/env" ]; then
 fi
 
 # Check if `cargo` command exists ----------------------------------------------
+
+echo "*** Checking if cargo exists and the version is ok"
 
 check_cargo
 

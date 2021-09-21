@@ -4,7 +4,7 @@
 
 RSCRIPT="${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe"
 
-. tools/configure_utils.sh
+. ./tools/configure_utils.sh
 
 # 1.41.0 is the min version among Debian and Ubuntu at the time of writing this
 # (c.f. https://github.com/ron-rs/ron/issues/256#issuecomment-657999081)
@@ -90,7 +90,7 @@ if [ -d "${R_HOME}/bin/i386/" ]; then
   download_binary "i686-pc-windows-gnu" "${SHA256SUM_I686}"
 fi
 
-echo "Succeeded to download the precompied binary"
+echo "Successfully downloaded the precompied binary"
 echo ""
 
 sed \
