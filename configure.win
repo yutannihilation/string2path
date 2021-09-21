@@ -2,6 +2,8 @@
 # This is based on the configure script of the gifski package, (https://github.com/r-rust/gifski/),
 # distributed under the MIT license, authored by Jeroen Ooms.
 
+RSCRIPT="${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe"
+
 # 1.41.0 is the min version among Debian and Ubuntu at the time of writing this
 # (c.f. https://github.com/ron-rs/ron/issues/256#issuecomment-657999081)
 # This might need bumped depending on the features the crate uses. cargo-msrv
@@ -93,7 +95,7 @@ download_binary() {
   echo "*** Download URL: ${SRC}"
   echo "*** Dest file: ${DST}"
 
-  "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" ./tools/download_precompiled_binary.R "${SRC}" "${DST}"
+  "${RSCRIPT}" ./tools/download_precompiled_binary.R "${SRC}" "${DST}"
 
   if [ $? -ne 0 ]; then
     echo ""
