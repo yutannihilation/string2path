@@ -82,14 +82,16 @@ echo "*** Trying to download the precompiled binary"
 if [ "`uname`" = "Darwin" ]; then
   # For some reason, it seems `uname -m` or `arch` cannot be used reliably (why?)
   # So, let's ask R.
-  MAC_ARCH=`"${Rscript}" -e 'cat(Sys.info()["machine"])'`
+  MAC_ARCH=`"${RSCRIPT}" -e 'cat(Sys.info()["machine"])'`
   case "${MAC_ARCH}" in
     x86_64)
       RUST_TARGET="x86_64-apple-darwin"
-      SHA256SUM_EXPECTED="${SHA256SUM_X86_64}" ;;
+      SHA256SUM_EXPECTED="${SHA256SUM_X86_64}"
+      ;;
     arm64)
       RUST_TARGET="aarch64-apple-darwin"
-      SHA256SUM_EXPECTED="${SHA256SUM_ARM64}" ;;
+      SHA256SUM_EXPECTED="${SHA256SUM_ARM64}"
+      ;;
     *)
       echo ""
       echo "ERROR: Unexpected arch: ${MAC_ARCH}"
