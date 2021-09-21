@@ -15,21 +15,16 @@ all: C_clean
 
 $(SHLIB): $(STATLIB)
 
+$(STATLIB):
 ifeq ($(NOT_CRAN),"true")
-$(STATLIB): build_non_cran
+	@echo "Detected NON_CRAN=true"
+	cargo build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
 else
-$(STATLIB): build_cran
-endif
-
-build_cran:
 	@echo "Using local CARGO_HOME"
-  CARGO_HOME="$(LOCAL_CARGO_HOME)" cargo build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
+	CARGO_HOME="$(LOCAL_CARGO_HOME)" cargo build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
 	rm -Rf $(LOCAL_CARGO_HOME)
 	rm -Rf $(LIBDIR)/build
-
-build_non_cran:
-	@echo "Detected NON_CRAN=true"
-  cargo build --lib --release --manifest-path=./rust/Cargo.toml
+endif
 
 C_clean:
 	rm -Rf $(SHLIB) $(OBJECTS) @CLEAN_EXTRA@
@@ -37,4 +32,4 @@ C_clean:
 clean:
 	rm -Rf $(SHLIB) $(OBJECTS) $(STATLIB) rust/target
 
-.PHONY: all build_cran build_non_cran C_clean clean
+.PHONY: all C_clean clean
