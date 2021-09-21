@@ -87,7 +87,7 @@ if [ "`uname`" = "Darwin" ]; then
   fi
 
   SRC="https://github.com/${GITHUB_REPO}/releases/download/${GITHUB_TAG}/${RUST_TARGET}-lib${CRATE_NAME}.a"
-  DST="./src/rust/target/${RUST_TARGET}/release/lib${CRATE_NAME}.a"
+  DST="./src/rust/target/release/lib${CRATE_NAME}.a"
 
   echo "*** Download URL: ${SRC}"
   echo "*** Dest file: ${DST}"
