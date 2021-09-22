@@ -199,7 +199,7 @@ _download_binary() {
   fi
 
   # Verify the checksum
-  SHA256SUM_ACTUAL=`sha256sum "${DST}" | cut -d' ' -f1`
+  SHA256SUM_ACTUAL=`sha256sum "${DESTFILE}" | cut -d' ' -f1`
   if [ -z "${SHA256SUM_ACTUAL}" ]; then
     show_error "Failed to get the checksum" 13
   fi
