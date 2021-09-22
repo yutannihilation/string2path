@@ -9,10 +9,10 @@ fi
 SYSINFO_MACHINE=`"${RSCRIPT}" -e 'cat(Sys.info()[["machine"]])'`
 SYSINFO_OS=`"${RSCRIPT}" -e 'cat(tolower(Sys.info()[["sysname"]]))'`
 
-echo ""
-echo "SYSINFO_MACHINE:   ${SYSINFO_MACHINE}"
-echo "SYSINFO_OS:        ${SYSINFO_OS}"
-echo ""
+echo "***"
+echo "*** SYSINFO_MACHINE:   ${SYSINFO_MACHINE}"
+echo "*** SYSINFO_OS:        ${SYSINFO_OS}"
+echo "***"
 
 # "true" if there's 32bit version of R installed
 if [ -d "${R_HOME}/bin/i386/" ]; then
@@ -155,10 +155,15 @@ _check_cargo_target() {
 
 
 
-
+# GITHUB_REPO: e.g. yutannihilation/string2path
+# GITHUB_TAG: e.g. build_20210921-1
+# CRT_PREFIX: "ucrt-" or empty. This should be set in configure.ucrt, if a
+#             different binary needs to be provided.
+# CRATE_NAME: string2path
 SRC_URL_TMPL="https://github.com/${GITHUB_REPO}/releases/download/${GITHUB_TAG}/${CRT_PREFIX}%s-lib${CRATE_NAME}.a"
+
 if [ "${SYSINFO_OS}" = "windows" ]; then
-  # On Windows, --target is specified
+  # On Windows, --target is specified, so the dir is nested one more
   DESTFILE_TMPL="./src/rust/target/%s/release/lib${CRATE_NAME}.a"
 else
   DESTFILE_TMPL="./src/rust/target/release/lib${CRATE_NAME}.a"
@@ -181,8 +186,10 @@ _download_binary() {
   SRC_URL=`printf "${SRC_URL_TMPL}" "${RUST_TARGET}"`
   DESTFILE=`printf "${DESTFILE_TMPL}" "${RUST_TARGET}"`
 
+  echo "***"
   echo "*** Download URL: ${SRC_URL}"
   echo "*** Dest file: ${DESTFILE}"
+  echo "***"
 
   # curl or wget might not be portable, so use R to download the file
   "${RSCRIPT}" ./tools/download_precompiled_binary.R "${SRC_URL}" "${DESTFILE}"
@@ -211,7 +218,9 @@ download_binaries() {
 
   # For debugging purpose
   if [ "${DEBUG_MUST_COMPILE}" = "true" ]; then
-    echo "Should not reach download_binaries"
+    echo ""
+    echo "[DEBUG] Reached download_binaries. Is something wrong?"
+    echo ""
     exit 100
   fi
 
