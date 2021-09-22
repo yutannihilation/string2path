@@ -4,7 +4,11 @@
 
 RSCRIPT="${R_HOME}/bin/Rscript"
 
+# Load common functions
 . ./tools/configure_utils.sh
+
+# Load the variables (e.g. github repo, tag, and checksum)
+. ./tools/vars.sh
 
 # 1.41.0 is the min version among Debian and Ubuntu at the time of writing this
 # (c.f. https://github.com/ron-rs/ron/issues/256#issuecomment-657999081)
@@ -14,18 +18,10 @@ MIN_RUST_VERSION="1.41.0"
 
 echo "NOT_CRAN: ${NOT_CRAN}"
 
-GITHUB_REPO="yutannihilation/string2path"
-CRATE_NAME="string2path"
-
-# These need to be updated if the binary is changed
-GITHUB_TAG="build_20210921-1"
-SHA256SUM_X86_64="be65f074cb7ae50e5784e7650f48579fff35f30ff663d1c01eabdc9f35c1f87c"
-SHA256SUM_ARM64="4a34f99cec66610746b20d456b1e11b346596c22ea1935c1bcb5ef1ab725f0e8"
-
 # Even when `cargo` is on `PATH`, `rustc` might not. This should ensure PATH is
 # configured correctly (c.f. https://github.com/yutannihilation/string2path/issues/4).
-if [ -e "$HOME/.cargo/env" ]; then
-  . $HOME/.cargo/env
+if [ -e "${HOME}/.cargo/env" ]; then
+  . "${HOME}/.cargo/env"
 fi
 
 # Check if `cargo` command exists ----------------------------------------------
@@ -58,11 +54,11 @@ if [ "`uname`" = "Darwin" ]; then
   case "${MAC_ARCH}" in
     x86_64)
       RUST_TARGET="x86_64-apple-darwin"
-      SHA256SUM_EXPECTED="${SHA256SUM_X86_64}"
+      SHA256SUM_EXPECTED="${SHA256SUM_MAC_INTEL}"
       ;;
     arm64)
       RUST_TARGET="aarch64-apple-darwin"
-      SHA256SUM_EXPECTED="${SHA256SUM_ARM64}"
+      SHA256SUM_EXPECTED="${SHA256SUM_MAC_ARM}"
       ;;
     *)
       show_error "ERROR: Unexpected arch: ${MAC_ARCH}" 11

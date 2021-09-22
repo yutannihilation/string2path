@@ -4,7 +4,11 @@
 
 RSCRIPT="${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe"
 
+# Load common functions
 . ./tools/configure_utils.sh
+
+# Load the variables (e.g. github repo, tag, and checksum)
+. ./tools/vars.sh
 
 # 1.41.0 is the min version among Debian and Ubuntu at the time of writing this
 # (c.f. https://github.com/ron-rs/ron/issues/256#issuecomment-657999081)
@@ -13,14 +17,6 @@ RSCRIPT="${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe"
 MIN_RUST_VERSION="1.41.0"
 
 echo "NOT_CRAN: ${NOT_CRAN}"
-
-GITHUB_REPO="yutannihilation/string2path"
-CRATE_NAME="string2path"
-
-# These need to be updated if the binary is changed
-GITHUB_TAG="build_20210921-1"
-SHA256SUM_X86_64="26a05f6ee8c2f625027ffc77c97fc8ac9746a182f5bc53d64235999a02c0b0dc"
-SHA256SUM_I686="ceda54184fb3bf9e4cbba86848cb2091ff5b77870357f94319f9215fadfa5b25"
 
 # Check if `cargo` command exists ----------------------------------------------
 
@@ -78,11 +74,11 @@ download_binary() {
 }
 
 # Download 64-bit binary
-download_binary "x86_64-pc-windows-gnu" "${SHA256SUM_X86_64}"
+download_binary "x86_64-pc-windows-gnu" "${SHA256SUM_WIN_64}"
 
 # If there are 32-bit version installation, download the binary
 if [ -d "${R_HOME}/bin/i386/" ]; then
-  download_binary "i686-pc-windows-gnu" "${SHA256SUM_I686}"
+  download_binary "i686-pc-windows-gnu" "${SHA256SUM_WIN_32}"
 fi
 
 echo "Successfully downloaded the precompied binary"
