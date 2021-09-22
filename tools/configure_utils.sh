@@ -1,3 +1,11 @@
+# Show error messages and exit
+#
+# USAGE:
+#     show_error MSG EXIT_CODE
+#
+# ARGS:
+#     MSG         Additional error message to show
+#     EXIT_CODE   Exit code to exit with
 show_error() {
   echo "-------------- ERROR: CONFIGURATION FAILED --------------------"
   echo ""
@@ -10,10 +18,18 @@ show_error() {
   exit $2
 }
 
+# Check if cargo is installed and set up as expected
+#
+# USAGE:
+#     check_cargo [TOOLCHAIN] [TARGET_1 TARGET_2...]
+#
+# ARGS:
+#     TOOLCHAIN   Toolchain that must be installed (i.e. stable-msvc on Windows)
+#     TARGET_n    Targets that must be installed
 check_cargo() {
-  TOOLCHAIN="$1"  # This is provided on Windows (Should be stable-msvc)
-  TARGET_64="$2"  # This is provided on Windows (Should be stable-msvc)
-  TARGET_32="$3"  # This is provided on Windows with R <4.2
+  TOOLCHAIN="$1"
+  shift
+  TARGETS="$@"
 
   echo "*** Checking if cargo is installed"
 
@@ -48,7 +64,7 @@ check_cargo() {
     fi
   fi
 
-  for TARGET in ${TARGET_64} ${TARGET_32}; do
+  for TARGET in ${TARGETS}; do
     check_cargo_target ${TARGET}
     ret=$?
     if [ "${ret}" -ne 0 ]; then
