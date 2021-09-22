@@ -1,11 +1,11 @@
 # In configure scripts, Rscript cannot be used without path specified
 RSCRIPT="${R_HOME}/bin/Rscript"
 
-# Load common functions (e.g. check_cargo)
-. ./tools/configure_utils.sh
-
 # Load the variables (e.g. github repo, tag, and checksum)
 . ./tools/vars.sh
+
+# Load common functions (e.g. check_cargo)
+. ./tools/common_functions.sh
 
 echo "NOT_CRAN: ${NOT_CRAN}"
 
