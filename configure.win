@@ -1,10 +1,6 @@
-# NOTE:
-# This is based on the configure script of the gifski package, (https://github.com/r-rust/gifski/),
-# distributed under the MIT license, authored by Jeroen Ooms.
-
 RSCRIPT="${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe"
 
-# Load common functions
+# Load common functions (e.g. check_cargo)
 . ./tools/configure_utils.sh
 
 # Load the variables (e.g. github repo, tag, and checksum)
