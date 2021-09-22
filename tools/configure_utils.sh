@@ -25,17 +25,19 @@ check_cargo() {
     return 1
   fi
 
-  echo "*** Checking if cargo is newer than the required version"
+  if [ -n "${MIN_RUST_VERSION}" ]; then
+    echo "*** Checking if cargo is newer than the required version"
 
-  # Check if the version is minimum required one. `-V` option of `sort` does
-  # version sort, and `-C` is for silently checking if the input is already
-  # sorted; so, if RUST_VERSION is smaller than MIN_RUST_VERSION, it fails.
-  RUST_VERSION="`cargo --version | cut -d' ' -f2`"
-  if ! printf '%s\n' "${MIN_RUST_VERSION}" "${RUST_VERSION}" | sort -C -V; then
-    echo ""
-    echo "WARN: The installed version of cargo (${RUST_VERSION}) is older than the requirement (${MIN_RUST_VERSION})"
-    echo ""
-    return 2
+    # Check if the version is minimum required one. `-V` option of `sort` does
+    # version sort, and `-C` is for silently checking if the input is already
+    # sorted; so, if RUST_VERSION is smaller than MIN_RUST_VERSION, it fails.
+    RUST_VERSION="`cargo --version | cut -d' ' -f2`"
+    if ! printf '%s\n' "${MIN_RUST_VERSION}" "${RUST_VERSION}" | sort -C -V; then
+      echo ""
+      echo "WARN: The installed version of cargo (${RUST_VERSION}) is older than the requirement (${MIN_RUST_VERSION})"
+      echo ""
+      return 2
+    fi
   fi
 
   if [ -n "${TOOLCHAIN}" ]; then
