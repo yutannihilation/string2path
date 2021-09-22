@@ -29,53 +29,8 @@ fi
 
 # Download the precompiled binary ----------------------------------------------
 
-echo "*** Trying to download the precompiled binary"
+download_binaries
 
-if [ "`uname`" = "Darwin" ]; then
-  # For some reason, it seems `uname -m` or `arch` cannot be used reliably (why?)
-  # So, let's ask R.
-  MAC_ARCH=`"${RSCRIPT}" -e 'cat(Sys.info()[["machine"]])'`
-  case "${MAC_ARCH}" in
-    x86_64)
-      RUST_TARGET="x86_64-apple-darwin"
-      SHA256SUM_EXPECTED="${SHA256SUM_MAC_INTEL}"
-      ;;
-    arm64)
-      RUST_TARGET="aarch64-apple-darwin"
-      SHA256SUM_EXPECTED="${SHA256SUM_MAC_ARM}"
-      ;;
-    *)
-      show_error "ERROR: Unexpected arch: ${MAC_ARCH}" 11
-  esac
+sed -e 's|@CLEAN_EXTRA@||' src/Makevars.in > src/Makevars
+exit 0
 
-  SRC="https://github.com/${GITHUB_REPO}/releases/download/${GITHUB_TAG}/${RUST_TARGET}-lib${CRATE_NAME}.a"
-  DST="./src/rust/target/release/lib${CRATE_NAME}.a"
-
-  echo "*** Download URL: ${SRC}"
-  echo "*** Dest file: ${DST}"
-
-  "${RSCRIPT}" ./tools/download_precompiled_binary.R "${SRC}" "${DST}"
-  if [ $? -ne 0 ]; then
-    show_error "Failed to download the pre-compiled binary" 12
-  fi
-
-  # Verify the checksum
-  SHA256SUM_ACTUAL=`shasum -a 256 "${DST}" | cut -d' ' -f1`
-  if [ -z "${SHA256SUM_ACTUAL}" ]; then
-    show_error "Failed to get the checksum" 13
-  fi
-
-  if [ "${SHA256SUM_ACTUAL}" != "${SHA256SUM_EXPECTED}" ]; then
-    show_error "Checksum mismatch for the pre-compiled binary" 14
-  fi
-
-  echo "Successfully downloaded the precompied binary"
-  echo ""
-
-  sed -e 's|@CLEAN_EXTRA@||' src/Makevars.in > src/Makevars
-
-  exit 0
-fi
-
-# No precompiled binary is provided for other OSes than Windows and macOS
-show_error "No precompiled binary is available." 14

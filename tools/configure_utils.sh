@@ -82,7 +82,7 @@ check_cargo() {
 
     # Check toolchain ------
 
-    check_cargo_toolchain stable-msvc
+    _check_cargo_toolchain stable-msvc
     ret=$?
     if [ "${ret}" -ne 0 ]; then
       return ${ret}
@@ -98,7 +98,7 @@ check_cargo() {
     fi
 
     for TARGET in ${TARGETS}; do
-      check_cargo_target ${TARGET}
+      _check_cargo_target ${TARGET}
       ret=$?
       if [ "${ret}" -ne 0 ]; then
         return ${ret}
@@ -117,11 +117,11 @@ check_cargo() {
 # (This is intended to be used in check_cargo)
 #
 # USAGE:
-#     check_cargo_toolchain TOOLCHAIN
+#     _check_cargo_toolchain TOOLCHAIN
 #
 # ARGS:
 #     TOOLCHAIN   Toolchain that must be installed (i.e. stable-msvc on Windows)
-check_cargo_toolchain() {
+_check_cargo_toolchain() {
   EXPECTED_TOOLCHAIN="$1"
 
   cargo "+${EXPECTED_TOOLCHAIN}" version >/dev/null 2>&1
@@ -138,11 +138,11 @@ check_cargo_toolchain() {
 # (This is intended to be used in check_cargo)
 #
 # USAGE:
-#     check_cargo_target TARGET
+#     _check_cargo_target TARGET
 #
 # ARGS:
 #     TARGET      Targets that must be installed
-check_cargo_target() {
+_check_cargo_target() {
   EXPECTED_TARGET="$1"
 
   if ! rustup target list --installed | grep -q "${EXPECTED_TARGET}"; then
@@ -151,4 +151,100 @@ check_cargo_target() {
     echo ""
     return 4
   fi
+}
+
+
+
+
+SRC_URL_TMPL="https://github.com/${GITHUB_REPO}/releases/download/${GITHUB_TAG}/${CRT_PREFIX}%s-lib${CRATE_NAME}.a"
+if [ "${SYSINFO_OS}" = "windows" ]; then
+  # On Windows, --target is specified
+  DESTFILE_TMPL="./src/rust/target/%s/release/lib${CRATE_NAME}.a"
+else
+  DESTFILE_TMPL="./src/rust/target/release/lib${CRATE_NAME}.a"
+fi
+
+# Download a binary
+#
+# (This is intended to be used in check_cargo)
+#
+# USAGE:
+#     _check_cargo_target RUST_TARGET SHA256SUM_EXPECTED
+#
+# ARGS:
+#     RUST_TARGET          Build target
+#     SHA256SUM_EXPECTED   Checksum of the downloaded binary
+_download_binary() {
+  RUST_TARGET="$1"
+  SHA256SUM_EXPECTED="$2"
+
+  SRC_URL=`printf "${SRC_URL_TMPL}" "${RUST_TARGET}"`
+  DESTFILE=`printf "${DESTFILE_TMPL}" "${RUST_TARGET}"`
+
+  echo "*** Download URL: ${SRC_URL}"
+  echo "*** Dest file: ${DESTFILE}"
+
+  # curl or wget might not be portable, so use R to download the file
+  "${RSCRIPT}" ./tools/download_precompiled_binary.R "${SRC_URL}" "${DESTFILE}"
+
+  if [ $? -ne 0 ]; then
+    show_error "Failed to download the pre-compiled binary" 12
+  fi
+
+  # Verify the checksum
+  SHA256SUM_ACTUAL=`sha256sum "${DST}" | cut -d' ' -f1`
+  if [ -z "${SHA256SUM_ACTUAL}" ]; then
+    show_error "Failed to get the checksum" 13
+  fi
+
+  if [ "${SHA256SUM_ACTUAL}" != "${SHA256SUM_EXPECTED}" ]; then
+    show_error "Checksum mismatch for the pre-compiled binary" 14
+  fi
+}
+
+# Download the precompiled binaries
+#
+# USAGE:
+#     download_binaries
+download_binaries() {
+  echo "*** Trying to download the precompiled binary"
+
+  # For debugging purpose
+  if [ "${DEBUG_MUST_COMPILE}" = "true" ]; then
+    echo "Should not reach download_binaries"
+    exit 100
+  fi
+
+  case "${SYSINFO_OS}" in
+
+    windows) ##################################################
+
+      # Download 64-bit binary
+      _download_binary "x86_64-pc-windows-gnu" "${SHA256SUM_WIN_64}"
+
+      # If there are 32-bit version installation, download the binary
+      if [ "${HAS_32BIT_R}" = "true" ]; then
+        _download_binary "i686-pc-windows-gnu" "${SHA256SUM_WIN_32}"
+      fi
+    ;; # end of windows case ##################################
+
+    darwin) ###################################################
+      case "${SYSINFO_MACHINE}" in
+      x86_64)
+        _download_binary "x86_64-apple-darwin" "${SHA256SUM_MAC_INTEL}"
+        ;;
+      arm64)
+        _download_binary "aarch64-apple-darwin" "${SHA256SUM_MAC_ARM}"
+        ;;
+      *)
+        show_error "ERROR: No precompiled binary is available for arch ${SYSINFO_MACHINE}" 11
+      esac
+    ;; # end of macOS case ####################################
+
+    *)
+        show_error "ERROR: No precompiled binary is available for OS ${SYSINFO_OS}" 11
+  esac
+
+  echo "Successfully downloaded the precompied binary"
+  echo ""
 }

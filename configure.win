@@ -23,49 +23,8 @@ fi
 
 # Download the precompiled binary ----------------------------------------------
 
-echo "*** Trying to download the precompiled binary"
-
-download_binary() {
-  RUST_TARGET="$1"
-  SHA256SUM_EXPECTED="$2"
-
-  SRC="https://github.com/${GITHUB_REPO}/releases/download/${GITHUB_TAG}/${CRT_PREFIX}${RUST_TARGET}-lib${CRATE_NAME}.a"
-  DST="./src/rust/target/${RUST_TARGET}/release/lib${CRATE_NAME}.a"
-
-  echo "*** Download URL: ${SRC}"
-  echo "*** Dest file: ${DST}"
-
-  "${RSCRIPT}" ./tools/download_precompiled_binary.R "${SRC}" "${DST}"
-
-  if [ $? -ne 0 ]; then
-    show_error "Failed to download the pre-compiled binary" 12
-  fi
-
-  # Verify the checksum
-  SHA256SUM_ACTUAL=`sha256sum "${DST}" | cut -d' ' -f1`
-  if [ -z "${SHA256SUM_ACTUAL}" ]; then
-    show_error "Failed to get the checksum" 13
-  fi
-
-  if [ "${SHA256SUM_ACTUAL}" != "${SHA256SUM_EXPECTED}" ]; then
-    show_error "Checksum mismatch for the pre-compiled binary" 14
-  fi
-}
-
-# Download 64-bit binary
-download_binary "x86_64-pc-windows-gnu" "${SHA256SUM_WIN_64}"
-
-# If there are 32-bit version installation, download the binary
-if [ -d "${R_HOME}/bin/i386/" ]; then
-  download_binary "i686-pc-windows-gnu" "${SHA256SUM_WIN_32}"
-fi
-
-echo "Successfully downloaded the precompied binary"
-echo ""
+download_binaries
 
 sed -e 's|@CLEAN_EXTRA@||' src/Makevars.win.in > src/Makevars.win
-
 exit 0
 
-# This should not happen on Windows.
-show_error "No precompiled binary is available." 14
