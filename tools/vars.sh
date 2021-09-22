@@ -12,7 +12,7 @@ SHA256SUM_WIN_32="ceda54184fb3bf9e4cbba86848cb2091ff5b77870357f94319f9215fadfa5b
 # (c.f. https://github.com/ron-rs/ron/issues/256#issuecomment-657999081)
 # This might need bumped depending on the features the crate uses. cargo-msrv
 # might be helpful to find the actual MSRV.
-MIN_RUST_VERSION="1.56.0"
+MIN_RUST_VERSION="1.41.0"
 
 # Set this true to disallow downloading the precompiled binaries
 DEBUG_MUST_COMPILE=
