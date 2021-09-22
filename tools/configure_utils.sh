@@ -1,3 +1,25 @@
+if [ -z "${RSCRIPT}" ]; then
+  echo ""
+  echo "ERROR: RSCRIPT variable needs to be set before sourcing configure_utils.sh"
+  echo ""
+  exit 100
+fi
+
+# Use these system information to do some extra checks
+SYSINFO_MACHINE=`"${RSCRIPT}" -e 'cat(Sys.info()[["machine"]])'`
+SYSINFO_OS=`"${RSCRIPT}" -e 'cat(tolower(Sys.info()[["sysname"]]))'`
+
+echo ""
+echo "SYSINFO_MACHINE:   ${SYSINFO_MACHINE}"
+echo "SYSINFO_OS:        ${SYSINFO_OS}"
+echo ""
+
+# "true" if there's 32bit version of R installed
+if [ -d "${R_HOME}/bin/i386/" ]; then
+  HAS_32BIT_R="true"
+fi
+
+
 # Show error messages and exit
 #
 # USAGE:
@@ -18,19 +40,18 @@ show_error() {
   exit $2
 }
 
+
+
 # Check if cargo is installed and set up as expected
 #
 # USAGE:
-#     check_cargo [TOOLCHAIN] [TARGET_1 TARGET_2...]
+#     check_cargo
 #
-# ARGS:
-#     TOOLCHAIN   Toolchain that must be installed (i.e. stable-msvc on Windows)
-#     TARGET_n    Targets that must be installed
+# VARIABLES:
+#     MIN_RUST_VERSION   If this is set, check if the installed version is newer
+#                        than the requirement
+#
 check_cargo() {
-  TOOLCHAIN="$1"
-  shift
-  TARGETS="$@"
-
   echo "*** Checking if cargo is installed"
 
   cargo version >/dev/null 2>&1
@@ -56,25 +77,50 @@ check_cargo() {
     fi
   fi
 
-  if [ -n "${TOOLCHAIN}" ]; then
-    check_cargo_toolchain "${TOOLCHAIN}"
+  # On Windows, there should be installed an specific toolchains
+  if [ "${SYSINFO_OS}" = "windows" ]; then
+
+    # Check toolchain ------
+
+    check_cargo_toolchain stable-msvc
     ret=$?
     if [ "${ret}" -ne 0 ]; then
       return ${ret}
     fi
+
+    # Check targets ------
+
+    # If there is 32-bit version of R, check the corresponding target is installed already
+    if [ "${HAS_32BIT_R}" = "true" ]; then
+      TARGETS="x86_64-pc-windows-gnu i686-pc-windows-gnu"
+    else
+      TARGETS="x86_64-pc-windows-gnu"
+    fi
+
+    for TARGET in ${TARGETS}; do
+      check_cargo_target ${TARGET}
+      ret=$?
+      if [ "${ret}" -ne 0 ]; then
+        return ${ret}
+      fi
+    done
   fi
 
-  for TARGET in ${TARGETS}; do
-    check_cargo_target ${TARGET}
-    ret=$?
-    if [ "${ret}" -ne 0 ]; then
-      return ${ret}
-    fi
-  done
+  echo "cargo is ok"
+  echo ""
 
   return 0
 }
 
+# Check if the installed cargo has a specific toolchain
+#
+# (This is intended to be used in check_cargo)
+#
+# USAGE:
+#     check_cargo_toolchain TOOLCHAIN
+#
+# ARGS:
+#     TOOLCHAIN   Toolchain that must be installed (i.e. stable-msvc on Windows)
 check_cargo_toolchain() {
   EXPECTED_TOOLCHAIN="$1"
 
@@ -87,6 +133,15 @@ check_cargo_toolchain() {
   fi
 }
 
+# Check if the installed cargo has a specific target
+#
+# (This is intended to be used in check_cargo)
+#
+# USAGE:
+#     check_cargo_target TARGET
+#
+# ARGS:
+#     TARGET      Targets that must be installed
 check_cargo_target() {
   EXPECTED_TARGET="$1"
 
