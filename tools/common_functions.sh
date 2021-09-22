@@ -199,7 +199,12 @@ _download_binary() {
   fi
 
   # Verify the checksum
-  SHA256SUM_ACTUAL=`sha256sum "${DESTFILE}" | cut -d' ' -f1`
+  if [ "${SYSINFO_OS}" = "darwin" ]; then
+    SHA256SUM_ACTUAL=`shasum -a 256 "${DESTFILE}" | cut -d' ' -f1`
+  else
+    SHA256SUM_ACTUAL=`sha256sum "${DESTFILE}" | cut -d' ' -f1`
+  fi
+
   if [ -z "${SHA256SUM_ACTUAL}" ]; then
     show_error "Failed to get the checksum" 13
   fi
