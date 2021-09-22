@@ -15,4 +15,4 @@ SHA256SUM_WIN_32="ceda54184fb3bf9e4cbba86848cb2091ff5b77870357f94319f9215fadfa5b
 MIN_RUST_VERSION="1.56.0"
 
 # Set this true to disallow downloading the precompiled binaries
-DEBUG_MUST_COMPILE=true
+DEBUG_MUST_COMPILE=

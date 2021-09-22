@@ -35,6 +35,8 @@ jobs:
     env:
       RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      # used in tools/configure_utils.sh
+      DEBUG_MUST_COMPILE: "true"
 
     steps:
       - uses: actions/checkout@v2
