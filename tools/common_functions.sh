@@ -9,6 +9,13 @@ fi
 SYSINFO_MACHINE=`"${RSCRIPT}" -e 'cat(Sys.info()[["machine"]])'`
 SYSINFO_OS=`"${RSCRIPT}" -e 'cat(tolower(Sys.info()[["sysname"]]))'`
 
+if [ -z "${SYSINFO_MACHINE}" -o -z "${SYSINFO_OS}" ]; then
+  echo ""
+  echo 'ERROR: Failed to get Sys.info()'
+  echo ""
+  exit 100
+fi
+
 echo "***"
 echo "*** SYSINFO_MACHINE:   ${SYSINFO_MACHINE}"
 echo "*** SYSINFO_OS:        ${SYSINFO_OS}"
@@ -154,12 +161,13 @@ _check_cargo_target() {
 }
 
 
+# This can be set if a different binary needs to be provided, but usually it's
+# not necessary. This script uses this mainly for demonstration purposes.
+CRT_PREFIX=`"${RSCRIPT}" -e 'cat(if(identical(R.version$crt, "ucrt")) "ucrt-" else "")'`
 
 # GITHUB_REPO: e.g. yutannihilation/string2path
 # GITHUB_TAG: e.g. build_20210921-1
-# CRT_PREFIX: "ucrt-" or empty. This should be set in configure.ucrt, if a
-#             different binary needs to be provided.
-# CRATE_NAME: string2path
+# CRATE_NAME: e.g. string2path
 SRC_URL_TMPL="https://github.com/${GITHUB_REPO}/releases/download/${GITHUB_TAG}/${CRT_PREFIX}%s-lib${CRATE_NAME}.a"
 
 if [ "${SYSINFO_OS}" = "windows" ]; then

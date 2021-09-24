@@ -7,8 +7,6 @@ RSCRIPT="${R_HOME}/bin/Rscript"
 # Load common functions (e.g. check_cargo)
 . ./tools/common_functions.sh
 
-echo "NOT_CRAN: ${NOT_CRAN}"
-
 # Even when `cargo` is on `PATH`, `rustc` might not. This should ensure PATH is
 # configured correctly (c.f. https://github.com/yutannihilation/string2path/issues/4).
 if [ -e "${HOME}/.cargo/env" ]; then
