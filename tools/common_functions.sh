@@ -1,12 +1,13 @@
+if [ -z "${RSCRIPT}" ]; then
+  echo ""
+  echo "ERROR: RSCRIPT variable needs to be set before sourcing configure_utils.sh"
+  echo ""
+  exit 100
+fi
+
 # Use these system information to do some extra checks
 SYSINFO_MACHINE=`"${RSCRIPT}" -e 'cat(Sys.info()[["machine"]])'`
 SYSINFO_OS=`"${RSCRIPT}" -e 'cat(tolower(Sys.info()[["sysname"]]))'`
-
-if [ "${SYSINFO_OS}" = "windows" ]; then
-  RSCRIPT="${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe"
-else
-  RSCRIPT="${R_HOME}/bin/Rscript"
-fi
 
 echo "***"
 echo "*** SYSINFO_MACHINE:   ${SYSINFO_MACHINE}"
