@@ -1,6 +1,3 @@
-# In configure scripts, Rscript cannot be used without path specified
-RSCRIPT="${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe"
-
 # Load the variables (e.g. github repo, tag, and checksum)
 . ./tools/vars.sh
 
