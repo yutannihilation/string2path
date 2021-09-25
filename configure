@@ -1,4 +1,4 @@
-"${R_HOME}/bin/Rscript" "./tools/cli.R"
+"${R_HOME}/bin/Rscript" "./tools/configure.R"
 
 ret=$?
 
