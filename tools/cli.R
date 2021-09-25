@@ -201,24 +201,21 @@ download_precompiled <- function() {
     stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
   }
 
-  print(checksums)
-
   tryCatch(
     {
-      checksums <- read.table(text = checksums, header = FALSE)
-      stopifnot(is.data.frame(checksums))
-      print(checksums)
-      stopifnot(ncol(checksums) == 2)
-      stopifnot(nrow(checksums) > 0)
+      checksums <- eval(parse(text = checksums))
+      stopifnot(is.list(checksums))
     },
     error = function(e) {
-      print(e)
       msg <- sprintf("The %sbinary_sha256sum field on the DESCRIPTION file is malformed.", DESC_FIELD_PREFIX)
       stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
     }
   )
 
-  colnames(checksums) <- c("sha256sum", "filename")
+  checksums <- data.frame(
+    filename  = names(checksums),
+    sha256sum = as.character(checksums)
+  )
 
   download_targets <- character(0)
   if (identical(SYSINFO_OS, "windows")) {
