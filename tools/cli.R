@@ -222,13 +222,13 @@ download_precompiled <- function() {
       download_targets <- c(download_targets, "i686-pc-windows-gnu")
     }
 
-    sha256sum_cmd_tmpl <- "foosha256sum %s"
+    sha256sum_cmd_tmpl <- "sha256sum %s"
   } else if (identical(SYSINFO_OS, "darwin")) {
     download_targets <- switch (SYSINFO_MACHINE,
       x86_64 = "x86_64-apple-darwin",
       arm64  = "aarch64-apple-darwin"
     )
-    sha256sum_cmd_tmpl <- "fooshasum -a 256 %s"
+    sha256sum_cmd_tmpl <- "shasum -a 256 %s"
   }
 
   if (length(download_targets) > 0) {
@@ -425,6 +425,7 @@ download_precompiled_result <- tryCatch(
 
 if (isTRUE(download_precompiled_result)) {
   message("\n*** Successfully downloaded the precompied binary\n")
+  # This needs to exit another status code to notify the status to the configure script
   quit("no", status = 1)
 }
 
@@ -432,7 +433,7 @@ if (isTRUE(download_precompiled_result)) {
 message(sprintf("
 -------------- ERROR: CONFIGURATION FAILED --------------------
 
-- cargo is not installed or configured properly
+- cargo is not installed or not configured properly
 - %s
 
 Please refer to <https://www.rust-lang.org/tools/install> to install Rust.
