@@ -323,6 +323,7 @@ download_precompiled <- function() {
       stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
     }
 
+    checksum_actual <- strsplit(checksum_actual, "\\s+")[[1]][1]
     if (!identical(checksum_actual, checksum_expected)) {
       msg <- paste("Checksum mismatch for the pre-compiled binary: ", target)
       stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
