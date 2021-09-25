@@ -220,18 +220,17 @@ download_precompiled <- function() {
     sha256sum = as.character(checksums)
   )
 
+  # For UCRT Windows, add ucrt- prefix
+  crt_prefix <- if (isTRUE(USE_UCRT)) "ucrt-" else ""
+
   download_targets <- character(0)
+
   if (identical(SYSINFO_OS, "windows")) {
     download_targets <- "x86_64-pc-windows-gnu"
 
     # If there is 32-bit version installation, download the binary
     if (isTRUE(HAS_32BIT_R)) {
       download_targets <- c(download_targets, "i686-pc-windows-gnu")
-    }
-
-    # For UCRT Windows, add ucrt- prefix
-    if(isTRUE(USE_UCRT)) {
-      download_targets <- paste0("ucrt-", download_targets)
     }
 
     sha256sum_cmd_tmpl <- "sha256sum %s"
@@ -245,7 +244,7 @@ download_precompiled <- function() {
 
   if (length(download_targets) > 0) {
     # restrict only the available ones
-    download_targets <- download_targets[sprintf("%s-lib%s.a", download_targets, crate_name) %in% checksums$filename]
+    download_targets <- download_targets[sprintf("%s%s-lib%s.a", crt_prefix, download_targets, crate_name) %in% checksums$filename]
   }
 
   # If there's no checksum available for the platform, it means there's no binary
@@ -268,7 +267,7 @@ download_precompiled <- function() {
   ### Download the files ###
 
   for (target in download_targets) {
-    src_file <- sprintf("%s-lib%s.a", target, crate_name)
+    src_file <- sprintf("%s%s-lib%s.a", crt_prefix, download_targets, crate_name)
     checksum_expected <- checksums$sha256sum[checksums$filename == src_file]
 
     src_url <- paste0("https://github.com/", github_repo, "/releases/download/", github_tag, "/", src_file)
