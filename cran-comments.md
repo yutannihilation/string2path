@@ -1,27 +1,23 @@
 ## Test environments
 
 * local Ubuntu Linux install: release
-* GitHub Actions CI (Windows, macOS, Linux): release and devel
+* GitHub Actions CI (Windows, macOS, Linux): release and devel, ucrt-devel
 * win-builder: devel
+* R Mac builder
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 2 note
 
-* This is a maintenance release in response to the request to fix the build
-  failures on CRAN. I sincerely apologize for the trouble.
-* This release contains these fixes:
-    - macOS: Now the configure script detects if the external command (i.e.
-        `cargo`) is available. If not, it downloads the necessary setups.
-    - M1 mac: src/Makevars now correctly sets PATH so that `rustc` command can
-        be found.
-    - Add "GNU make" to SystemRequirements because the src/Makevars uses a
-      GNU make extension.
-* I would like to request to exclude Solaris from the build targets because
-  Solaris is not a supported platform by Rust. This should be in line with the
-  treatments of other CRAN packages that use Rust; gifski, baseflow, and
-  salso are not built on Solaris. I'm sorry that I didn't write this in the first
-  submission.
-* The build error on r-devel-windows-x86_64-gcc10-UCRT should be solved when the
-  dependency package (i.e., tibble) become available.
+* This is a maintenance release to improve configure scripts to detect the Rust
+  installation, and handle the case when it's not available.
+* Regarding the current CRAN check results,
+      - The ERROR on r-devel-windows-x86_64-gcc10-UCRT ("curl: (60) SSL 
+        certificate problem") might indicate something is wrong with the curl
+        installation on the CRAN machine. But, this version switches to use
+        the standard R function `download.file()` instead of curl, so hopefully
+        the error will disappear.
+      - On some platform, it NOTEs that "All declared Imports should be used"
+        about tibble package. However, tibble is surely used in the Rust code
+        so I believe these NOTEs are false-positive and can be ignored.
 * There's no reverse dependency.
