@@ -1,4 +1,7 @@
-# string2path (development version)
+# string2path 0.0.3
+
+* This is a maintenance release to improve configure scripts to detect Rust
+  installations correctly. No new features are added.
 
 # string2path 0.0.2
 
