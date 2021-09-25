@@ -1,28 +1,15 @@
-# In configure scripts, Rscript cannot be used without path specified
-RSCRIPT="${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe"
+"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "./tools/cli.R"
 
-# Load the variables (e.g. github repo, tag, and checksum)
-. ./tools/vars.sh
+ret=$?
 
-# Load common functions (e.g. check_cargo)
-. ./tools/common_functions.sh
-
-# Check if `cargo` command exists ----------------------------------------------
-
-check_cargo
-
-# If cargo is confirmed fine, exit here. But, even if the cargo is not available
-# or too old, it's not the end of the world. There might be a pre-compiled
-# binary for the platform.
-if [ $? -eq 0 ]; then
-    sed -e 's|@CLEAN_EXTRA@|$(STATLIB)|' src/Makevars.win.in > src/Makevars.win
-    exit 0
-fi
-
-# Download the precompiled binary ----------------------------------------------
-
-download_binaries
-
-sed -e 's|@CLEAN_EXTRA@||' src/Makevars.win.in > src/Makevars.win
-exit 0
-
+case $ret in
+0)
+  sed -e 's|@CLEAN_EXTRA@|$(STATLIB)|' src/Makevars.in > src/Makevars
+  exit 0
+  ;;
+1)
+  sed -e 's|@CLEAN_EXTRA@||' src/Makevars.in > src/Makevars
+  exit 0
+  ;;
+*)
+  exit $ret
