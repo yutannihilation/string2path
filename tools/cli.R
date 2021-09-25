@@ -233,13 +233,13 @@ download_precompiled <- function() {
       download_targets <- c(download_targets, "i686-pc-windows-gnu")
     }
 
-    sha256sum_cmd_tmpl <- "foo %s"
+    sha256sum_cmd_tmpl <- "sha256sum %s"
   } else if (identical(SYSINFO_OS, "darwin")) {
     download_targets <- switch (SYSINFO_MACHINE,
       x86_64 = "x86_64-apple-darwin",
       arm64  = "aarch64-apple-darwin"
     )
-    sha256sum_cmd_tmpl <- "foo -a 256 %s"
+    sha256sum_cmd_tmpl <- "shasum -a 256 %s"
   }
 
   if (length(download_targets) > 0) {
