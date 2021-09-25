@@ -284,7 +284,7 @@ download_precompiled <- function() {
 ", src_url, destfile))
 
     dir.create(dirname(destfile), showWarnings = FALSE, recursive = TRUE)
-    break
+
     # Download the file
     tryCatch(
       download.file(src_url, destfile = destfile, mode = "wb", quiet = TRUE),
@@ -312,6 +312,8 @@ download_precompiled <- function() {
 }
 
 # MAIN --------------------------------------------------------------------
+
+### Check cargo toolchain ###
 
 cargo_check_result <- tryCatch(
   check_cargo(),
@@ -341,6 +343,8 @@ Please refer to <https://www.rust-lang.org/tools/install> to install Rust.
   quit("no", status = 100)
 }
 
+### Try downloading precompiled binaries ###
+
 download_precompiled_result <- tryCatch(
   download_precompiled(),
   # Defer errors if it's raised by functions here
@@ -361,5 +365,5 @@ message(sprintf("
 Please refer to <https://www.rust-lang.org/tools/install> to install Rust.
 
 ---------------------------------------------------------------
-", cargo_check_result))
+", download_precompiled_result))
 quit("no", status = 101)
