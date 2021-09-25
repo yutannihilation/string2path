@@ -361,7 +361,7 @@ check_checksum <- function(cmd, args, file, expected) {
     stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
   }
 
-  checksum_actual <- strsplit(checksum_actual, "\\s+")[[1]]
+  checksum_actual <- strsplit(checksum_actual$output, "\\s+")[[1]]
 
   if (length(checksum_actual) != 2) {
     msg <- paste0("The output of `", sprintf(sha256sum_cmd_tmpl, file), "` was unexpected")
