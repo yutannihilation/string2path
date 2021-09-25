@@ -207,27 +207,7 @@ download_precompiled <- function() {
 
   ### Get checksums from DESCRIPTION ###
 
-  checksums <- get_desc_field("binary_sha256sum")
-  if (isTRUE(is.na(checksums))) {
-    msg <- sprintf("No precompiled binary is available; the DESCRIPTION file doesn't have %sbinary_sha256sum", DESC_FIELD_PREFIX)
-    stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
-  }
-
-  tryCatch(
-    {
-      checksums <- eval(parse(text = checksums))
-      stopifnot(is.list(checksums))
-    },
-    error = function(e) {
-      msg <- sprintf("The %sbinary_sha256sum field on the DESCRIPTION file is malformed.", DESC_FIELD_PREFIX)
-      stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
-    }
-  )
-
-  checksums <- data.frame(
-    filename  = names(checksums),
-    sha256sum = as.character(checksums)
-  )
+  checksums <- get_expected_checksums()
 
   # For UCRT Windows, add ucrt- prefix
   crt_prefix <- if (isTRUE(USE_UCRT)) "ucrt-" else ""
@@ -264,15 +244,7 @@ download_precompiled <- function() {
   }
 
   # Test sha256sum command
-  sha256sum_testfile <- tempfile()
-  on.exit(unlink(sha256sum_testfile, force = TRUE))
-  file.create(sha256sum_testfile)
-  suppressWarnings(ret <- system(sprintf(sha256sum_cmd_tmpl, sha256sum_testfile), ignore.stdout = TRUE, ignore.stderr = TRUE))
-
-  if (!identical(ret, 0L)) {
-    msg <- sprintf(sha256sum_cmd_tmpl, " command is not available")
-    stop(errorCondition(msg, class = c("string2path_error_cargo_check", "error")))
-  }
+  check_sha256sum_cmd(sha256sum_cmd_tmpl)
 
   ### Construct string templates for download URLs and destfiles ###
 
@@ -316,20 +288,97 @@ download_precompiled <- function() {
       }
     )
 
-    # Get the checksum
-    checksum_actual <- system(sprintf(sha256sum_cmd_tmpl, destfile), intern = TRUE)
-    if (!is.null(attr(checksum_actual, "status"))) {
-      msg <- paste("Failed to get the checksum of", destfile)
-      stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
-    }
-
-    checksum_actual <- strsplit(checksum_actual, "\\s+")[[1]][1]
-    if (!identical(checksum_actual, checksum_expected)) {
-      msg <- paste("Checksum mismatch for the pre-compiled binary: ", target)
-      stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
-    }
+    check_checksum(sha256sum_cmd_tmpl, destfile, checksum_expected)
 
   } ### End of for loop
+
+  invisible(TRUE)
+}
+
+
+#' Get expected checksums written in DESCRIPTION
+#'
+#' @return
+#'   A data.frame of checksums.
+get_expected_checksums <- function() {
+  checksums <- get_desc_field("binary_sha256sum")
+
+  if (isTRUE(is.na(checksums))) {
+    msg <- sprintf("No precompiled binary is available; the DESCRIPTION file doesn't have %sbinary_sha256sum", DESC_FIELD_PREFIX)
+    stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
+  }
+
+  tryCatch(
+    {
+      checksums <- eval(parse(text = checksums))
+      stopifnot(is.list(checksums))
+    },
+    error = function(e) {
+      msg <- sprintf("The %sbinary_sha256sum field on the DESCRIPTION file is malformed.", DESC_FIELD_PREFIX)
+      stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
+    }
+  )
+
+  checksums <- data.frame(
+    filename  = names(checksums),
+    sha256sum = as.character(checksums)
+  )
+}
+
+#' Check if sha256sum command works without errors
+#'
+#' @param sha256sum_cmd_tmpl
+#'   `sprintf()` template for sha256sum command (e.g. `"sha256sum %s"`).
+#'
+#' @return
+#'   `TRUE` invisibly if no error was found.
+check_sha256sum_cmd <- function(sha256sum_cmd_tmpl) {
+  sha256sum_testfile <- tempfile()
+  on.exit(unlink(sha256sum_testfile, force = TRUE))
+  file.create(sha256sum_testfile)
+  suppressWarnings(ret <- system(sprintf(sha256sum_cmd_tmpl, sha256sum_testfile), ignore.stdout = TRUE, ignore.stderr = TRUE))
+
+  if (!identical(ret, 0L)) {
+    msg <- sprintf(sha256sum_cmd_tmpl, " command is not available")
+    stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
+  }
+
+  invisible(TRUE)
+}
+
+#' Check if the SHA256sum of the file matches with the expected one.
+#'
+#'
+#' @param sha256sum_cmd_tmpl
+#'   `sprintf()` template for sha256sum command (e.g. `"sha256sum %s"`).
+#' @param file
+#'   File to check the checksum.
+#' @param expected
+#'   Expected checksum.
+#'
+#' @return
+#'   `TRUE` invisibly if no error was found.
+check_checksum <- function(sha256sum_cmd_tmpl, file, expected) {
+  # Get the checksum
+  checksum_actual <- system(sprintf(sha256sum_cmd_tmpl, file), intern = TRUE)
+  if (!is.null(attr(checksum_actual, "status"))) {
+    msg <- paste("Failed to get the checksum of", file)
+    stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
+  }
+
+  checksum_actual <- strsplit(checksum_actual, "\\s+")[[1]]
+
+  if (length(checksum_actual) != 2) {
+    msg <- paste0("The output of `", sprintf(sha256sum_cmd_tmpl, file), "` was unexpected")
+    stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
+  }
+
+  checksum_actual <- checksum_actual[1]
+
+  if (!identical(checksum_actual, expected)) {
+    msg <- paste("Checksum mismatch for the pre-compiled binary: ", target)
+    stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
+  }
 
   invisible(TRUE)
 }
