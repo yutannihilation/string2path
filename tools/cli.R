@@ -1,30 +1,24 @@
-SYSINFO_OS      <- tolower(Sys.info()[["sysname"]])
-SYSINFO_MACHINE <- Sys.info()[["machine"]]
-HAS_32BIT_R     <- dir.exists(file.path(R.home(), "bin", "i386"))
-USE_UCRT        <- identical(R.version$crt, "ucrt")
-
-
 # The following fields in DESCRIPTION can be used for customizing the behavior.
 #
-# Config/string2path/MSRV (optional):
+# Config/<package name>/MSRV (optional):
 #   Minimum Supported Rust version (e.g. 1.41.0). If this is specified, errors
 #   when the installed cargo is newer than the requirement.
 #
-# Config/string2path/windows_toolchain (optional):
+# Config/<package name>/windows_toolchain (optional):
 #   Expected toolchain of the Rust installation (e.g. stable-msvc). If this is
 #   specified, errors when the specified toolchain is not available.
 #
-# Config/string2path/github_repo:
+# Config/<package name>/github_repo:
 #   Name of the GitHub repo (e.g. yutannihilation/string2path)
 #
-# Config/string2path/crate_name (optional):
+# Config/<package name>/crate_name (optional):
 #   Name of the crate (e.g. string2path). If the crate name is the same as the
 #   repository name, this can be omitted.
 #
-# Config/string2path/github_tag:
+# Config/<package name>/github_tag:
 #   Tag of the GitHub release of the precompiled binaries (e.g. build_20210921-1)
 #
-# Config/string2path/binary_sha256sum:
+# Config/<package name>/binary_sha256sum:
 #   The expected checksums of the precompiled binaries. This is the output of
 #   `sha256sum` command (or `shasum -a 256` if you are on macOS).
 #
@@ -34,8 +28,13 @@ USE_UCRT        <- identical(R.version$crt, "ucrt")
 #       26a05f6ee8c2f625027ffc77c97fc8ac9746a182f5bc53d64235999a02c0b0dc  ucrt-x86_64-pc-windows-gnu-libstring2path.a
 #       be65f074cb7ae50e5784e7650f48579fff35f30ff663d1c01eabdc9f35c1f87c  x86_64-apple-darwin-libstring2path.a
 #       26a05f6ee8c2f625027ffc77c97fc8ac9746a182f5bc53d64235999a02c0b0dc  x86_64-pc-windows-gnu-libstring2path.a
-#
-DESC_FIELD_PREFIX <- "Config/string2path/"
+
+
+SYSINFO_OS      <- tolower(Sys.info()[["sysname"]])
+SYSINFO_MACHINE <- Sys.info()[["machine"]]
+HAS_32BIT_R     <- dir.exists(file.path(R.home(), "bin", "i386"))
+USE_UCRT        <- identical(R.version$crt, "ucrt")
+
 
 # Utilities ---------------------------------------------------------------
 
@@ -66,6 +65,8 @@ get_desc_field <- function(field, prefix = DESC_FIELD_PREFIX, optional = TRUE) {
 
   x
 }
+
+DESC_FIELD_PREFIX <- paste0("Config/", get_desc_field("Package", prefix = ""), "/")
 
 # check_cargo -------------------------------------------------------------
 
@@ -327,7 +328,7 @@ if (isTRUE(cargo_check_result)) {
 }
 
 # If ABORT_WHEN_NO_CARGO is set, abort immediately without trying the binaries
-if (!identical(Sys.getenv("ABORT_WHEN_NO_CARGO"), "true")) {
+if (identical(Sys.getenv("ABORT_WHEN_NO_CARGO"), "true")) {
   message(sprintf("
 -------------- ERROR: CONFIGURATION FAILED --------------------
 
