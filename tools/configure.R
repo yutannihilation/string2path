@@ -101,7 +101,7 @@ safe_system2 <- function(cmd, args) {
 check_cargo <- function() {
   ### Check if cargo command works without error ###
 
-  message("*** Checking if cargo is installed")
+  cat("*** Checking if cargo is installed\n")
 
   cargo_cmd <- "cargo"
   cargo_args <- "version"
@@ -114,7 +114,7 @@ check_cargo <- function() {
 
   # On Windows, check the toolchain as well.
   if (identical(SYSINFO_OS, "windows")) {
-    message("*** Checking if the required Rust toolchain is installed")
+    cat("*** Checking if the required Rust toolchain is installed\n")
 
     toolchain <- windows_toolchain()
     cargo_args <- c(paste0("+", toolchain), cargo_args)
@@ -134,7 +134,7 @@ check_cargo <- function() {
   msrv <- get_desc_field("MSRV", optional = TRUE)
 
   if (isTRUE(!is.na(msrv))) {
-    message("*** Checking if cargo is newer than the required version")
+    cat("*** Checking if cargo is newer than the required version\n")
 
     version <- res_version$output
 
@@ -153,7 +153,7 @@ check_cargo <- function() {
 
   ### Check the toolchains ###
   if (identical(SYSINFO_OS, "windows")) {
-    message("*** Checking if the required Rust target is installed")
+    cat("*** Checking if the required Rust target is installed\n")
 
     expected_targets <- "x86_64-pc-windows-gnu"
 
@@ -284,7 +284,7 @@ download_precompiled <- function() {
       destfile <- paste0("./src/rust/target/release/lib", crate_name, ".a")
     }
 
-    message(sprintf("
+    cat(sprintf("
 ***
 *** Download URL: %s
 *** Dest file: %s
@@ -392,13 +392,13 @@ cargo_check_result <- tryCatch(
 # or too old, it's not the end of the world. There might be a pre-compiled
 # binary available for the platform.
 if (isTRUE(cargo_check_result)) {
-  message("\n*** cargo is ok\n")
+  cat("\n*** cargo is ok\n\n\n")
   quit("no", status = 0)
 }
 
 # If ABORT_WHEN_NO_CARGO is set, abort immediately without trying the binaries
 if (identical(Sys.getenv("ABORT_WHEN_NO_CARGO"), "true")) {
-  message(sprintf("
+  cat(sprintf("
 -------------- ERROR: CONFIGURATION FAILED --------------------
 
 [cargo check result]
@@ -410,6 +410,7 @@ ABORT_WHEN_NO_CARGO is set to true
 Please refer to <https://www.rust-lang.org/tools/install> to install Rust.
 
 ---------------------------------------------------------------
+
 ", cargo_check_result))
   quit("no", status = 2)
 }
@@ -423,13 +424,13 @@ download_precompiled_result <- tryCatch(
 )
 
 if (isTRUE(download_precompiled_result)) {
-  message("\n*** Successfully downloaded the precompied binary\n")
+  cat("\n*** Successfully downloaded the precompied binary\n\n\n")
   # This needs to exit another status code to notify the status to the configure script
   quit("no", status = 100)
 }
 
 
-message(sprintf("
+cat(sprintf("
 -------------- ERROR: CONFIGURATION FAILED --------------------
 
 [cargo check result]
@@ -441,5 +442,6 @@ message(sprintf("
 Please refer to <https://www.rust-lang.org/tools/install> to install Rust.
 
 ---------------------------------------------------------------
+
 ", cargo_check_result, download_precompiled_result))
 quit("no", status = 3)
