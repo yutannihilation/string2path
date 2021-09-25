@@ -163,7 +163,7 @@ check_cargo <- function() {
     }
 
     targets <- safe_system2("rustup", c("target", "list", "--installed"))
-    unavailable_targets <- setdiff(expected_targets, targets)
+    unavailable_targets <- setdiff(expected_targets, targets$output)
     if (length(unavailable_targets) != 0) {
       msg <- sprintf(
         "The required toolchain %s %s not installed",
@@ -405,7 +405,7 @@ if (identical(Sys.getenv("ABORT_WHEN_NO_CARGO"), "true")) {
 %s
 
 [precompiled binary]
-BORT_WHEN_NO_CARGO is set to true
+ABORT_WHEN_NO_CARGO is set to true
 
 Please refer to <https://www.rust-lang.org/tools/install> to install Rust.
 
