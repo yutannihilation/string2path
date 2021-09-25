@@ -201,6 +201,8 @@ download_precompiled <- function() {
     stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
   }
 
+  print(checksums)
+
   tryCatch(
     {
       checksums <- read.table(text = checksums, header = FALSE)
@@ -209,6 +211,7 @@ download_precompiled <- function() {
       stopifnot(nrow(checksums) > 0)
     },
     error = function(e) {
+      print(e)
       msg <- sprintf("The %sbinary_sha256sum field on the DESCRIPTION file is malformed.", DESC_FIELD_PREFIX)
       stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
     }
