@@ -4,11 +4,11 @@ ret=$?
 
 case $ret in
 0)
-  sed -e 's|@CLEAN_EXTRA@|$(STATLIB)|' src/Makevars.in > src/Makevars
+  sed -e 's|@CLEAN_EXTRA@|$(STATLIB)|' src/Makevars.win.in > src/Makevars.win
   exit 0
   ;;
 1)
-  sed -e 's|@CLEAN_EXTRA@||' src/Makevars.in > src/Makevars
+  sed -e 's|@CLEAN_EXTRA@||' src/Makevars.win.in > src/Makevars.win
   exit 0
   ;;
 *)
