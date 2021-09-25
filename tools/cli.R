@@ -94,10 +94,17 @@ check_cargo <- function() {
 
   cargo_cmd <- sprintf(cargo_cmd_tmpl, "version")
 
-  # version variable might be used for checking MSRV later
-  suppressWarnings(version <- system(cargo_cmd, intern = TRUE))
+  # Note that, if intern = TRUE, this can fail in two patterns:
+  #
+  #    1. if cargo command is not found, it stop()s.
+  #    2. even if cargo command is found, it might errors. In this case, "status"
+  #       attribute indicates the error.
+  #
+  # This is a bit hard to handle, so first check the exit code with intern = FALSE,
+  # then check the output later.
+  suppressWarnings(ret <- system(cargo_cmd, ignore.stdout = TRUE, ignore.stderr = TRUE))
 
-  if (!is.null(attr(version, "status"))) {
+  if (!identical(ret, 0L)) {
     stop(errorCondition("cargo command is not available", class = c("string2path_error_cargo_check", "error")))
   }
 
@@ -123,6 +130,8 @@ check_cargo <- function() {
     msrv <- package_version(msrv)
 
     message("*** Checking if cargo is newer than the required version")
+
+    suppressWarnings(version <- system(cargo_cmd, intern = TRUE))
 
     ptn <- "cargo\\s+(\\d+\\.\\d+\\.\\d+)"
     m <- regmatches(version, regexec(ptn, version))[[1]]
@@ -254,8 +263,18 @@ download_precompiled <- function() {
     stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
   }
 
-  ### Construct string templates for download URLs and destfiles ###
+  # Test sha256sum command
+  sha256sum_testfile <- tempfile()
+  on.exit(unlink(sha256sum_testfile, force = TRUE))
+  file.create(sha256sum_testfile)
+  suppressWarnings(ret <- system(sprintf(sha256sum_cmd_tmpl, sha256sum_testfile), ignore.stdout = TRUE, ignore.stderr = TRUE))
 
+  if (!identical(ret, 0L)) {
+    msg <- sprintf(sha256sum_cmd_tmpl, " command is not available")
+    stop(errorCondition(msg, class = c("string2path_error_cargo_check", "error")))
+  }
+
+  ### Construct string templates for download URLs and destfiles ###
 
   if (identical(SYSINFO_OS, "windows")) {
     # On Windows, --target is specified, so the dir is nested one level deeper
@@ -363,7 +382,7 @@ if (isTRUE(download_precompiled_result)) {
 message(sprintf("
 -------------- ERROR: CONFIGURATION FAILED --------------------
 
-- cargo is not available
+- cargo is not installed or configured properly
 - %s
 
 Please refer to <https://www.rust-lang.org/tools/install> to install Rust.
