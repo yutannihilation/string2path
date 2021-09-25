@@ -13,3 +13,4 @@ case $ret in
   ;;
 *)
   exit $ret
+esac
