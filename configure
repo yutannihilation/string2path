@@ -1,3 +1,10 @@
+# Even when `cargo` is on `PATH`, `rustc` might not. We need to source
+# ~/.cargo/env to ensure PATH is configured correctly.
+# (c.f. https://github.com/yutannihilation/string2path/issues/4)
+if [ -e "${HOME}/.cargo/env" ]; then
+  . "${HOME}/.cargo/env"
+fi
+
 "${R_HOME}/bin/Rscript" "./tools/configure.R"
 
 ret=$?

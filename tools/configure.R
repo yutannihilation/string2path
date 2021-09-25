@@ -69,7 +69,28 @@ get_desc_field <- function(field, prefix = DESC_FIELD_PREFIX, optional = TRUE) {
   x
 }
 
+# This is tricky; while DESC_FIELD_PREFIX is used in get_desc_field()'s default,
+# this variable is defined by get_desc_field(). It's no problem as long as the
+# default is not used before it exists!
 DESC_FIELD_PREFIX <- paste0("Config/", get_desc_field("Package", prefix = ""), "/")
+
+
+safe_system2 <- function(cmd, args) {
+  result <- list(success = FALSE, output = "")
+
+  output_tmp <- tempfile()
+  on.exit(unlink(output_tmp, force = TRUE))
+
+  suppressWarnings(ret <- system2(cmd, args, stdout = output_tmp))
+
+  if (!identical(ret, 0L)) {
+    return(result)
+  }
+
+  result$output  <- readLines(output_tmp)
+  result$success <- TRUE
+  result
+}
 
 # check_cargo -------------------------------------------------------------
 
@@ -78,33 +99,16 @@ DESC_FIELD_PREFIX <- paste0("Config/", get_desc_field("Package", prefix = ""), "
 #' @return
 #'   `TRUE` invisibly if no error was found.
 check_cargo <- function() {
-  # Even when `cargo` is on `PATH`, `rustc` might not. We need to source
-  # ~/.cargo/env to ensure PATH is configured correctly.
-  # (c.f. https://github.com/yutannihilation/string2path/issues/4)
-  cargo_env_file <- file.path(Sys.getenv("HOME"), ".cargo", "env")
-  if (file.exists(cargo_env_file)) {
-    cargo_cmd_tmpl <- sprintf(". %s && cargo %%s", cargo_env_file)
-  } else {
-    cargo_cmd_tmpl <- "cargo %s"
-  }
-
   ### Check if cargo command works without error ###
 
   message("*** Checking if cargo is installed")
 
-  cargo_cmd <- sprintf(cargo_cmd_tmpl, "version")
+  cargo_cmd <- "cargo"
+  cargo_args <- "version"
 
-  # Note that, if intern = TRUE, this can fail in two patterns:
-  #
-  #    1. if cargo command is not found, it stop()s.
-  #    2. even if cargo command is found, it might errors. In this case, "status"
-  #       attribute indicates the error.
-  #
-  # This is a bit hard to handle, so first check the exit code with intern = FALSE,
-  # then check the output later.
-  suppressWarnings(ret <- system(cargo_cmd, ignore.stdout = TRUE, ignore.stderr = TRUE))
+  res_version <- safe_system2(cargo_cmd, cargo_args)
 
-  if (!identical(ret, 0L)) {
+  if (!isTRUE(res_version$success)) {
     stop(errorCondition("cargo command is not available", class = c("string2path_error_cargo_check", "error")))
   }
 
@@ -113,9 +117,11 @@ check_cargo <- function() {
     message("*** Checking if the required Rust toolchain is installed")
 
     toolchain <- windows_toolchain()
-    cargo_cmd <- sprintf(cargo_cmd_tmpl, paste0("+", toolchain, " version"))
-    suppressWarnings(ret <- system(cargo_cmd, ignore.stdout = TRUE, ignore.stderr = TRUE))
-    if (!identical(ret, 0L)) {
+    cargo_args <- c(paste0("+", toolchain), cargo_args)
+
+    res_version <- safe_system2(cargo_cmd, cargo_args)
+
+    if (!isTRUE(res_version$success)) {
       stop(errorCondition(
         paste("cargo toolchain ", toolchain, " is not installed"),
         class = c("string2path_error_cargo_check", "error")
@@ -126,12 +132,11 @@ check_cargo <- function() {
   ### Check the version ###
 
   msrv <- get_desc_field("MSRV", optional = TRUE)
-  if (isTRUE(!is.na(msrv))) {
-    msrv <- package_version(msrv)
 
+  if (isTRUE(!is.na(msrv))) {
     message("*** Checking if cargo is newer than the required version")
 
-    suppressWarnings(version <- system(cargo_cmd, intern = TRUE))
+    version <- res_version$output
 
     ptn <- "cargo\\s+(\\d+\\.\\d+\\.\\d+)"
     m <- regmatches(version, regexec(ptn, version))[[1]]
@@ -140,7 +145,7 @@ check_cargo <- function() {
       stop(errorCondition("cargo version returned unexpected result", class = c("string2path_error_cargo_check", "error")))
     }
 
-    if (package_version(m[2]) < msrv) {
+    if (package_version(m[2]) < package_version(msrv)) {
       msg <- sprintf("The installed version of cargo (%s) is older than the requirement (%s)", m[2], msrv)
       stop(errorCondition(msg, class = c("string2path_error_cargo_check", "error")))
     }
@@ -157,7 +162,7 @@ check_cargo <- function() {
       expected_targets <- c(expected_targets, "i686-pc-windows-gnu")
     }
 
-    suppressWarnings(targets <- system("rustup target list --installed", intern = TRUE))
+    targets <- safe_system2("rustup", c("target", "list", "--installed"))
     unavailable_targets <- setdiff(expected_targets, targets)
     if (length(unavailable_targets) != 0) {
       msg <- sprintf(
@@ -222,13 +227,17 @@ download_precompiled <- function() {
       download_targets <- c(download_targets, "i686-pc-windows-gnu")
     }
 
-    sha256sum_cmd_tmpl <- "sha256sum %s"
+    sha256sum_cmd <- "sha256sum"
+    sha256sum_cmd_args <- character(0)
+
   } else if (identical(SYSINFO_OS, "darwin")) {
     download_targets <- switch (SYSINFO_MACHINE,
       x86_64 = "x86_64-apple-darwin",
       arm64  = "aarch64-apple-darwin"
     )
-    sha256sum_cmd_tmpl <- "shasum -a 256 %s"
+
+    sha256sum_cmd <- "shasum"
+    sha256sum_cmd_args <- c("-a", "256")
   }
 
   if (length(download_targets) > 0) {
@@ -244,7 +253,12 @@ download_precompiled <- function() {
   }
 
   # Test sha256sum command
-  check_sha256sum_cmd(sha256sum_cmd_tmpl)
+  sha256sum_res <- safe_system2(sha256sum_cmd, "--version")
+
+  if (!isTRUE(sha256sum_res$success)) {
+    msg <- paste0(sha256sum_cmd, " command is not available")
+    stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
+  }
 
   ### Construct string templates for download URLs and destfiles ###
 
@@ -288,7 +302,7 @@ download_precompiled <- function() {
       }
     )
 
-    check_checksum(sha256sum_cmd_tmpl, destfile, checksum_expected)
+    check_checksum(sha256sum_cmd, sha256sum_cmd_args, destfile, checksum_expected)
 
   } ### End of for loop
 
@@ -325,32 +339,13 @@ get_expected_checksums <- function() {
   )
 }
 
-#' Check if sha256sum command works without errors
-#'
-#' @param sha256sum_cmd_tmpl
-#'   `sprintf()` template for sha256sum command (e.g. `"sha256sum %s"`).
-#'
-#' @return
-#'   `TRUE` invisibly if no error was found.
-check_sha256sum_cmd <- function(sha256sum_cmd_tmpl) {
-  sha256sum_testfile <- tempfile()
-  on.exit(unlink(sha256sum_testfile, force = TRUE))
-  file.create(sha256sum_testfile)
-  suppressWarnings(ret <- system(sprintf(sha256sum_cmd_tmpl, sha256sum_testfile), ignore.stdout = TRUE, ignore.stderr = TRUE))
-
-  if (!identical(ret, 0L)) {
-    msg <- sprintf(sha256sum_cmd_tmpl, " command is not available")
-    stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
-  }
-
-  invisible(TRUE)
-}
-
 #' Check if the SHA256sum of the file matches with the expected one.
 #'
 #'
-#' @param sha256sum_cmd_tmpl
-#'   `sprintf()` template for sha256sum command (e.g. `"sha256sum %s"`).
+#' @param cmd
+#'   Command to calculate SHA256sum (e.g. `"sha256sum"`)
+#' @param args
+#'   Arguments to get passed to `cmd`. (e.g. `c("-a", "256")`)
 #' @param file
 #'   File to check the checksum.
 #' @param expected
@@ -358,10 +353,10 @@ check_sha256sum_cmd <- function(sha256sum_cmd_tmpl) {
 #'
 #' @return
 #'   `TRUE` invisibly if no error was found.
-check_checksum <- function(sha256sum_cmd_tmpl, file, expected) {
+check_checksum <- function(cmd, args, file, expected) {
   # Get the checksum
-  checksum_actual <- system(sprintf(sha256sum_cmd_tmpl, file), intern = TRUE)
-  if (!is.null(attr(checksum_actual, "status"))) {
+  checksum_actual <- safe_system2(cmd, args = c(args, file))
+  if (!isTRUE(checksum_actual$success)) {
     msg <- paste("Failed to get the checksum of", file)
     stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
   }
@@ -406,7 +401,11 @@ if (identical(Sys.getenv("ABORT_WHEN_NO_CARGO"), "true")) {
   message(sprintf("
 -------------- ERROR: CONFIGURATION FAILED --------------------
 
-%s and ABORT_WHEN_NO_CARGO is set to true
+[cargo check result]
+%s
+
+[precompiled binary]
+BORT_WHEN_NO_CARGO is set to true
 
 Please refer to <https://www.rust-lang.org/tools/install> to install Rust.
 
@@ -433,11 +432,14 @@ if (isTRUE(download_precompiled_result)) {
 message(sprintf("
 -------------- ERROR: CONFIGURATION FAILED --------------------
 
-- cargo is not installed or not configured properly
-- %s
+[cargo check result]
+%s
+
+[precompiled binary]
+%s
 
 Please refer to <https://www.rust-lang.org/tools/install> to install Rust.
 
 ---------------------------------------------------------------
-", download_precompiled_result))
+", cargo_check_result, download_precompiled_result))
 quit("no", status = 3)
