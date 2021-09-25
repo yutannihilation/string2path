@@ -363,7 +363,8 @@ if (isTRUE(download_precompiled_result)) {
 message(sprintf("
 -------------- ERROR: CONFIGURATION FAILED --------------------
 
-%s and the precompiled binary is not available
+- cargo is not available
+- %s
 
 Please refer to <https://www.rust-lang.org/tools/install> to install Rust.
 
