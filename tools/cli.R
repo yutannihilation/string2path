@@ -267,7 +267,7 @@ download_precompiled <- function() {
   ### Download the files ###
 
   for (target in download_targets) {
-    src_file <- sprintf("%s%s-lib%s.a", crt_prefix, download_targets, crate_name)
+    src_file <- sprintf("%s%s-lib%s.a", crt_prefix, target, crate_name)
     checksum_expected <- checksums$sha256sum[checksums$filename == src_file]
 
     src_url <- paste0("https://github.com/", github_repo, "/releases/download/", github_tag, "/", src_file)
@@ -304,7 +304,7 @@ download_precompiled <- function() {
       stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
     }
 
-    if (!identical(checksum_expected, checksum_expected)) {
+    if (!identical(checksum_actual, checksum_expected)) {
       msg <- paste("Checksum mismatch for the pre-compiled binary: ", target)
       stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
     }
