@@ -207,6 +207,7 @@ download_precompiled <- function() {
     {
       checksums <- read.table(text = checksums, header = FALSE)
       stopifnot(is.data.frame(checksums))
+      print(checksums)
       stopifnot(ncol(checksums) == 2)
       stopifnot(nrow(checksums) > 0)
     },
