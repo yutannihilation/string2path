@@ -7,7 +7,7 @@ case $ret in
   sed -e 's|@CLEAN_EXTRA@|$(STATLIB)|' src/Makevars.win.in > src/Makevars.win
   exit 0
   ;;
-1)
+100)
   sed -e 's|@CLEAN_EXTRA@||' src/Makevars.win.in > src/Makevars.win
   exit 0
   ;;

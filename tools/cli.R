@@ -376,7 +376,7 @@ check_checksum <- function(sha256sum_cmd_tmpl, file, expected) {
   checksum_actual <- checksum_actual[1]
 
   if (!identical(checksum_actual, expected)) {
-    msg <- paste("Checksum mismatch for the pre-compiled binary: ", target)
+    msg <- paste("Checksum mismatch for the pre-compiled binary: ", file)
     stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))
   }
 
@@ -412,7 +412,7 @@ Please refer to <https://www.rust-lang.org/tools/install> to install Rust.
 
 ---------------------------------------------------------------
 ", cargo_check_result))
-  quit("no", status = 100)
+  quit("no", status = 2)
 }
 
 ### Try downloading precompiled binaries ###
@@ -426,7 +426,7 @@ download_precompiled_result <- tryCatch(
 if (isTRUE(download_precompiled_result)) {
   message("\n*** Successfully downloaded the precompied binary\n")
   # This needs to exit another status code to notify the status to the configure script
-  quit("no", status = 1)
+  quit("no", status = 100)
 }
 
 
@@ -440,4 +440,4 @@ Please refer to <https://www.rust-lang.org/tools/install> to install Rust.
 
 ---------------------------------------------------------------
 ", download_precompiled_result))
-quit("no", status = 101)
+quit("no", status = 3)
