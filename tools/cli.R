@@ -19,16 +19,19 @@
 #   Tag of the GitHub release of the precompiled binaries (e.g. build_20210921-1)
 #
 # Config/<package name>/binary_sha256sum:
-#   The expected checksums of the precompiled binaries. This is the output of
-#   `sha256sum` command (or `shasum -a 256` if you are on macOS).
+#   The expected checksums of the precompiled binaries as an expression of a list.
+#   Note: This needs to be an R expression rather than CSV or TSV, because the
+#         DESCRIPTION gets auto-formatted when compiling, which introduces
+#         unexpected line breaks.
 #
 #   Example:
-#       4a34f99cec66610746b20d456b1e11b346596c22ea1935c1bcb5ef1ab725f0e8  aarch64-apple-darwin-libstring2path.a
-#       ceda54184fb3bf9e4cbba86848cb2091ff5b77870357f94319f9215fadfa5b25  i686-pc-windows-gnu-libstring2path.a
-#       26a05f6ee8c2f625027ffc77c97fc8ac9746a182f5bc53d64235999a02c0b0dc  ucrt-x86_64-pc-windows-gnu-libstring2path.a
-#       be65f074cb7ae50e5784e7650f48579fff35f30ff663d1c01eabdc9f35c1f87c  x86_64-apple-darwin-libstring2path.a
-#       26a05f6ee8c2f625027ffc77c97fc8ac9746a182f5bc53d64235999a02c0b0dc  x86_64-pc-windows-gnu-libstring2path.a
-
+#       list(
+#           `aarch64-apple-darwin-libstring2path.a`       = "4a34f99cec66610746b20d456b1e11b346596c22ea1935c1bcb5ef1ab725f0e8",
+#           `i686-pc-windows-gnu-libstring2path.a`        = "ceda54184fb3bf9e4cbba86848cb2091ff5b77870357f94319f9215fadfa5b25",
+#           `ucrt-x86_64-pc-windows-gnu-libstring2path.a` = "26a05f6ee8c2f625027ffc77c97fc8ac9746a182f5bc53d64235999a02c0b0dc",
+#           `x86_64-apple-darwin-libstring2path.a`        = "be65f074cb7ae50e5784e7650f48579fff35f30ff663d1c01eabdc9f35c1f87c",
+#           `x86_64-pc-windows-gnu-libstring2path.a`      = "26a05f6ee8c2f625027ffc77c97fc8ac9746a182f5bc53d64235999a02c0b0dc"
+#       )
 
 SYSINFO_OS      <- tolower(Sys.info()[["sysname"]])
 SYSINFO_MACHINE <- Sys.info()[["machine"]]
