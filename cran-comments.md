@@ -11,6 +11,8 @@
 
 * This is a maintenance release to improve configure scripts to detect the Rust
   installation, and handle the case when it's not available.
+* Makevars and Makevars.win are also improved; they now don't require GNU make
+  extensions, so I removed it from SystemRequirements.
 * Regarding the current CRAN check results,
       - The ERROR on r-devel-windows-x86_64-gcc10-UCRT ("curl: (60) SSL 
         certificate problem") might indicate something is wrong with the curl
