@@ -7,7 +7,8 @@ all: C_clean
 $(SHLIB): $(STATLIB)
 
 $(STATLIB):
-	cargo build --lib --release --manifest-path=./rust/Cargo.toml
+	@BEFORE_CARGO_BUILD@ cargo build --lib --release --manifest-path=./rust/Cargo.toml
+	@AFTER_CARGO_BUILD@
 
 C_clean:
 	rm -Rf $(SHLIB) $(OBJECTS) @CLEAN_EXTRA@

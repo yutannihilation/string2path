@@ -29,16 +29,16 @@ esac
 # temporary directory on installation. So, we need to tweak Makevars to make the
 # compilation happen only within the package directory (i.e. `$(PWD)`).
 if [ "${NOT_CRAN}" != "true" ]; then
-  BEFORE_CARGO_BUILD="${BEFORE_CARGO_BUILD}"'export CARGO_HOME="$(PWD)/.cargo" \&\& '
-  AFTER_CARGO_BUILD="${AFTER_CARGO_BUILD}"'\trm -Rf $(PWD)/.cargo $(LIBDIR)/build'
+  BEFORE_CARGO_BUILD="${BEFORE_CARGO_BUILD}"' export CARGO_HOME="$(PWD)/.cargo" \&\&'
+  AFTER_CARGO_BUILD="${AFTER_CARGO_BUILD}"'rm -Rf $(PWD)/.cargo $(LIBDIR)/build'
 else
   echo "*** Detected NOT_CRAN=true, do not override CARGO_HOME"
 fi
 
 sed \
   -e "s|@CLEAN_EXTRA@|${CLEAN_EXTRA}|" \
-  -e "s|cargo build|${BEFORE_CARGO_BUILD}&|" \
-  -e "/cargo build/a \\${AFTER_CARGO_BUILD}" \
+  -e "s|@BEFORE_CARGO_BUILD@|${BEFORE_CARGO_BUILD}|" \
+  -e "s|@AFTER_CARGO_BUILD@|${AFTER_CARGO_BUILD}|" \
   src/Makevars.win.in > src/Makevars.win
 
 # Uncomment this to debug
