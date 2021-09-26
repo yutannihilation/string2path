@@ -1,5 +1,7 @@
-BEFORE_CARGO_BUILD=""
-AFTER_CARGO_BUILD=""
+# Variables used for tweaking Makevars
+BEFORE_CARGO_BUILD=''
+AFTER_CARGO_BUILD=''
+CLEAN_EXTRA=''
 
 # Even when `cargo` is on `PATH`, `rustc` might not. We need to source
 # ~/.cargo/env to ensure PATH is configured correctly in some cases
@@ -25,7 +27,6 @@ case $ret in
 
   # The case when the precompiled binary is used
   100)
-    CLEAN_EXTRA=''
     ;;
 
   # The case when both Rust and the precompiled binary are unavailable (or the

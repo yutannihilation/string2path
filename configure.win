@@ -1,5 +1,7 @@
-BEFORE_CARGO_BUILD=""
-AFTER_CARGO_BUILD=""
+# Variables used for tweaking Makevars
+BEFORE_CARGO_BUILD=''
+AFTER_CARGO_BUILD=''
+CLEAN_EXTRA=''
 
 # Check the Rust installation, and, if not available, try downloading the
 # precompiled binary.
@@ -15,7 +17,6 @@ case $ret in
 
   # The case when the precompiled binary is used
   100)
-    CLEAN_EXTRA=''
     ;;
 
   # The case when both Rust and the precompiled binary are unavailable (or the
