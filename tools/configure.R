@@ -392,7 +392,7 @@ cargo_check_result <- tryCatch(
 # or too old, it's not the end of the world. There might be a pre-compiled
 # binary available for the platform.
 if (isTRUE(cargo_check_result)) {
-  cat("\n*** cargo is ok\n\n\n")
+  cat("*** cargo is ok\n")
   quit("no", status = 0)
 }
 

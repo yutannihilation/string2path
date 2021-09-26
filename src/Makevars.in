@@ -1,28 +1,13 @@
-# If on the local development environment, do not override CARGO_HOME
-NOT_CRAN_ENVVAR = "${NOT_CRAN}"
-
 LIBDIR = ./rust/target/release
 PKG_LIBS = -L$(LIBDIR) -lstring2path
 STATLIB = $(LIBDIR)/libstring2path.a
-
-LOCAL_CARGO_HOME = $(PWD)/.cargo
 
 all: C_clean
 
 $(SHLIB): $(STATLIB)
 
 $(STATLIB):
-ifeq ($(NOT_CRAN_ENVVAR),"true")
-	@echo "Detected NON_CRAN=true"
-	. "$(HOME)/.cargo/env" || \
-	  cargo build --lib --release --manifest-path=./rust/Cargo.toml
-else
-	@echo "Using local CARGO_HOME"
-	. "$(HOME)/.cargo/env" || \
-	  CARGO_HOME="$(LOCAL_CARGO_HOME)" cargo build --lib --release --manifest-path=./rust/Cargo.toml
-	rm -Rf $(LOCAL_CARGO_HOME)
-	rm -Rf $(LIBDIR)/build
-endif
+	cargo build --lib --release --manifest-path=./rust/Cargo.toml
 
 C_clean:
 	rm -Rf $(SHLIB) $(OBJECTS) @CLEAN_EXTRA@

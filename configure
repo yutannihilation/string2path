@@ -1,23 +1,55 @@
+BEFORE_CARGO_BUILD=""
+AFTER_CARGO_BUILD=""
+
 # Even when `cargo` is on `PATH`, `rustc` might not. We need to source
-# ~/.cargo/env to ensure PATH is configured correctly.
-# (c.f. https://github.com/yutannihilation/string2path/issues/4)
+# ~/.cargo/env to ensure PATH is configured correctly in some cases
+# (c.f. yutannihilation/string2path#4). However, this file is not always
+# available (e.g. when Rust is installed via apt on Ubuntu), so it might be
+# more straightforward to add `PATH` directly.
 if [ -e "${HOME}/.cargo/env" ]; then
   . "${HOME}/.cargo/env"
+  BEFORE_CARGO_BUILD="${BEFORE_CARGO_BUILD}. \"${HOME}/.cargo/env\" \\&\\& "
 fi
 
+# Check the Rust installation, and, if not available, try downloading the
+# precompiled binary.
 "${R_HOME}/bin/Rscript" "./tools/configure.R"
 
 ret=$?
 
 case $ret in
-0)
-  sed -e 's|@CLEAN_EXTRA@|$(STATLIB)|' src/Makevars.in > src/Makevars
-  exit 0
-  ;;
-100)
-  sed -e 's|@CLEAN_EXTRA@||' src/Makevars.in > src/Makevars
-  exit 0
-  ;;
-*)
-  exit $ret
+  # The case when Rust is available
+  0)
+    CLEAN_EXTRA='$(STATLIB)'
+    ;;
+
+  # The case when the precompiled binary is used
+  100)
+    CLEAN_EXTRA=''
+    ;;
+
+  # The case when both Rust and the precompiled binary are unavailable (or the
+  # R script failed some unexpected error)
+  *)
+    exit $ret
 esac
+
+# If it's on CRAN, a package is not allowed to write in any other place than the
+# temporary directory on installation. So, we need to tweak Makevars to make the
+# compilation happen only within the package directory (i.e. `$(PWD)`).
+if [ "${NOT_CRAN}" != "true" ]; then
+  BEFORE_CARGO_BUILD="${BEFORE_CARGO_BUILD}"'export CARGO_HOME="$(PWD)/.cargo" \&\& '
+  AFTER_CARGO_BUILD="${AFTER_CARGO_BUILD}"'\trm -Rf $(PWD)/.cargo $(LIBDIR)/build'
+else
+  echo "*** Detected NOT_CRAN=true, do not override CARGO_HOME"
+fi
+
+sed \
+  -e "s|@CLEAN_EXTRA@|${CLEAN_EXTRA}|" \
+  -e "s|cargo build|${BEFORE_CARGO_BUILD}&|" \
+  -e "/cargo build/a \\${AFTER_CARGO_BUILD}" \
+  src/Makevars.in > src/Makevars
+
+# Uncomment this to debug
+#
+# cat src/Makevars
