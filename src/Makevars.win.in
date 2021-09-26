@@ -1,4 +1,7 @@
-TARGET = $(subst 64,x86_64,$(subst 32,i686,$(WIN)))-pc-windows-gnu
+# WIN is used in the usual rwinlib Makevars, but it seems WIN envvar is not
+# available when configure.win is used. So, R_ARCH is chosen here.
+TARGET = $(subst /x64,x86_64,$(subst /i386,i686,$(R_ARCH)))-pc-windows-gnu
+
 TOOLCHAIN = stable-msvc
 
 LIBDIR = ./rust/target/$(TARGET)/release
