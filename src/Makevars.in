@@ -14,11 +14,11 @@ $(SHLIB): $(STATLIB)
 $(STATLIB):
 ifeq ($(NOT_CRAN_ENVVAR),"true")
 	@echo "Detected NON_CRAN=true"
-	. "$(HOME)/.cargo/env" && \
+	. "$(HOME)/.cargo/env" || \
 	  cargo build --lib --release --manifest-path=./rust/Cargo.toml
 else
 	@echo "Using local CARGO_HOME"
-	. "$(HOME)/.cargo/env" && \
+	. "$(HOME)/.cargo/env" || \
 	  CARGO_HOME="$(LOCAL_CARGO_HOME)" cargo build --lib --release --manifest-path=./rust/Cargo.toml
 	rm -Rf $(LOCAL_CARGO_HOME)
 	rm -Rf $(LIBDIR)/build
