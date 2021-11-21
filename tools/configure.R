@@ -295,7 +295,11 @@ download_precompiled <- function() {
 
     # Download the file
     tryCatch(
-      download.file(src_url, destfile = destfile, mode = "wb", quiet = TRUE),
+      {
+        # To satisfy the CRAN repository policy about caring a slow internet connection
+        options(timeout = max(300, getOption("timeout")))
+        download.file(src_url, destfile = destfile, mode = "wb", quiet = TRUE)
+      },
       error = function(e) {
         msg <- "Failed to download a precompiled binary"
         stop(errorCondition(msg, class = c("string2path_error_download_precompiled", "error")))

@@ -1,4 +1,7 @@
-# string2path (development version)
+# string2path 0.0.4
+
+* This is a maintenance release to make the installation work even on a slow
+  internet connection.
 
 # string2path 0.0.3
 
