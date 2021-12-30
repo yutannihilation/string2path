@@ -30,7 +30,7 @@ jobs:
           #       So, this is probably unnecessary, but leave this as-is as this
           #       might be eventually useful for other package that depends on
           #       some C/C++ library.
-          - {os: windows-2022, r: 'devel-ucrt', rust: 'stable'}
+          - {os: windows-2022,   r: 'devel',      rust: 'stable'}
 
     env:
       RSPM: ${{ matrix.config.rspm }}
@@ -129,13 +129,9 @@ jobs:
 
           mkdir ./staticlib
 
-          if ( '${{ matrix.config.r }}'.EndsWith('ucrt') ) {
-            $CRT_PREFIX='ucrt-'
-          }
-
           # R-devel already drops 32bit Windows!
-          if ( '${{ matrix.config.r }}'.StartsWith('devel') ) {
-            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a staticlib/${CRT_PREFIX}x86_64-pc-windows-gnu-libstring2path.a
+          if ( $(Rscript -e 'cat(R.Version()$crt)').Equals('ucrt') ) {
+            mv ./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a staticlib/ucrt-x86_64-pc-windows-gnu-libstring2path.a
           } else {
             mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a staticlib/x86_64-pc-windows-gnu-libstring2path.a
             mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-i386/rust/target/i686-pc-windows-gnu/release/libstring2path.a staticlib/i686-pc-windows-gnu-libstring2path.a
