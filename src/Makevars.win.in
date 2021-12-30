@@ -5,7 +5,7 @@ TARGET = $(subst /x64,x86_64,$(subst /i386,i686,$(R_ARCH)))-pc-windows-gnu
 TOOLCHAIN = stable-msvc
 
 LIBDIR = ./rust/target/$(TARGET)/release
-PKG_LIBS = -L$(LIBDIR) -lstring2path -lws2_32 -ladvapi32 -luserenv
+PKG_LIBS = -L$(LIBDIR) -lstring2path -lws2_32 -ladvapi32 -luserenv -lbcrypt
 STATLIB = $(LIBDIR)/libstring2path.a
 
 all: C_clean
