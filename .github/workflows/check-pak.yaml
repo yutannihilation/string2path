@@ -130,7 +130,7 @@ jobs:
           mkdir ./staticlib
 
           # R-devel already drops 32bit Windows!
-          if ( $(Rscript -e 'cat(R.Version()$crt)').Equals('ucrt') ) {
+          if ( "$(Rscript -e 'cat(R.Version()$crt)')".Equals('ucrt') ) {
             mv ./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a staticlib/ucrt-x86_64-pc-windows-gnu-libstring2path.a
           } else {
             mv ./check/string2path.Rcheck/00_pkg_src/string2path/src-x64/rust/target/x86_64-pc-windows-gnu/release/libstring2path.a staticlib/x86_64-pc-windows-gnu-libstring2path.a
