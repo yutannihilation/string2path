@@ -26,18 +26,19 @@ dependencies = [
 [[package]]
 name = "extendr-api"
 version = "0.2.0"
-source = "git+https://github.com/extendr/extendr.git?rev=42d168bee850bbc3fdb3b0737832fe0f3679451d#42d168bee850bbc3fdb3b0737832fe0f3679451d"
+source = "git+https://github.com/yutannihilation/extendr.git?rev=c4d5090daa05c587e26808638be48e1aa53b0796#c4d5090daa05c587e26808638be48e1aa53b0796"
 dependencies = [
  "extendr-engine",
  "extendr-macros",
  "lazy_static",
  "libR-sys",
+ "paste",
 ]
 
 [[package]]
 name = "extendr-engine"
 version = "0.2.0"
-source = "git+https://github.com/extendr/extendr.git?rev=42d168bee850bbc3fdb3b0737832fe0f3679451d#42d168bee850bbc3fdb3b0737832fe0f3679451d"
+source = "git+https://github.com/yutannihilation/extendr.git?rev=c4d5090daa05c587e26808638be48e1aa53b0796#c4d5090daa05c587e26808638be48e1aa53b0796"
 dependencies = [
  "libR-sys",
 ]
@@ -45,7 +46,7 @@ dependencies = [
 [[package]]
 name = "extendr-macros"
 version = "0.2.0"
-source = "git+https://github.com/extendr/extendr.git?rev=42d168bee850bbc3fdb3b0737832fe0f3679451d#42d168bee850bbc3fdb3b0737832fe0f3679451d"
+source = "git+https://github.com/yutannihilation/extendr.git?rev=c4d5090daa05c587e26808638be48e1aa53b0796#c4d5090daa05c587e26808638be48e1aa53b0796"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -62,16 +63,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "kernel32-sys"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7507624b29483431c0ba2d82aece8ca6cdba9382bff4ddd0f7490560c056098d"
-dependencies = [
- "winapi 0.2.8",
- "winapi-build",
-]
-
-[[package]]
 name = "lazy_static"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -79,12 +70,11 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "libR-sys"
-version = "0.2.1"
+version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1cbd8e612a78f2ccbef3d1e4b94ed136996793fc37c8da54e8d50ff04a1a9ad8"
+checksum = "bdf45e5498eb0fcd981b603e79f4c99819f8fc30a314fe28a32b99921a47c908"
 dependencies = [
- "kernel32-sys",
- "winapi 0.3.9",
+ "winapi",
 ]
 
 [[package]]
@@ -149,6 +139,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "paste"
+version = "1.0.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0744126afe1a6dd7f394cb50a716dbe086cb06e255e53d8d0185d82828358fb5"
+
+[[package]]
 name = "proc-macro2"
 version = "1.0.28"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -209,12 +205,6 @@ checksum = "8ccb82d61f80a663efe1f787a51b16b5a51e3314d6ac365b08639f52387b33f3"
 
 [[package]]
 name = "winapi"
-version = "0.2.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "167dc9d6949a9b857f3451275e911c3f44255842c1f7a76f33c55103a909087a"
-
-[[package]]
-name = "winapi"
 version = "0.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5c839a674fcd7a98952e593242ea400abe93992746761e38641405d28b00f419"
@@ -222,12 +212,6 @@ dependencies = [
  "winapi-i686-pc-windows-gnu",
  "winapi-x86_64-pc-windows-gnu",
 ]
-
-[[package]]
-name = "winapi-build"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2d315eee3b34aca4797b2da6b13ed88266e6d612562a0c46390af8299fc699bc"
 
 [[package]]
 name = "winapi-i686-pc-windows-gnu"
