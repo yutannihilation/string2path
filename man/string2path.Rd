@@ -43,34 +43,36 @@ to the paths of the filled polygon of each glyph.
 if (requireNamespace("systemfonts", quietly = TRUE)) {
   available_fonts <- systemfonts::system_fonts()$path
 
-  # string2path supports only TrueType or OpenType formats
-  ttf_or_otf <- available_fonts[grepl("\\\\.(ttf|otf)$", available_fonts)]
+  if (length(available_fonts) > 0) {
+    # string2path supports only TrueType or OpenType formats
+    ttf_or_otf <- available_fonts[grepl("\\\\.(ttf|otf)$", available_fonts)]
 
-  # string2path() converts a text to paths
-  d_path <- string2path("TEXT", ttf_or_otf[1])
-  plot(d_path$x, d_path$y)
-  for (p in split(d_path, d_path$path_id)) {
-    lines(p$x, p$y)
-  }
+    # string2path() converts a text to paths
+    d_path <- string2path("TEXT", ttf_or_otf[1])
+    plot(d_path$x, d_path$y)
+    for (p in split(d_path, d_path$path_id)) {
+      lines(p$x, p$y)
+    }
 
-  # string2stroke() converts a text to strokes
-  d_stroke <- string2stroke("TEXT", ttf_or_otf[1])
-  plot(d_stroke$x, d_stroke$y)
+    # string2stroke() converts a text to strokes
+    d_stroke <- string2stroke("TEXT", ttf_or_otf[1])
+    plot(d_stroke$x, d_stroke$y)
 
-  # The stroke is split into triangles, which can be distinguished by `triangle_id`
-  set.seed(2)
-  for (p in split(d_stroke, d_stroke$triangle_id)) {
-    polygon(p$x, p$y, col = rgb(runif(1), runif(1), runif(1), 0.8))
-  }
+    # The stroke is split into triangles, which can be distinguished by `triangle_id`
+    set.seed(2)
+    for (p in split(d_stroke, d_stroke$triangle_id)) {
+      polygon(p$x, p$y, col = rgb(runif(1), runif(1), runif(1), 0.8))
+    }
 
-  # string2fill() converts a text to filled polygons
-  d_fill <- string2fill("TEXT", ttf_or_otf[1])
-  plot(d_fill$x, d_fill$y)
+    # string2fill() converts a text to filled polygons
+    d_fill <- string2fill("TEXT", ttf_or_otf[1])
+    plot(d_fill$x, d_fill$y)
 
-  # The polygon is split into triangles, which can be distinguished by `triangle_id`
-  set.seed(2)
-  for (p in split(d_fill, d_fill$triangle_id)) {
-    polygon(p$x, p$y, col = rgb(runif(1), runif(1), runif(1), 0.8))
+    # The polygon is split into triangles, which can be distinguished by `triangle_id`
+    set.seed(2)
+    for (p in split(d_fill, d_fill$triangle_id)) {
+      polygon(p$x, p$y, col = rgb(runif(1), runif(1), runif(1), 0.8))
+    }
   }
 }
 
