@@ -7,3 +7,6 @@
 ^cran-comments\.md$
 ^CRAN-RELEASE$
 ^src/.cargo
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
