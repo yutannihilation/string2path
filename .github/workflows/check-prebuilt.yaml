@@ -18,8 +18,8 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: 'release'}
-          - {os: windows-latest, r: 'devel'}
+          - {os: windows-latest, r: 'release', rtools-version: '42'}
+          - {os: windows-latest, r: 'devel',   rtools-version: '42'}
           - {os: macOS-latest,   r: 'release'}
           # TODO: test M1 macOS
 
@@ -38,6 +38,7 @@ jobs:
         id: install-r
         with:
           r-version: ${{ matrix.config.r }}
+          rtools-version: ${{ matrix.config.rtools-version }}
           # TODO: Enable RSPM where possible
           use-public-rspm: false
           # use-public-rspm: ${{ matrix.config.r != 'devel' }}

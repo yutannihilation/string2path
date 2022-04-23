@@ -20,9 +20,9 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: 'release',  rust: 'stable-gnu' }
+          - {os: windows-latest, r: 'release',  rust: 'stable-gnu', rtools-version: '42'}
+          - {os: windows-latest, r: 'devel',    rust: 'stable-gnu', rtools-version: '42'}
           - {os: macOS-latest,   r: 'release',  rust: 'stable'     }
-          - {os: windows-latest, r: 'devel',    rust: 'stable-gnu' }
           - {os: ubuntu-20.04,   r: 'release',  rust: 'stable'     }
           - {os: ubuntu-20.04,   r: 'devel',    rust: 'stable'     }
           - {os: ubuntu-20.04,   r: 'release',  rust: 'nightly'    }
@@ -50,6 +50,7 @@ jobs:
         id: install-r
         with:
           r-version: ${{ matrix.config.r }}
+          rtools-version: ${{ matrix.config.rtools-version }}
           # TODO: Enable RSPM where possible
           use-public-rspm: false
           # use-public-rspm: ${{ matrix.config.r != 'devel' }}
