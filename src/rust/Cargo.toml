@@ -7,6 +7,6 @@ edition = "2018"
 crate-type = ["staticlib"]
 
 [dependencies]
-extendr-api = { git = "https://github.com/extendr/extendr.git", rev = "72fa959d78d318f202f5fca0956defcf821c2740" }
+extendr-api = { git = "https://github.com/extendr/extendr.git", rev = "66149191b8e7e5ab54b4c42470ee81aae7704345" }
 lyon = "0.17.5"
 ttf-parser = "0.12.3"
