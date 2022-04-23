@@ -38,7 +38,9 @@ jobs:
         id: install-r
         with:
           r-version: ${{ matrix.config.r }}
-          use-public-rspm: ${{ matrix.config.r != 'devel' }}
+          # TODO: Enable RSPM where possible
+          use-public-rspm: false
+          # use-public-rspm: ${{ matrix.config.r != 'devel' }}
 
       - uses: r-lib/actions/setup-pandoc@v2
 
