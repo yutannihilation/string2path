@@ -27,7 +27,6 @@ SystemRequirements: Cargo (rustc package manager)
 Biarch: true
 Config/testthat/edition: 3
 Config/string2path/MSRV: 1.41.0
-Config/string2path/windows_toolchain: stable-msvc
 Config/string2path/crate_name: string2path
 Config/string2path/github_repo: yutannihilation/string2path
 Config/string2path/github_tag: build_20220424-1

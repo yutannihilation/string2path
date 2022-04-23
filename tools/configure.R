@@ -113,17 +113,16 @@ check_cargo <- function() {
   }
 
   # On Windows, check the toolchain as well.
-  if (identical(SYSINFO_OS, "windows")) {
-    cat("*** Checking if the required Rust toolchain is installed\n")
+  if (identical(SYSINFO_OS, "windows") && USE_UCRT) {
+    cat("*** Checking if the GNU version of Rust toolchain is installed\n")
 
-    toolchain <- windows_toolchain()
-    cargo_args <- c(paste0("+", toolchain), cargo_args)
+    cargo_args <- c("+stable-gnu", cargo_args)
 
     res_version <- safe_system2(cargo_cmd, cargo_args)
 
     if (!isTRUE(res_version$success)) {
       stop(errorCondition(
-        paste("cargo toolchain ", toolchain, " is not installed"),
+        paste("stable-gnu toolchain is not installed"),
         class = c("string2path_error_cargo_check", "error")
       ))
     }
@@ -176,20 +175,6 @@ check_cargo <- function() {
 
   invisible(TRUE)
 }
-
-#' Get the expected Windows toolchain.
-#'
-#' @return
-#'   The expected windows toolchain as a length one of a character vector.
-windows_toolchain <- function() {
-  x <- get_desc_field("windows_toolchain", optional = TRUE)
-  if (isTRUE(!is.na(x))) {
-    x
-  } else {
-    "stable-msvc"
-  }
-}
-
 
 # download_precompiled ----------------------------------------------------
 
