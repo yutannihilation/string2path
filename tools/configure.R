@@ -4,10 +4,6 @@
 #   Minimum Supported Rust version (e.g. 1.41.0). If this is specified, errors
 #   when the installed cargo is newer than the requirement.
 #
-# Config/<package name>/windows_toolchain (optional):
-#   Expected toolchain of the Rust installation (e.g. stable-msvc). If this is
-#   specified, errors when the specified toolchain is not available.
-#
 # Config/<package name>/github_repo:
 #   Name of the GitHub repo (e.g. yutannihilation/string2path)
 #
