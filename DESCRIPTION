@@ -12,7 +12,8 @@ Description: Extract glyph information from a font file, and translate the
     data is returned as a 'data.frame' in easy-to-plot format.
 License: MIT + file LICENSE
 Depends:
-    R (>= 4.0)
+    R (>= 4.0),
+    cli
 Imports: 
     tibble
 Suggests: 
