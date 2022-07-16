@@ -52,8 +52,9 @@ devtools::install_github("yutannihilation/string2path")
 library(string2path)
 library(ggplot2)
 
+# You can change the font family to the available one on your machine.
+# Try dump_fontdb() to list the font faces that string2path can recognize.
 d <- string2path("カラテが\n高まる。", "Noto Sans JP", font_weight = "bold")
-# d <- string2path("カラテが\n高まる。", "Iosevka")
 
 d <- tibble::rowid_to_column(d)
 
