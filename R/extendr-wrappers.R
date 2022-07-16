@@ -8,9 +8,11 @@
 #' @useDynLib string2path, .registration = TRUE
 NULL
 
-string2path_impl <- function(text, font_family, font_weight, tolerance) .Call(wrap__string2path_impl, text, font_family, font_weight, tolerance)
+string2path_impl <- function(text, font_family, font_weight, font_style, tolerance) .Call(wrap__string2path_impl, text, font_family, font_weight, font_style, tolerance)
 
-string2stroke_impl <- function(text, font_family, font_weight, tolerance, line_width) .Call(wrap__string2stroke_impl, text, font_family, font_weight, tolerance, line_width)
+string2stroke_impl <- function(text, font_family, font_weight, font_style, tolerance, line_width) .Call(wrap__string2stroke_impl, text, font_family, font_weight, font_style, tolerance, line_width)
 
-string2fill_impl <- function(text, font_family, font_weight, tolerance) .Call(wrap__string2fill_impl, text, font_family, font_weight, tolerance)
+string2fill_impl <- function(text, font_family, font_weight, font_style, tolerance) .Call(wrap__string2fill_impl, text, font_family, font_weight, font_style, tolerance)
+
+dump_fontdb_impl <- function() .Call(wrap__dump_fontdb_impl)
 

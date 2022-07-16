@@ -1,3 +1,5 @@
+use extendr_api::prelude::*;
+
 use crate::builder::LyonPathBuilder;
 
 use once_cell::sync::Lazy;
@@ -5,7 +7,7 @@ use once_cell::sync::Lazy;
 use std::{error::Error, fmt::Display};
 use ttf_parser::GlyphId;
 
-static FONTDB: Lazy<fontdb::Database> = Lazy::new(|| {
+pub(crate) static FONTDB: Lazy<fontdb::Database> = Lazy::new(|| {
     let mut db = fontdb::Database::new();
     db.load_system_fonts();
     db
@@ -48,12 +50,12 @@ impl LyonPathBuilder {
     pub fn outline(
         &mut self,
         text: &str,
-        family: &str,
-        weight: &str,
-    ) -> Result<(), FontLoadingError> {
-        // TODO
+        font_family: &str,
+        font_weight: &str,
+        font_style: &str,
+    ) -> std::result::Result<(), FontLoadingError> {
         #[rustfmt::skip]
-        let weight = match weight {
+        let weight = match font_weight {
             "thin"       => fontdb::Weight::THIN,
             "extra_thin" => fontdb::Weight::EXTRA_LIGHT,
             "light"      => fontdb::Weight::LIGHT,
@@ -66,11 +68,20 @@ impl LyonPathBuilder {
             _            => fontdb::Weight::NORMAL,
         };
 
+        #[rustfmt::skip]
+        let style = match font_style {
+            "normal"  => fontdb::Style::Normal,
+            "italic"  => fontdb::Style::Italic,
+            "oblique" => fontdb::Style::Oblique,
+            _         => fontdb::Style::Normal,
+        };
+
         // 1. Try the user-supplied query first
 
         let query = fontdb::Query {
-            families: &[fontdb::Family::Name(family)],
+            families: &[fontdb::Family::Name(font_family)],
             weight,
+            style,
             ..Default::default()
         };
 
@@ -81,6 +92,8 @@ impl LyonPathBuilder {
 
             return result.unwrap_or(Ok(()));
         }
+
+        reprintln!("No font face matched with the specified conditions. Falling back to the default font...");
 
         // 2. If not found, try the fallback query which should hit at least one font
 
@@ -99,14 +112,17 @@ impl LyonPathBuilder {
 
         // 3. When no fonts are available, return an error.
 
+        reprintln!("No font is available!");
+
         Err(FontLoadingError::NoAvailableFonts)
     }
 
+    #[cfg(test)]
     pub fn outline_from_file(
         &mut self,
         text: &str,
         font_file: &str,
-    ) -> Result<(), FontLoadingError> {
+    ) -> std::result::Result<(), FontLoadingError> {
         let font_data_raw = std::fs::read(font_file)?;
         self.outline_inner(text, font_data_raw.as_slice(), 0)?;
 
@@ -118,7 +134,7 @@ impl LyonPathBuilder {
         text: &str,
         font_data: &[u8],
         face_index: u32,
-    ) -> Result<(), FontLoadingError> {
+    ) -> std::result::Result<(), FontLoadingError> {
         // TODO: handle error
         let font = ttf_parser::Face::from_slice(font_data, face_index)?;
         let facetables = font.tables();

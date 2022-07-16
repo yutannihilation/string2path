@@ -1,4 +1,6 @@
 use extendr_api::prelude::*;
+use font::FONTDB;
+use result::FontDBTibble;
 
 mod builder;
 mod font;
@@ -16,13 +18,16 @@ fn string2path_inner(
     text: &str,
     font_family: &str,
     font_weight: &str,
+    font_style: &str,
     tolerance: f32,
     line_width: f32,
     ct: ConversionType,
 ) -> Robj {
     let mut builder = builder::LyonPathBuilder::new(tolerance, line_width);
 
-    builder.outline(text, font_family, font_weight).unwrap();
+    builder
+        .outline(text, font_family, font_weight, font_style)
+        .unwrap();
 
     let result = match ct {
         ConversionType::Path => builder.into_path(),
@@ -34,11 +39,18 @@ fn string2path_inner(
 }
 
 #[extendr(use_try_from = true)]
-fn string2path_impl(text: &str, font_family: &str, font_weight: &str, tolerance: f32) -> Robj {
+fn string2path_impl(
+    text: &str,
+    font_family: &str,
+    font_weight: &str,
+    font_style: &str,
+    tolerance: f32,
+) -> Robj {
     string2path_inner(
         text,
         font_family,
         font_weight,
+        font_style,
         tolerance,
         0.,
         ConversionType::Path,
@@ -50,6 +62,7 @@ fn string2stroke_impl(
     text: &str,
     font_family: &str,
     font_weight: &str,
+    font_style: &str,
     tolerance: f32,
     line_width: f32,
 ) -> Robj {
@@ -57,6 +70,7 @@ fn string2stroke_impl(
         text,
         font_family,
         font_weight,
+        font_style,
         tolerance,
         line_width,
         ConversionType::Stroke,
@@ -64,15 +78,79 @@ fn string2stroke_impl(
 }
 
 #[extendr(use_try_from = true)]
-fn string2fill_impl(text: &str, font_family: &str, font_weight: &str, tolerance: f32) -> Robj {
+fn string2fill_impl(
+    text: &str,
+    font_family: &str,
+    font_weight: &str,
+    font_style: &str,
+    tolerance: f32,
+) -> Robj {
     string2path_inner(
         text,
         font_family,
         font_weight,
+        font_style,
         tolerance,
         0.,
         ConversionType::Fill,
     )
+}
+
+#[extendr(use_try_from = true)]
+fn dump_fontdb_impl() -> Robj {
+    let mut source: Vec<String> = Vec::new();
+    let mut index: Vec<u32> = Vec::new();
+    let mut family: Vec<String> = Vec::new();
+    let mut weight: Vec<String> = Vec::new();
+    let mut style: Vec<String> = Vec::new();
+
+    for f in FONTDB.faces() {
+        source.push(match f.source {
+            fontdb::Source::Binary(_) => "(binary)".to_string(),
+            fontdb::Source::File(ref path) => path.to_string_lossy().to_string(),
+            fontdb::Source::SharedFile(ref path, _) => path.to_string_lossy().to_string(),
+        });
+
+        index.push(f.index);
+        family.push(f.family.clone());
+
+        #[rustfmt::skip]
+        weight.push(
+            match f.weight {
+                fontdb::Weight::THIN        => "thin",
+                fontdb::Weight::EXTRA_LIGHT => "extra_light",
+                fontdb::Weight::LIGHT       => "light",
+                fontdb::Weight::NORMAL      => "normal",
+                fontdb::Weight::MEDIUM      => "medium",
+                fontdb::Weight::SEMIBOLD    => "semibold",
+                fontdb::Weight::BOLD        => "bold",
+                fontdb::Weight::EXTRA_BOLD  => "extra_bold",
+                fontdb::Weight::BLACK       => "black",
+                _                           => "unknown",
+            }
+            .to_string(),
+        );
+
+        #[rustfmt::skip]
+        style.push(
+            match f.style {
+                fontdb::Style::Normal  => "normal",
+                fontdb::Style::Italic  => "italic",
+                fontdb::Style::Oblique => "oblique",
+            }
+            .to_string(),
+        );
+    }
+
+    let result = FontDBTibble {
+        source,
+        index,
+        family,
+        weight,
+        style,
+    };
+
+    result.try_into().unwrap()
 }
 
 // Macro to generate exports.
@@ -83,6 +161,7 @@ extendr_module! {
     fn string2path_impl;
     fn string2stroke_impl;
     fn string2fill_impl;
+    fn dump_fontdb_impl;
 }
 
 #[cfg(test)]
