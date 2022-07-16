@@ -1,5 +1,13 @@
 # string2path (development version)
 
+## Breaking changes
+
+* Now all functions accepts **font family name** instead of the path to the
+  actual font file. This is to support TTC file properly, which contains more
+  than one fonts.  
+  A new function `dump_fontdb()` is useful to check the actual family name (and
+  the weight and the style) to specify.
+
 # string2path 0.0.4
 
 * This is a maintenance release to make the installation work even on a slow
