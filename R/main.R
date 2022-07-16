@@ -70,8 +70,11 @@ string2path <- function(
     font_style = c("normal", "italic", "oblique"),
     tolerance = 0.00005
 ) {
+  validate_font_family(font_family, "string2path")
+
   font_weight <- match.arg(font_weight)
   font_style <- match.arg(font_style)
+
   string2path_impl(text, font_family, font_weight, font_style, tolerance)
 }
 
@@ -85,8 +88,11 @@ string2stroke <- function(
     tolerance = 0.00005,
     line_width = 0.03
 ) {
+  validate_font_family(font_family, "string2stroke")
+
   font_weight <- match.arg(font_weight)
   font_style <- match.arg(font_style)
+
   string2stroke_impl(text, font_family, font_weight, font_style, tolerance, line_width)
 }
 
@@ -99,7 +105,18 @@ string2fill <- function(
     font_style = c("normal", "italic", "oblique"),
     tolerance = 0.00005
 ) {
+  validate_font_family(font_family, "string2fill")
+
   font_weight <- match.arg(font_weight)
   font_style <- match.arg(font_style)
+
   string2fill_impl(text, font_family, font_weight, font_style, tolerance)
+}
+
+validate_font_family <- function(font_family, call) {
+  if (isTRUE(grepl("\\.(ttf|otf)$", font_family))) {
+    cli::cli_abort(
+      "{.fun {call}} now uses a font family name (e.g. `\"Arial\"`), instead of the path to the font file."
+    )
+  }
 }
