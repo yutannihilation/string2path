@@ -3,7 +3,7 @@ use extendr_api::prelude::*;
 use std::convert::TryFrom;
 
 /// An intermediate form of the extracted path information to convert to a tibble.
-pub(crate) struct PathTibble {
+pub struct PathTibble {
     // Unscaled position of x.
     pub x: Vec<f32>,
     // Unscaled position of y.
@@ -48,7 +48,7 @@ impl TryFrom<PathTibble> for Robj {
 }
 
 /// An intermediate form of the content of the fontdb to convert to a tibble.
-pub(crate) struct FontDBTibble {
+pub struct FontDBTibble {
     pub source: Vec<String>,
     pub index: Vec<u32>,
     pub family: Vec<String>,
