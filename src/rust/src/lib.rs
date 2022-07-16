@@ -14,14 +14,15 @@ enum ConversionType {
 
 fn string2path_inner(
     text: &str,
-    font_file: &str,
+    font_family: &str,
+    font_weight: &str,
     tolerance: f32,
     line_width: f32,
     ct: ConversionType,
 ) -> Robj {
     let mut builder = builder::LyonPathBuilder::new(tolerance, line_width);
 
-    builder.outline(text, font_file).unwrap();
+    builder.outline(text, font_family, font_weight).unwrap();
 
     let result = match ct {
         ConversionType::Path => builder.into_path(),
@@ -33,15 +34,29 @@ fn string2path_inner(
 }
 
 #[extendr(use_try_from = true)]
-fn string2path_impl(text: &str, font_file: &str, tolerance: f32) -> Robj {
-    string2path_inner(text, font_file, tolerance, 0., ConversionType::Path)
+fn string2path_impl(text: &str, font_family: &str, font_weight: &str, tolerance: f32) -> Robj {
+    string2path_inner(
+        text,
+        font_family,
+        font_weight,
+        tolerance,
+        0.,
+        ConversionType::Path,
+    )
 }
 
 #[extendr(use_try_from = true)]
-fn string2stroke_impl(text: &str, font_file: &str, tolerance: f32, line_width: f32) -> Robj {
+fn string2stroke_impl(
+    text: &str,
+    font_family: &str,
+    font_weight: &str,
+    tolerance: f32,
+    line_width: f32,
+) -> Robj {
     string2path_inner(
         text,
-        font_file,
+        font_family,
+        font_weight,
         tolerance,
         line_width,
         ConversionType::Stroke,
@@ -49,8 +64,15 @@ fn string2stroke_impl(text: &str, font_file: &str, tolerance: f32, line_width: f
 }
 
 #[extendr(use_try_from = true)]
-fn string2fill_impl(text: &str, font_file: &str, tolerance: f32) -> Robj {
-    string2path_inner(text, font_file, tolerance, 0., ConversionType::Fill)
+fn string2fill_impl(text: &str, font_family: &str, font_weight: &str, tolerance: f32) -> Robj {
+    string2path_inner(
+        text,
+        font_family,
+        font_weight,
+        tolerance,
+        0.,
+        ConversionType::Fill,
+    )
 }
 
 // Macro to generate exports.
@@ -70,7 +92,9 @@ mod tests {
     #[test]
     fn test_path() {
         let mut builder = LyonPathBuilder::new(0.00001, 0.);
-        builder.outline("A", "test/font/test.ttf").unwrap();
+        builder
+            .outline_from_file("A", "test/font/test.ttf")
+            .unwrap();
         let result = builder.into_path();
 
         // the height of the test.ttf is 125 (ascent 100 + descent 25)
@@ -81,7 +105,9 @@ mod tests {
     #[test]
     fn test_stroke() {
         let mut builder = LyonPathBuilder::new(0.00001, 0.2);
-        builder.outline("A", "test/font/test.ttf").unwrap();
+        builder
+            .outline_from_file("A", "test/font/test.ttf")
+            .unwrap();
         let result = builder.into_stroke();
 
         assert!(result
@@ -97,7 +123,9 @@ mod tests {
     #[test]
     fn test_fill() {
         let mut builder = LyonPathBuilder::new(0.00001, 0.);
-        builder.outline("A", "test/font/test.ttf").unwrap();
+        builder
+            .outline_from_file("A", "test/font/test.ttf")
+            .unwrap();
         let result = builder.into_fill();
 
         // TODO: Is this correct...?

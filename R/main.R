@@ -7,8 +7,8 @@
 #'
 #' @name string2path
 #' @param text A text to convert to paths.
-#' @param font_file A path to a 'TrueType' font file ('.ttf') or an 'OpenType'
-#'   font file ('.otf').
+#' @param font_family A font family.
+#' @param font_weight A font weight.
 #' @param tolerance Maximum distance allowed between the curve and its
 #'   approximation. For more details, please refer to [the documentation of the
 #'   underlying Rust
@@ -63,21 +63,51 @@
 #' }
 #'
 #' @export
-string2path <- function(text, font_file, tolerance = 0.00005) {
-  font_file <- path.expand(font_file)
-  string2path_impl(text, font_file, tolerance)
+string2path <- function(text, font_family, font_weight = c(
+                          "normal",
+                          "thin",
+                          "extra_thin",
+                          "light",
+                          "medium",
+                          "semibold",
+                          "bold",
+                          "extra_bold",
+                          "black"
+                        ), tolerance = 0.00005) {
+  font_weight <- match.arg(font_weight)
+  string2path_impl(text, font_family, font_weight, tolerance)
 }
 
 #' @rdname string2path
 #' @export
-string2stroke <- function(text, font_file, tolerance = 0.00005, line_width = 0.03) {
-  font_file <- path.expand(font_file)
-  string2stroke_impl(text, font_file, tolerance, line_width)
+string2stroke <- function(text, font_family, font_weight = c(
+                          "normal",
+                          "thin",
+                          "extra_thin",
+                          "light",
+                          "medium",
+                          "semibold",
+                          "bold",
+                          "extra_bold",
+                          "black"
+                        ), tolerance = 0.00005) {
+  font_weight <- match.arg(font_weight)
+  string2stroke_impl(text, font_family, font_weight, tolerance, line_width)
 }
 
 #' @rdname string2path
 #' @export
-string2fill <- function(text, font_file, tolerance = 0.00005) {
-  font_file <- path.expand(font_file)
-  string2fill_impl(text, font_file, tolerance)
+string2fill <- function(text, font_family, font_weight = c(
+                          "normal",
+                          "thin",
+                          "extra_thin",
+                          "light",
+                          "medium",
+                          "semibold",
+                          "bold",
+                          "extra_bold",
+                          "black"
+                        ), tolerance = 0.00005) {
+  font_weight <- match.arg(font_weight)
+  string2fill_impl(text, font_family, font_weight, tolerance)
 }
