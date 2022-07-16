@@ -71,7 +71,7 @@ impl ttf_parser::OutlineBuilder for LyonPathBuilder {
     }
 
     fn close(&mut self) {
-        self.builder.close();
+        self.builder.end(true);
         self.cur_path_id += 1;
     }
 }
