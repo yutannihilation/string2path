@@ -57,7 +57,7 @@ library(string2path)
 #> Loading required package: cli
 library(ggplot2)
 
-d <- string2path("カラテが\n高まる。", font_family = "Noto Sans JP", font_weight = "bold")
+d <- string2path("カラテが\n高まる。", "Noto Sans JP", font_weight = "bold")
 
 d <- tibble::rowid_to_column(d)
 
@@ -113,6 +113,31 @@ dump_fontdb()
 #> 10 "C:\\Windows\\Fonts\\BIZ-UDGothicR.ttc"     1 BIZ UDPGothic normal normal
 #> # … with 437 more rows
 ```
+
+You can also specify the font file directly. Pomicons is a font
+available on
+[gabrielelana/pomicons](https://github.com/gabrielelana/pomicons),
+licensed under SIL OFL 1.1.
+
+``` r
+pomicons_file <- here::here("font", "Pomicons.ttf")
+if (!file.exists(pomicons_file)) {
+  dir.create(dirname(pomicons_file))
+  curl::curl_download(
+    "https://github.com/gabrielelana/pomicons/blob/master/fonts/Pomicons.ttf?raw=true",
+    destfile = pomicons_file
+  )
+}
+
+d_tmp <- string2path("\uE007", pomicons_file)
+
+ggplot(d_tmp) +
+  geom_path(aes(x, y, group = path_id), linewidth = 5, colour = "#26d1a9") +
+  theme_minimal() +
+  coord_equal()
+```
+
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
 ### `string2fill()`
 

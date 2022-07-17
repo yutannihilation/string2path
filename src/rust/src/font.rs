@@ -117,12 +117,16 @@ impl LyonPathBuilder {
         Err(FontLoadingError::NoAvailableFonts)
     }
 
-    #[cfg(test)]
     pub fn outline_from_file(
         &mut self,
         text: &str,
         font_file: &str,
     ) -> std::result::Result<(), FontLoadingError> {
+        // NOTE: Technically, fontdb can load file data with .load_font_file().
+        //       It might simplify the implimentation, but it would require us
+        //       to specify a query, but we don't know how to query the exact
+        //       information in the file. So, having another implimentation is
+        //       probably reasonable for now.
         let font_data_raw = std::fs::read(font_file)?;
         self.outline_inner(text, font_data_raw.as_slice(), 0)?;
 

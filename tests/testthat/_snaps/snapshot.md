@@ -1,4 +1,43 @@
-# the extracted data are expected
+# the data extracted from font file are as expected
+
+    Code
+      string2path("A", "./font/test.ttf")
+    Output
+      # A tibble: 4 x 4
+            x     y glyph_id path_id
+        <dbl> <dbl>    <dbl>   <dbl>
+      1 0     0            0       0
+      2 0.800 0.800        0       0
+      3 0     0.800        0       0
+      4 0     0            0       0
+
+---
+
+    Code
+      string2stroke("A", "./font/test.ttf")
+    Output
+      # A tibble: 4 x 4
+            x     y glyph_id path_id
+        <dbl> <dbl>    <dbl>   <dbl>
+      1 0     0            0       0
+      2 0.800 0.800        0       0
+      3 0     0.800        0       0
+      4 0     0            0       0
+
+---
+
+    Code
+      string2fill("A", "./font/test.ttf")
+    Output
+      # A tibble: 4 x 4
+            x     y glyph_id path_id
+        <dbl> <dbl>    <dbl>   <dbl>
+      1 0     0            0       0
+      2 0.800 0.800        0       0
+      3 0     0.800        0       0
+      4 0     0            0       0
+
+# the data extracted from installed font are as expected
 
     Code
       string2path("A", "Arial")

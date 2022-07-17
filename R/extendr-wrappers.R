@@ -8,11 +8,17 @@
 #' @useDynLib string2path, .registration = TRUE
 NULL
 
-string2path_impl <- function(text, font_family, font_weight, font_style, tolerance) .Call(wrap__string2path_impl, text, font_family, font_weight, font_style, tolerance)
+string2path_family <- function(text, font_family, font_weight, font_style, tolerance) .Call(wrap__string2path_family, text, font_family, font_weight, font_style, tolerance)
 
-string2stroke_impl <- function(text, font_family, font_weight, font_style, tolerance, line_width) .Call(wrap__string2stroke_impl, text, font_family, font_weight, font_style, tolerance, line_width)
+string2path_file <- function(text, font_file, tolerance) .Call(wrap__string2path_file, text, font_file, tolerance)
 
-string2fill_impl <- function(text, font_family, font_weight, font_style, tolerance) .Call(wrap__string2fill_impl, text, font_family, font_weight, font_style, tolerance)
+string2stroke_family <- function(text, font_family, font_weight, font_style, tolerance, line_width) .Call(wrap__string2stroke_family, text, font_family, font_weight, font_style, tolerance, line_width)
+
+string2stroke_file <- function(text, font_file, tolerance, line_width) .Call(wrap__string2stroke_file, text, font_file, tolerance, line_width)
+
+string2fill_family <- function(text, font_family, font_weight, font_style, tolerance) .Call(wrap__string2fill_family, text, font_family, font_weight, font_style, tolerance)
+
+string2fill_file <- function(text, font_file, tolerance) .Call(wrap__string2fill_file, text, font_file, tolerance)
 
 dump_fontdb_impl <- function() .Call(wrap__dump_fontdb_impl)
 

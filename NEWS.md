@@ -4,11 +4,12 @@
 
 * Drop support for R < 4.1.
 
-* Now all functions accepts **font family name** instead of the path to the
-  actual font file. This is to support TTC file properly, which contains more
-  than one fonts.  
-  A new function `dump_fontdb()` is useful to check the actual family name (and
-  the weight and the style) to specify.
+* Now all functions accept **font family name**. This is to support TTC file
+  properly, which contains more than one fonts. A new function `dump_fontdb()`
+  is useful to check the actual family name (and the weight and the style) to
+  specify.
+  They also accept a file path, so the existing code should work, except when
+  specifying `tolerance` without the named argument.
 
 * The minimum supported Rust version is bumped to 1.56.0 for the 2021 edition.
 
