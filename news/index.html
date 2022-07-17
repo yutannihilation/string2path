@@ -44,7 +44,13 @@
       <small>Source: <a href="https://github.com/yutannihilation/string2path/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="section level2"><h2 class="pkg-version" data-toc-text="development version" id="string2path-development-version">string2path (development version)<a class="anchor" aria-label="anchor" href="#string2path-development-version"></a></h2></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="string2path-development-version">string2path (development version)<a class="anchor" aria-label="anchor" href="#string2path-development-version"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<ul><li>Now all functions accepts <strong>font family name</strong> instead of the path to the actual font file. This is to support TTC file properly, which contains more than one fonts.<br>
+A new function <code><a href="../reference/dump_fontdb.html">dump_fontdb()</a></code> is useful to check the actual family name (and the weight and the style) to specify.</li></ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.4" id="string2path-004">string2path 0.0.4<a class="anchor" aria-label="anchor" href="#string2path-004"></a></h2><p class="text-muted">CRAN release: 2021-11-22</p>
 <ul><li>This is a maintenance release to make the installation work even on a slow internet connection.</li></ul></div>
@@ -68,7 +74,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>
