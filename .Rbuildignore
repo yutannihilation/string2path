@@ -6,7 +6,8 @@
 ^fonts$
 ^cran-comments\.md$
 ^CRAN-RELEASE$
-^src/.cargo
+^src/.cargo$
+^src/.vscode$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$

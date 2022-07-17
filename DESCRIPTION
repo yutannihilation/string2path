@@ -12,12 +12,12 @@ Description: Extract glyph information from a font file, and translate the
     data is returned as a 'data.frame' in easy-to-plot format.
 License: MIT + file LICENSE
 Depends:
-    R (>= 4.0)
+    R (>= 4.0),
+    cli
 Imports: 
     tibble
 Suggests: 
-    testthat (>= 3.0.0),
-    systemfonts
+    testthat (>= 3.0.0)
 URL: https://yutannihilation.github.io/string2path/, https://github.com/yutannihilation/string2path
 BugReports: https://github.com/yutannihilation/string2path/issues
 Encoding: UTF-8

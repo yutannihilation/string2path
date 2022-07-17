@@ -7,8 +7,9 @@
 #'
 #' @name string2path
 #' @param text A text to convert to paths.
-#' @param font_file A path to a 'TrueType' font file ('.ttf') or an 'OpenType'
-#'   font file ('.otf').
+#' @param font_family A font family.
+#' @param font_weight A font weight.
+#' @param font_style A font style.
 #' @param tolerance Maximum distance allowed between the curve and its
 #'   approximation. For more details, please refer to [the documentation of the
 #'   underlying Rust
@@ -26,58 +27,96 @@
 #' }
 #'
 #' @examples
-#' if (requireNamespace("systemfonts", quietly = TRUE)) {
-#'   available_fonts <- systemfonts::system_fonts()$path
+#' available_fonts <- dump_fontdb()
 #'
-#'   if (length(available_fonts) > 0) {
-#'     # string2path supports only TrueType or OpenType formats
-#'     ttf_or_otf <- available_fonts[grepl("\\.(ttf|otf)$", available_fonts)]
+#' if (nrow(available_fonts) > 0) {
+#'   family <- available_fonts$family[1]
+#'   weight <- available_fonts$weight[1]
+#'   style  <- available_fonts$style[1]
 #'
-#'     # string2path() converts a text to paths
-#'     d_path <- string2path("TEXT", ttf_or_otf[1])
-#'     plot(d_path$x, d_path$y)
-#'     for (p in split(d_path, d_path$path_id)) {
-#'       lines(p$x, p$y)
-#'     }
+#'   # string2path() converts a text to paths
+#'   d_path <- string2path("TEXT", family, weight, style)
+#'   plot(d_path$x, d_path$y)
+#'   for (p in split(d_path, d_path$path_id)) {
+#'     lines(p$x, p$y)
+#'   }
 #'
-#'     # string2stroke() converts a text to strokes
-#'     d_stroke <- string2stroke("TEXT", ttf_or_otf[1])
-#'     plot(d_stroke$x, d_stroke$y)
+#'   # string2stroke() converts a text to strokes
+#'   d_stroke <- string2stroke("TEXT", family, weight, style)
+#'   plot(d_stroke$x, d_stroke$y)
 #'
-#'     # The stroke is split into triangles, which can be distinguished by `triangle_id`
-#'     set.seed(2)
-#'     for (p in split(d_stroke, d_stroke$triangle_id)) {
-#'       polygon(p$x, p$y, col = rgb(runif(1), runif(1), runif(1), 0.8))
-#'     }
+#'   # The stroke is split into triangles, which can be distinguished by `triangle_id`
+#'   set.seed(2)
+#'   for (p in split(d_stroke, d_stroke$triangle_id)) {
+#'     polygon(p$x, p$y, col = rgb(runif(1), runif(1), runif(1), 0.8))
+#'   }
 #'
-#'     # string2fill() converts a text to filled polygons
-#'     d_fill <- string2fill("TEXT", ttf_or_otf[1])
-#'     plot(d_fill$x, d_fill$y)
+#'   # string2fill() converts a text to filled polygons
+#'   d_fill <- string2fill("TEXT", family, weight, style)
+#'   plot(d_fill$x, d_fill$y)
 #'
-#'     # The polygon is split into triangles, which can be distinguished by `triangle_id`
-#'     set.seed(2)
-#'     for (p in split(d_fill, d_fill$triangle_id)) {
-#'       polygon(p$x, p$y, col = rgb(runif(1), runif(1), runif(1), 0.8))
-#'     }
+#'   # The polygon is split into triangles, which can be distinguished by `triangle_id`
+#'   set.seed(2)
+#'   for (p in split(d_fill, d_fill$triangle_id)) {
+#'     polygon(p$x, p$y, col = rgb(runif(1), runif(1), runif(1), 0.8))
 #'   }
 #' }
 #'
 #' @export
-string2path <- function(text, font_file, tolerance = 0.00005) {
-  font_file <- path.expand(font_file)
-  string2path_impl(text, font_file, tolerance)
+string2path <- function(
+    text,
+    font_family,
+    font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold", "bold", "extra_bold", "black"),
+    font_style = c("normal", "italic", "oblique"),
+    tolerance = 0.00005
+) {
+  validate_font_family(font_family, "string2path")
+
+  font_weight <- match.arg(font_weight)
+  font_style <- match.arg(font_style)
+
+  string2path_impl(text, font_family, font_weight, font_style, tolerance)
 }
 
 #' @rdname string2path
 #' @export
-string2stroke <- function(text, font_file, tolerance = 0.00005, line_width = 0.03) {
-  font_file <- path.expand(font_file)
-  string2stroke_impl(text, font_file, tolerance, line_width)
+string2stroke <- function(
+    text,
+    font_family,
+    font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold", "bold", "extra_bold", "black"),
+    font_style = c("normal", "italic", "oblique"),
+    tolerance = 0.00005,
+    line_width = 0.03
+) {
+  validate_font_family(font_family, "string2stroke")
+
+  font_weight <- match.arg(font_weight)
+  font_style <- match.arg(font_style)
+
+  string2stroke_impl(text, font_family, font_weight, font_style, tolerance, line_width)
 }
 
 #' @rdname string2path
 #' @export
-string2fill <- function(text, font_file, tolerance = 0.00005) {
-  font_file <- path.expand(font_file)
-  string2fill_impl(text, font_file, tolerance)
+string2fill <- function(
+    text,
+    font_family,
+    font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold", "bold", "extra_bold", "black"),
+    font_style = c("normal", "italic", "oblique"),
+    tolerance = 0.00005
+) {
+  validate_font_family(font_family, "string2fill")
+
+  font_weight <- match.arg(font_weight)
+  font_style <- match.arg(font_style)
+
+  string2fill_impl(text, font_family, font_weight, font_style, tolerance)
+}
+
+validate_font_family <- function(font_family, call) {
+  if (isTRUE(grepl("\\.(ttf|otf)$", font_family))) {
+    cli::cli_abort(
+      "{.fun {call}} now uses a font family name (e.g. `\"Arial\"`), instead of the path to the font file."
+    )
+  }
 }
