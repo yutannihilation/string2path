@@ -62,7 +62,7 @@ to the paths of the filled polygon of each glyph.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">string2path</span><span class="op">(</span></span>
 <span>  <span class="va">text</span>,</span>
-<span>  <span class="va">font_family</span>,</span>
+<span>  <span class="va">font</span>,</span>
 <span>  font_weight <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"thin"</span>, <span class="st">"extra_thin"</span>, <span class="st">"light"</span>, <span class="st">"medium"</span>, <span class="st">"semibold"</span>,</span>
 <span>    <span class="st">"bold"</span>, <span class="st">"extra_bold"</span>, <span class="st">"black"</span><span class="op">)</span>,</span>
 <span>  font_style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"italic"</span>, <span class="st">"oblique"</span><span class="op">)</span>,</span>
@@ -71,7 +71,7 @@ to the paths of the filled polygon of each glyph.</p>
 <span></span>
 <span><span class="fu">string2stroke</span><span class="op">(</span></span>
 <span>  <span class="va">text</span>,</span>
-<span>  <span class="va">font_family</span>,</span>
+<span>  <span class="va">font</span>,</span>
 <span>  font_weight <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"thin"</span>, <span class="st">"extra_thin"</span>, <span class="st">"light"</span>, <span class="st">"medium"</span>, <span class="st">"semibold"</span>,</span>
 <span>    <span class="st">"bold"</span>, <span class="st">"extra_bold"</span>, <span class="st">"black"</span><span class="op">)</span>,</span>
 <span>  font_style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"italic"</span>, <span class="st">"oblique"</span><span class="op">)</span>,</span>
@@ -81,7 +81,7 @@ to the paths of the filled polygon of each glyph.</p>
 <span></span>
 <span><span class="fu">string2fill</span><span class="op">(</span></span>
 <span>  <span class="va">text</span>,</span>
-<span>  <span class="va">font_family</span>,</span>
+<span>  <span class="va">font</span>,</span>
 <span>  font_weight <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"thin"</span>, <span class="st">"extra_thin"</span>, <span class="st">"light"</span>, <span class="st">"medium"</span>, <span class="st">"semibold"</span>,</span>
 <span>    <span class="st">"bold"</span>, <span class="st">"extra_bold"</span>, <span class="st">"black"</span><span class="op">)</span>,</span>
 <span>  font_style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"italic"</span>, <span class="st">"oblique"</span><span class="op">)</span>,</span>
@@ -95,8 +95,9 @@ to the paths of the filled polygon of each glyph.</p>
 <dd><p>A text to convert to paths.</p></dd>
 
 
-<dt>font_family</dt>
-<dd><p>A font family.</p></dd>
+<dt>font</dt>
+<dd><p>A font family (e.g. <code>"Arial"</code>) or a path to a font file (e.g.
+<code>"path/to/font.ttf"</code>).</p></dd>
 
 
 <dt>font_weight</dt>
