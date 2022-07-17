@@ -8,6 +8,8 @@
   A new function `dump_fontdb()` is useful to check the actual family name (and
   the weight and the style) to specify.
 
+* The minimum supported Rust version is bumped to 1.56.0 for the 2021 edition.
+
 # string2path 0.0.4
 
 * This is a maintenance release to make the installation work even on a slow
