@@ -78,14 +78,18 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>If you are using Windows, you are lucky. Because this repository provides pre-compiled binary for you, you don’t need to install Rust toolchain.</p>
-<p>Otherwise, you need to have Rust toolchain installed before trying to install this package. See <a href="https://www.rust-lang.org/tools/install" class="external-link uri">https://www.rust-lang.org/tools/install</a> for the installation instructions.</p>
+<p>If you are using macOS or Windows, you are lucky. Since this repository provides the pre-compiled binary for you, you don’t need to install Rust toolchains!</p>
+<p>Otherwise (i.e. Linux), you need to have Rust toolchain installed before trying to install this package. See <a href="https://www.rust-lang.org/tools/install" class="external-link uri">https://www.rust-lang.org/tools/install</a> for the installation instructions.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"string2path"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Or the development version from GitHub:</span></span>
-<span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"yutannihilation/string2path"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># Or the development version from r-universe:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"string2path"</span>,</span>
+<span>  repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    yutannihilation <span class="op">=</span> <span class="st">"https://yutannihilation.r-universe.dev"</span>,</span>
+<span>    CRAN <span class="op">=</span> <span class="st">"https://cloud.r-project.org"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
@@ -96,16 +100,16 @@
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yutannihilation.github.io/string2path/" class="external-link">string2path</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: cli</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># You can change the font family to the available one on your machine.</span></span>
-<span><span class="co"># Try dump_fontdb() to list the font faces that string2path can recognize.</span></span>
-<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/string2path.html">string2path</a></span><span class="op">(</span><span class="st">"カラテが\n高まる。"</span>, <span class="st">"Noto Sans JP"</span>, font_weight <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/string2path.html">string2path</a></span><span class="op">(</span><span class="st">"カラテが\n高まる。"</span>, font_family <span class="op">=</span> <span class="st">"Noto Sans JP"</span>, font_weight <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rowid_to_column</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_path</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, group <span class="op">=</span> <span class="va">path_id</span>, colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">glyph_id</span><span class="op">)</span><span class="op">)</span>, linewidth <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_path</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, group <span class="op">=</span> <span class="va">path_id</span>, colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">glyph_id</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>            linewidth <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">coord_equal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -118,20 +122,40 @@
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rowid_to_column</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_path</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, group <span class="op">=</span> <span class="va">path_id</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span>, colour <span class="op">=</span> <span class="st">"purple2"</span>, lineend <span class="op">=</span> <span class="st">"round"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_path</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, group <span class="op">=</span> <span class="va">path_id</span><span class="op">)</span>,</span>
+<span>            linewidth <span class="op">=</span> <span class="fl">2</span>, colour <span class="op">=</span> <span class="st">"purple2"</span>, lineend <span class="op">=</span> <span class="st">"round"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">coord_equal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">transition_reveal</span><span class="op">(</span><span class="va">rowid</span><span class="op">)</span></span>
-<span><span class="co">#&gt; size aesthetic has been deprecated for use with lines as of ggplot2 3.4.0</span></span>
-<span><span class="co">#&gt; ℹ Please use linewidth aesthetic instead</span></span>
-<span><span class="co">#&gt; This message is displayed once every 8 hours.</span></span></code></pre></div>
+<span>  <span class="fu">transition_reveal</span><span class="op">(</span><span class="va">rowid</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-1.gif" width="100%"></p>
+<div class="section level4">
+<h4 id="dump_fontdb">
+<code>dump_fontdb()</code><a class="anchor" aria-label="anchor" href="#dump_fontdb"></a>
+</h4>
+<p>Note that <code>"Noto Sans JP"</code> above (and <code>"Iosevka SS08"</code> below) is the font installed on my local machine, so the same code might not run on your environment. You can use <code><a href="reference/dump_fontdb.html">dump_fontdb()</a></code> to see the available combination of font family (e.g. <code>"Arial"</code>), weight (e.g. <code>"bold"</code>), and style (e.g. <code>"italic"</code>).</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/dump_fontdb.html">dump_fontdb</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 447 × 5</span></span>
+<span><span class="co">#&gt;    source                                  index family        weight style </span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;                                   &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt; </span></span>
+<span><span class="co">#&gt;  1 "C:\\Windows\\Fonts\\arial.ttf"             0 Arial         normal normal</span></span>
+<span><span class="co">#&gt;  2 "C:\\Windows\\Fonts\\arialbd.ttf"           0 Arial         bold   normal</span></span>
+<span><span class="co">#&gt;  3 "C:\\Windows\\Fonts\\arialbi.ttf"           0 Arial         bold   italic</span></span>
+<span><span class="co">#&gt;  4 "C:\\Windows\\Fonts\\ariali.ttf"            0 Arial         normal italic</span></span>
+<span><span class="co">#&gt;  5 "C:\\Windows\\Fonts\\ariblk.ttf"            0 Arial Black   black  normal</span></span>
+<span><span class="co">#&gt;  6 "C:\\Windows\\Fonts\\bahnschrift.ttf"       0 Bahnschrift   normal normal</span></span>
+<span><span class="co">#&gt;  7 "C:\\Windows\\Fonts\\BIZ-UDGothicB.ttc"     0 BIZ UDGothic  bold   normal</span></span>
+<span><span class="co">#&gt;  8 "C:\\Windows\\Fonts\\BIZ-UDGothicB.ttc"     1 BIZ UDPGothic bold   normal</span></span>
+<span><span class="co">#&gt;  9 "C:\\Windows\\Fonts\\BIZ-UDGothicR.ttc"     0 BIZ UDGothic  normal normal</span></span>
+<span><span class="co">#&gt; 10 "C:\\Windows\\Fonts\\BIZ-UDGothicR.ttc"     1 BIZ UDPGothic normal normal</span></span>
+<span><span class="co">#&gt; # … with 437 more rows</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="string2fill">
 <code>string2fill()</code><a class="anchor" aria-label="anchor" href="#string2fill"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/string2path.html">string2fill</a></span><span class="op">(</span><span class="st">"abc"</span>, <span class="st">"Iosevka SS08"</span>, font_weight <span class="op">=</span> <span class="st">"bold"</span>, font_style <span class="op">=</span> <span class="st">"italic"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">+</span></span>
@@ -147,7 +171,7 @@
 <h3 id="string2stroke">
 <code>string2stroke()</code><a class="anchor" aria-label="anchor" href="#string2stroke"></a>
 </h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">w</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">9</span> <span class="op">*</span> <span class="fl">0.01</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/string2path.html">string2stroke</a></span><span class="op">(</span><span class="st">"abc"</span>,<span class="st">"Iosevka SS08"</span>, font_weight <span class="op">=</span> <span class="st">"bold"</span>, font_style <span class="op">=</span> <span class="st">"italic"</span>, line_width <span class="op">=</span> <span class="va">w</span><span class="op">)</span></span>
 <span>  </span>
@@ -168,7 +192,7 @@
 <code>tolerance</code><a class="anchor" aria-label="anchor" href="#tolerance"></a>
 </h2>
 <p><code>tolerance</code> controls resolution of the tessellation. You can reduce tolerance to get higher resolutions.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">tolerance</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1e-1</span>, <span class="fl">1e-2</span>, <span class="fl">1e-3</span>, <span class="fl">1e-4</span>, <span class="fl">1e-5</span>, <span class="fl">1e-6</span>, <span class="fl">1e-7</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/string2path.html">string2fill</a></span><span class="op">(</span><span class="st">"abc"</span>, <span class="st">"Iosevka SS08"</span>, font_weight <span class="op">=</span> <span class="st">"bold"</span>, font_style <span class="op">=</span> <span class="st">"italic"</span>, tolerance <span class="op">=</span> <span class="va">tolerance</span><span class="op">)</span></span>
 <span>  </span>
@@ -182,18 +206,30 @@
 <span><span class="op">}</span></span></code></pre></div>
 <p><img src="reference/figures/README-example3-.gif" width="100%"></p>
 <p>Note that <code>tolerance</code> parameter behaves a bit differently on <code><a href="reference/string2path.html">string2fill()</a></code> and <code><a href="reference/string2path.html">string2stroke()</a></code>. But, in either case, 1e-5 ~ 1e-6 should be enough.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">tolerance</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1e-1</span>, <span class="fl">1e-2</span>, <span class="fl">1e-3</span>, <span class="fl">1e-4</span>, <span class="fl">1e-5</span>, <span class="fl">1e-6</span>, <span class="fl">1e-7</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/string2path.html">string2path</a></span><span class="op">(</span><span class="st">"abc"</span>, <span class="st">"Iosevka SS08"</span>, font_weight <span class="op">=</span> <span class="st">"bold"</span>, font_style <span class="op">=</span> <span class="st">"italic"</span>, tolerance <span class="op">=</span> <span class="va">tolerance</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">geom_path</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, group <span class="op">=</span> <span class="va">path_id</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, group <span class="op">=</span> <span class="va">path_id</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_path</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, group <span class="op">=</span> <span class="va">path_id</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"black"</span>, linewidth <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, group <span class="op">=</span> <span class="va">path_id</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"black"</span>, linewidth <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">coord_equal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"tolerance: "</span>, <span class="va">tolerance</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth = 1.5): Ignoring unknown parameters: `linewidth`</span></span>
+<span><span class="co">#&gt; Ignoring unknown parameters: `linewidth`</span></span>
+<span><span class="co">#&gt; Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =</span></span>
+<span><span class="co">#&gt; 1.5): Ignoring unknown parameters: `linewidth`</span></span>
+<span><span class="co">#&gt; Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =</span></span>
+<span><span class="co">#&gt; 1.5): Ignoring unknown parameters: `linewidth`</span></span>
+<span><span class="co">#&gt; Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =</span></span>
+<span><span class="co">#&gt; 1.5): Ignoring unknown parameters: `linewidth`</span></span>
+<span><span class="co">#&gt; Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =</span></span>
+<span><span class="co">#&gt; 1.5): Ignoring unknown parameters: `linewidth`</span></span>
+<span><span class="co">#&gt; Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =</span></span>
+<span><span class="co">#&gt; 1.5): Ignoring unknown parameters: `linewidth`</span></span></code></pre></div>
 <p><img src="reference/figures/README-example4-.gif" width="100%"></p>
 </div>
 </div>
