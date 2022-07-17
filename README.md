@@ -25,20 +25,25 @@ two Rust crates:
 
 ## Installation
 
-If you are using Windows, you are lucky. Because this repository
-provides pre-compiled binary for you, you don’t need to install Rust
-toolchain.
+If you are using macOS or Windows, you are lucky. Since this repository
+provides the pre-compiled binary for you, you don’t need to install Rust
+toolchains!
 
-Otherwise, you need to have Rust toolchain installed before trying to
-install this package. See <https://www.rust-lang.org/tools/install> for
-the installation instructions.
+Otherwise (i.e. Linux), you need to have Rust toolchain installed before
+trying to install this package. See
+<https://www.rust-lang.org/tools/install> for the installation
+instructions.
 
 ``` r
 install.packages("string2path")
 
-# Or the development version from GitHub:
-# install.packages("devtools")
-devtools::install_github("yutannihilation/string2path")
+# Or the development version from r-universe:
+install.packages("string2path",
+  repos = c(
+    yutannihilation = "https://yutannihilation.r-universe.dev",
+    CRAN = "https://cloud.r-project.org"
+  )
+)
 ```
 
 ## Example
@@ -47,16 +52,16 @@ devtools::install_github("yutannihilation/string2path")
 
 ``` r
 library(string2path)
+#> Loading required package: cli
 library(ggplot2)
 
-# You can change the font family to the available one on your machine.
-# Try dump_fontdb() to list the font faces that string2path can recognize.
-d <- string2path("カラテが\n高まる。", "Noto Sans JP", font_weight = "bold")
+d <- string2path("カラテが\n高まる。", font_family = "Noto Sans JP", font_weight = "bold")
 
 d <- tibble::rowid_to_column(d)
 
 ggplot(d) +
-  geom_path(aes(x, y, group = path_id, colour = factor(glyph_id)), linewidth = 1.5) +
+  geom_path(aes(x, y, group = path_id, colour = factor(glyph_id)),
+            linewidth = 1.5) +
   theme_minimal() +
   coord_equal() +
   theme(legend.position = "top") +
@@ -72,16 +77,40 @@ d <- string2path("蹴", "Noto Sans JP")
 d <- tibble::rowid_to_column(d)
 
 ggplot(d) +
-  geom_path(aes(x, y, group = path_id), size = 2, colour = "purple2", lineend = "round") +
+  geom_path(aes(x, y, group = path_id),
+            linewidth = 2, colour = "purple2", lineend = "round") +
   theme_minimal() +
   coord_equal() +
   transition_reveal(rowid)
-#> size aesthetic has been deprecated for use with lines as of ggplot2 3.4.0
-#> ℹ Please use linewidth aesthetic instead
-#> This message is displayed once every 8 hours.
 ```
 
 <img src="man/figures/README-example-1.gif" width="100%" />
+
+#### `dump_fontdb()`
+
+Note that `"Noto Sans JP"` above (and `"Iosevka SS08"` below) is the
+font installed on my local machine, so the same code might not run on
+your environment. You can use `dump_fontdb()` to see the available
+combination of font family (e.g. `"Arial"`), weight (e.g. `"bold"`), and
+style (e.g. `"italic"`).
+
+``` r
+dump_fontdb()
+#> # A tibble: 447 × 5
+#>    source                                  index family        weight style 
+#>    <chr>                                   <dbl> <chr>         <chr>  <chr> 
+#>  1 "C:\\Windows\\Fonts\\arial.ttf"             0 Arial         normal normal
+#>  2 "C:\\Windows\\Fonts\\arialbd.ttf"           0 Arial         bold   normal
+#>  3 "C:\\Windows\\Fonts\\arialbi.ttf"           0 Arial         bold   italic
+#>  4 "C:\\Windows\\Fonts\\ariali.ttf"            0 Arial         normal italic
+#>  5 "C:\\Windows\\Fonts\\ariblk.ttf"            0 Arial Black   black  normal
+#>  6 "C:\\Windows\\Fonts\\bahnschrift.ttf"       0 Bahnschrift   normal normal
+#>  7 "C:\\Windows\\Fonts\\BIZ-UDGothicB.ttc"     0 BIZ UDGothic  bold   normal
+#>  8 "C:\\Windows\\Fonts\\BIZ-UDGothicB.ttc"     1 BIZ UDPGothic bold   normal
+#>  9 "C:\\Windows\\Fonts\\BIZ-UDGothicR.ttc"     0 BIZ UDGothic  normal normal
+#> 10 "C:\\Windows\\Fonts\\BIZ-UDGothicR.ttc"     1 BIZ UDPGothic normal normal
+#> # … with 437 more rows
+```
 
 ### `string2fill()`
 
@@ -148,13 +177,25 @@ for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
   d <- string2path("abc", "Iosevka SS08", font_weight = "bold", font_style = "italic", tolerance = tolerance)
   
   p <- ggplot(d) +
-    geom_path(aes(x, y, group = path_id), colour = "black", size = 0.5) +
-    geom_point(aes(x, y, group = path_id), colour = "black", size = 1.5) +
+    geom_path(aes(x, y, group = path_id), colour = "black", linewidth = 0.5) +
+    geom_point(aes(x, y, group = path_id), colour = "black", linewidth = 1.5) +
     theme_minimal() +
     coord_equal() +
     ggtitle(paste0("tolerance: ", tolerance))
   plot(p)
 }
+#> Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth = 1.5): Ignoring unknown parameters: `linewidth`
+#> Ignoring unknown parameters: `linewidth`
+#> Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =
+#> 1.5): Ignoring unknown parameters: `linewidth`
+#> Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =
+#> 1.5): Ignoring unknown parameters: `linewidth`
+#> Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =
+#> 1.5): Ignoring unknown parameters: `linewidth`
+#> Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =
+#> 1.5): Ignoring unknown parameters: `linewidth`
+#> Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =
+#> 1.5): Ignoring unknown parameters: `linewidth`
 ```
 
 <img src="man/figures/README-example4-.gif" width="100%" />
