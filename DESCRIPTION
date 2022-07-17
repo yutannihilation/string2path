@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "yutani.ini@gmail.com",
            comment = c(ORCID = "0000-0002-3385-7233"))
-Description: Extract glyph information from a font file, and translate the
+Description: Extract glyph information from font data, and translate the
     outline curves to flattened paths or tessellated polygons. The converted
     data is returned as a 'data.frame' in easy-to-plot format.
 License: MIT + file LICENSE
@@ -26,15 +26,15 @@ RoxygenNote: 7.2.0
 SystemRequirements: Cargo (rustc package manager)
 Biarch: true
 Config/testthat/edition: 3
-Config/string2path/MSRV: 1.41.0
+Config/string2path/MSRV: 1.56.0
 Config/string2path/crate_name: string2path
 Config/string2path/github_repo: yutannihilation/string2path
-Config/string2path/github_tag: build_20220424-1
+Config/string2path/github_tag: build_20220717-1
 Config/string2path/binary_sha256sum:
     list(
-        `aarch64-apple-darwin-libstring2path.a`       = "46bc7af352d1a63d8deab9a7ca943d5b420b1d8e35308868d9aa78405690204f",
-        `i686-pc-windows-gnu-libstring2path.a`        = "87e6244461cab7e8d8c44d4f99c7251ca7b3a8b98ad1cef09a4513659eaf70af",
-        `ucrt-x86_64-pc-windows-gnu-libstring2path.a` = "9a4ba3009f86b384220b1b9a03a54c37db53add49115582d774572865072495b",
-        `x86_64-apple-darwin-libstring2path.a`        = "7e2f0891efb4ab39129af73778a6ff574b6f4753ecd37bad914e576423d9c26c",
-        `x86_64-pc-windows-gnu-libstring2path.a`      = "b33818d3b302df54e9db9c25689443649469a319cc8499555f66d773e3da64a3"
+        `aarch64-apple-darwin-libstring2path.a`       = "630345d45ac0c2568ce5da6164e0c78201863071557cbcd8982f0b088b06788e",
+        `i686-pc-windows-gnu-libstring2path.a`        = "27bd22fcffd482b3e2e49aa8a8748f820749fd1e8789a6f6c2f98b18df2a8690",
+        `ucrt-x86_64-pc-windows-gnu-libstring2path.a` = "c5f2ec373b167e1b7b7a29a132aa0a350d4b18ad8ae97fa326826117c793719d",
+        `x86_64-apple-darwin-libstring2path.a`        = "0dcc8806e9e0001e8c2f016e2a00df7a0d348b0d1a1538647e9bcc9ea36e2b82",
+        `x86_64-pc-windows-gnu-libstring2path.a`      = "f5f2b8fe3fae0410f31395cc17c1895d9ac239d847a665126937e3fdb5e79d53"
     )
