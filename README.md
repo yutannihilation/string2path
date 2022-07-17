@@ -54,7 +54,6 @@ install.packages("string2path",
 
 ``` r
 library(string2path)
-#> Loading required package: cli
 library(ggplot2)
 
 d <- string2path("カラテが\n高まる。", "Noto Sans JP", font_weight = "bold")
