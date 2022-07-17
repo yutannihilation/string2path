@@ -7,7 +7,7 @@
 ^cran-comments\.md$
 ^CRAN-RELEASE$
 ^src/.cargo$
-^src/.vscode$
+^src/rust/.vscode$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
