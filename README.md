@@ -120,7 +120,7 @@ available on
 licensed under SIL OFL 1.1.
 
 ``` r
-pomicons_file <- here::here("font", "Pomicons.ttf")
+pomicons_file <- here::here("fonts", "Pomicons.ttf")
 if (!file.exists(pomicons_file)) {
   dir.create(dirname(pomicons_file))
   curl::curl_download(
