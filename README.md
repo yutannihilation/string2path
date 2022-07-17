@@ -69,7 +69,7 @@ ggplot(d) +
   scale_colour_viridis_d(option = "H")
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+<img src="man/figures/README-example-1.png" width="50%" />
 
 ``` r
 
@@ -85,7 +85,7 @@ ggplot(d) +
   transition_reveal(rowid)
 ```
 
-<img src="man/figures/README-example-1.gif" width="100%" />
+<img src="man/figures/README-example-1.gif" width="50%" />
 
 #### `dump_fontdb()`
 
@@ -136,7 +136,7 @@ ggplot(d_tmp) +
   coord_equal()
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="50%" />
 
 ### `string2fill()`
 
@@ -152,7 +152,7 @@ ggplot(d) +
   scale_fill_viridis_d(option = "H")
 ```
 
-<img src="man/figures/README-example2-1.png" width="100%" />
+<img src="man/figures/README-example2-1.png" width="50%" />
 
 ### `string2stroke()`
 
@@ -171,7 +171,7 @@ for (w in 1:9 * 0.01) {
 }
 ```
 
-<img src="man/figures/README-string2stroke-.gif" width="100%" />
+<img src="man/figures/README-string2stroke-.gif" width="50%" />
 
 ## `tolerance`
 
@@ -192,7 +192,7 @@ for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
 }
 ```
 
-<img src="man/figures/README-example3-.gif" width="100%" />
+<img src="man/figures/README-example3-.gif" width="50%" />
 
 Note that `tolerance` parameter behaves a bit differently on
 `string2fill()` and `string2stroke()`. But, in either case, 1e-5 \~ 1e-6
@@ -212,4 +212,4 @@ for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
 }
 ```
 
-<img src="man/figures/README-example4-.gif" width="100%" />
+<img src="man/figures/README-example4-.gif" width="50%" />

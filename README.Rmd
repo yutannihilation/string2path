@@ -9,7 +9,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%",
+  fig.width = 4,
+  out.width = "50%",
   dev = "ragg_png"
 )
 ```
