@@ -212,24 +212,12 @@
 <span>  </span>
 <span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">geom_path</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, group <span class="op">=</span> <span class="va">path_id</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"black"</span>, linewidth <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, group <span class="op">=</span> <span class="va">path_id</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"black"</span>, linewidth <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, group <span class="op">=</span> <span class="va">path_id</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">coord_equal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"tolerance: "</span>, <span class="va">tolerance</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="co">#&gt; Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth = 1.5): Ignoring unknown parameters: `linewidth`</span></span>
-<span><span class="co">#&gt; Ignoring unknown parameters: `linewidth`</span></span>
-<span><span class="co">#&gt; Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =</span></span>
-<span><span class="co">#&gt; 1.5): Ignoring unknown parameters: `linewidth`</span></span>
-<span><span class="co">#&gt; Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =</span></span>
-<span><span class="co">#&gt; 1.5): Ignoring unknown parameters: `linewidth`</span></span>
-<span><span class="co">#&gt; Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =</span></span>
-<span><span class="co">#&gt; 1.5): Ignoring unknown parameters: `linewidth`</span></span>
-<span><span class="co">#&gt; Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =</span></span>
-<span><span class="co">#&gt; 1.5): Ignoring unknown parameters: `linewidth`</span></span>
-<span><span class="co">#&gt; Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =</span></span>
-<span><span class="co">#&gt; 1.5): Ignoring unknown parameters: `linewidth`</span></span></code></pre></div>
+<span><span class="op">}</span></span></code></pre></div>
 <p><img src="reference/figures/README-example4-.gif" width="100%"></p>
 </div>
 </div>
