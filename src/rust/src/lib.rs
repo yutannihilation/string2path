@@ -14,7 +14,7 @@ enum ConversionType {
     Fill,
 }
 
-fn string2path_inner(
+fn string2any_family(
     text: &str,
     font_family: &str,
     font_weight: &str,
@@ -38,15 +38,35 @@ fn string2path_inner(
     result.try_into().unwrap()
 }
 
+fn string2any_file(
+    text: &str,
+    font_file: &str,
+    tolerance: f32,
+    line_width: f32,
+    ct: ConversionType,
+) -> Robj {
+    let mut builder = builder::LyonPathBuilder::new(tolerance, line_width);
+
+    builder.outline_from_file(text, font_file).unwrap();
+
+    let result = match ct {
+        ConversionType::Path => builder.into_path(),
+        ConversionType::Stroke => builder.into_stroke(),
+        ConversionType::Fill => builder.into_fill(),
+    };
+
+    result.try_into().unwrap()
+}
+
 #[extendr(use_try_from = true)]
-fn string2path_impl(
+fn string2path_family(
     text: &str,
     font_family: &str,
     font_weight: &str,
     font_style: &str,
     tolerance: f32,
 ) -> Robj {
-    string2path_inner(
+    string2any_family(
         text,
         font_family,
         font_weight,
@@ -58,7 +78,12 @@ fn string2path_impl(
 }
 
 #[extendr(use_try_from = true)]
-fn string2stroke_impl(
+fn string2path_file(text: &str, font_file: &str, tolerance: f32) -> Robj {
+    string2any_file(text, font_file, tolerance, 0., ConversionType::Path)
+}
+
+#[extendr(use_try_from = true)]
+fn string2stroke_family(
     text: &str,
     font_family: &str,
     font_weight: &str,
@@ -66,7 +91,7 @@ fn string2stroke_impl(
     tolerance: f32,
     line_width: f32,
 ) -> Robj {
-    string2path_inner(
+    string2any_family(
         text,
         font_family,
         font_weight,
@@ -78,14 +103,19 @@ fn string2stroke_impl(
 }
 
 #[extendr(use_try_from = true)]
-fn string2fill_impl(
+fn string2stroke_file(text: &str, font_file: &str, tolerance: f32, line_width: f32) -> Robj {
+    string2any_file(text, font_file, tolerance, line_width, ConversionType::Path)
+}
+
+#[extendr(use_try_from = true)]
+fn string2fill_family(
     text: &str,
     font_family: &str,
     font_weight: &str,
     font_style: &str,
     tolerance: f32,
 ) -> Robj {
-    string2path_inner(
+    string2any_family(
         text,
         font_family,
         font_weight,
@@ -94,6 +124,11 @@ fn string2fill_impl(
         0.,
         ConversionType::Fill,
     )
+}
+
+#[extendr(use_try_from = true)]
+fn string2fill_file(text: &str, font_file: &str, tolerance: f32) -> Robj {
+    string2any_file(text, font_file, tolerance, 0., ConversionType::Path)
 }
 
 #[extendr(use_try_from = true)]
@@ -158,9 +193,12 @@ fn dump_fontdb_impl() -> Robj {
 // See corresponding C code in `entrypoint.c`.
 extendr_module! {
     mod string2path;
-    fn string2path_impl;
-    fn string2stroke_impl;
-    fn string2fill_impl;
+    fn string2path_family;
+    fn string2path_file;
+    fn string2stroke_family;
+    fn string2stroke_file;
+    fn string2fill_family;
+    fn string2fill_file;
     fn dump_fontdb_impl;
 }
 

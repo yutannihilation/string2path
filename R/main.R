@@ -7,7 +7,8 @@
 #'
 #' @name string2path
 #' @param text A text to convert to paths.
-#' @param font_family A font family.
+#' @param font A font family (e.g. `"Arial"`) or a path to a font file (e.g.
+#'   `"path/to/font.ttf"`).
 #' @param font_weight A font weight.
 #' @param font_style A font style.
 #' @param tolerance Maximum distance allowed between the curve and its
@@ -65,58 +66,76 @@
 #' @export
 string2path <- function(
     text,
-    font_family,
+    font,
     font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold", "bold", "extra_bold", "black"),
     font_style = c("normal", "italic", "oblique"),
     tolerance = 0.00005
 ) {
-  validate_font_family(font_family, "string2path")
+  if (is_font_file(font)) {
+    if (!missing(font_weight) || !missing(font_style)) {
+      cli::cli_warn("{.arg font_weight} and {.arg font_style} are ignored when extracting a font file.")
+    }
 
-  font_weight <- match.arg(font_weight)
-  font_style <- match.arg(font_style)
+    font <- path.expand(font)
+    string2path_file(text, font, tolerance)
+  } else {
+    font_weight <- match.arg(font_weight)
+    font_style <- match.arg(font_style)
 
-  string2path_impl(text, font_family, font_weight, font_style, tolerance)
+    string2path_family(text, font, font_weight, font_style, tolerance)
+  }
 }
 
 #' @rdname string2path
 #' @export
 string2stroke <- function(
     text,
-    font_family,
+    font,
     font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold", "bold", "extra_bold", "black"),
     font_style = c("normal", "italic", "oblique"),
     tolerance = 0.00005,
     line_width = 0.03
 ) {
-  validate_font_family(font_family, "string2stroke")
+  if (is_font_file(font)) {
+    if (!missing(font_weight) || !missing(font_style)) {
+      cli::cli_warn("{.arg font_weight} and {.arg font_style} are ignored when extracting a font file.")
+    }
 
-  font_weight <- match.arg(font_weight)
-  font_style <- match.arg(font_style)
+    font <- path.expand(font)
+    string2stroke_file(text, font, tolerance, line_width)
+  } else {
+    font_weight <- match.arg(font_weight)
+    font_style <- match.arg(font_style)
 
-  string2stroke_impl(text, font_family, font_weight, font_style, tolerance, line_width)
+    string2stroke_family(text, font, font_weight, font_style, tolerance, line_width)
+  }
 }
 
 #' @rdname string2path
 #' @export
 string2fill <- function(
     text,
-    font_family,
+    font,
     font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold", "bold", "extra_bold", "black"),
     font_style = c("normal", "italic", "oblique"),
     tolerance = 0.00005
 ) {
-  validate_font_family(font_family, "string2fill")
+  if (is_font_file(font)) {
+    if (!missing(font_weight) || !missing(font_style)) {
+      cli::cli_warn("{.arg font_weight} and {.arg font_style} are ignored when extracting a font file.")
+    }
 
-  font_weight <- match.arg(font_weight)
-  font_style <- match.arg(font_style)
+    font <- path.expand(font)
+    string2fill_file(text, font, tolerance)
+  } else {
+    font_weight <- match.arg(font_weight)
+    font_style <- match.arg(font_style)
 
-  string2fill_impl(text, font_family, font_weight, font_style, tolerance)
+    string2fill_family(text, font, font_weight, font_style, tolerance)
+  }
 }
 
-validate_font_family <- function(font_family, call) {
-  if (isTRUE(grepl("\\.(ttf|otf)$", font_family))) {
-    cli::cli_abort(
-      "{.fun {call}} now uses a font family name (e.g. `\"Arial\"`), instead of the path to the font file."
-    )
-  }
+# Hope there's no fonts whose family name ends with .ttf or .otf!
+is_font_file <- function(x) {
+  isTRUE(endsWith(x, ".ttf") || endsWith(x, ".otf"))
 }
