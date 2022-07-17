@@ -10,6 +10,8 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/string2path)](https://CRAN.R-project.org/package=string2path)
+[![string2path status
+badge](https://yutannihilation.r-universe.dev/badges/string2path)](https://yutannihilation.r-universe.dev)
 <!-- badges: end -->
 
 The string2path R package converts a text to paths of the outlines of
