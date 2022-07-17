@@ -180,24 +180,12 @@ for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
   
   p <- ggplot(d) +
     geom_path(aes(x, y, group = path_id), colour = "black", linewidth = 0.5) +
-    geom_point(aes(x, y, group = path_id), colour = "black", linewidth = 1.5) +
+    geom_point(aes(x, y, group = path_id), colour = "black", size = 1.5) +
     theme_minimal() +
     coord_equal() +
     ggtitle(paste0("tolerance: ", tolerance))
   plot(p)
 }
-#> Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth = 1.5): Ignoring unknown parameters: `linewidth`
-#> Ignoring unknown parameters: `linewidth`
-#> Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =
-#> 1.5): Ignoring unknown parameters: `linewidth`
-#> Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =
-#> 1.5): Ignoring unknown parameters: `linewidth`
-#> Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =
-#> 1.5): Ignoring unknown parameters: `linewidth`
-#> Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =
-#> 1.5): Ignoring unknown parameters: `linewidth`
-#> Warning in geom_point(aes(x, y, group = path_id), colour = "black", linewidth =
-#> 1.5): Ignoring unknown parameters: `linewidth`
 ```
 
 <img src="man/figures/README-example4-.gif" width="100%" />
