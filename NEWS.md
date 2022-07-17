@@ -2,6 +2,8 @@
 
 ## Breaking changes
 
+* Drop support for R < 4.1.
+
 * Now all functions accepts **font family name** instead of the path to the
   actual font file. This is to support TTC file properly, which contains more
   than one fonts.  
