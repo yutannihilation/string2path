@@ -37,29 +37,35 @@
 #'
 #'   # string2path() converts a text to paths
 #'   d_path <- string2path("TEXT", family, weight, style)
-#'   plot(d_path$x, d_path$y)
-#'   for (p in split(d_path, d_path$path_id)) {
-#'     lines(p$x, p$y)
+#'   if (nrow(d_path) > 0) {
+#'     plot(d_path$x, d_path$y)
+#'     for (p in split(d_path, d_path$path_id)) {
+#'       lines(p$x, p$y)
+#'     }
 #'   }
 #'
 #'   # string2stroke() converts a text to strokes
 #'   d_stroke <- string2stroke("TEXT", family, weight, style)
-#'   plot(d_stroke$x, d_stroke$y)
+#'   if (nrow(d_stroke) > 0) {
+#'     plot(d_stroke$x, d_stroke$y)
 #'
-#'   # The stroke is split into triangles, which can be distinguished by `triangle_id`
-#'   set.seed(2)
-#'   for (p in split(d_stroke, d_stroke$triangle_id)) {
-#'     polygon(p$x, p$y, col = rgb(runif(1), runif(1), runif(1), 0.8))
+#'     # The stroke is split into triangles, which can be distinguished by `triangle_id`
+#'     set.seed(2)
+#'     for (p in split(d_stroke, d_stroke$triangle_id)) {
+#'       polygon(p$x, p$y, col = rgb(runif(1), runif(1), runif(1), 0.8))
+#'     }
 #'   }
 #'
 #'   # string2fill() converts a text to filled polygons
 #'   d_fill <- string2fill("TEXT", family, weight, style)
-#'   plot(d_fill$x, d_fill$y)
+#'   if (nrow(d_fill) > 0) {
+#'     plot(d_fill$x, d_fill$y)
 #'
-#'   # The polygon is split into triangles, which can be distinguished by `triangle_id`
-#'   set.seed(2)
-#'   for (p in split(d_fill, d_fill$triangle_id)) {
-#'     polygon(p$x, p$y, col = rgb(runif(1), runif(1), runif(1), 0.8))
+#'     # The polygon is split into triangles, which can be distinguished by `triangle_id`
+#'     set.seed(2)
+#'     for (p in split(d_fill, d_fill$triangle_id)) {
+#'       polygon(p$x, p$y, col = rgb(runif(1), runif(1), runif(1), 0.8))
+#'     }
 #'   }
 #' }
 #'
