@@ -13,10 +13,10 @@ Description: Extract glyph information from font data, and translate the
 License: MIT + file LICENSE
 Depends:
     R (>= 4.1)
-Imports: 
+Imports:
     tibble,
     cli
-Suggests: 
+Suggests:
     testthat (>= 3.0.0)
 URL: https://yutannihilation.github.io/string2path/, https://github.com/yutannihilation/string2path
 BugReports: https://github.com/yutannihilation/string2path/issues
