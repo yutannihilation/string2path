@@ -29,12 +29,12 @@ Config/testthat/edition: 3
 Config/string2path/MSRV: 1.56.0
 Config/string2path/crate_name: string2path
 Config/string2path/github_repo: yutannihilation/string2path
-Config/string2path/github_tag: build_20220717-3
+Config/string2path/github_tag: build_20220719-1
 Config/string2path/binary_sha256sum:
     list(
-        `aarch64-apple-darwin-libstring2path.a`       = "be85eff1a67b4cc2a4ec8d881242602fa2ff94910c05bbaeaf0fc19dcde57a3d",
-        `i686-pc-windows-gnu-libstring2path.a`        = "e5a1f923d1ef1a727fcdc3a9cfd5dd3768ce4bfb4d56ca1f74138d4a91c7d9e7",
-        `ucrt-x86_64-pc-windows-gnu-libstring2path.a` = "4845e8d3be8aff6366996b22d8e69fd0ffc87c41261026cd901d747e20ee62b6",
-        `x86_64-apple-darwin-libstring2path.a`        = "c9c10d2cc5cfffe466c08c27ec2f45323ea828d2492e61bcc95f092f43e33839",
-        `x86_64-pc-windows-gnu-libstring2path.a`      = "c212f6855df874c3ff2b544ef96d7fe180e81c3600cbfcf9ba9e37a30d557a01"
+        `aarch64-apple-darwin-libstring2path.a`       = "e8377c852c456b7538d75acebc03654b4b7d12bdfc59e410f3dd723103f0498a",
+        `i686-pc-windows-gnu-libstring2path.a`        = "d0b8d05ca4df4c80dc14d92c4298c20063866b6af1817303a8a9abf77928d85b",
+        `ucrt-x86_64-pc-windows-gnu-libstring2path.a` = "b63dfd9a3afce0ce11c5b324e9e7cbe8e6a6c7e8cb299287cc08831cc6a5074d",
+        `x86_64-apple-darwin-libstring2path.a`        = "864639b502a8a811574aa8e4190710396d26dffdada71dc178c374fa8547af4f",
+        `x86_64-pc-windows-gnu-libstring2path.a`      = "f2aab07d60d863e15ef44bca98389219b5d60f05e18509580b6634f8b3207840"
     )
