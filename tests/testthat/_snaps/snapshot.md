@@ -56,6 +56,7 @@
        9 -0.00131 0            0       0
       10  0.184   0.263        0       1
       # ... with 15 more rows
+      # i Use `print(n = ...)` to see more rows
 
 ---
 
@@ -76,6 +77,7 @@
        9 0.621 -0.0150        0       0           2
       10 0.326  0.626         0       0           3
       # ... with 140 more rows
+      # i Use `print(n = ...)` to see more rows
 
 ---
 
@@ -96,4 +98,5 @@
        9  0.184   0.263        0       1           2
       10  0.184   0.263        0       1           3
       # ... with 65 more rows
+      # i Use `print(n = ...)` to see more rows
 
