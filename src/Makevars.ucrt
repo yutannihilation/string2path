@@ -6,3 +6,11 @@ TOOLCHAIN = stable-gnu
 CARGO_LINKER = x86_64-w64-mingw32.static.posix-gcc.exe
 
 include Makevars.win
+
+$(LIBGCC_MOCK):
+	mkdir -p $@
+	cd $@ && \
+		touch gcc_mock.c && \
+		$(CXX) -c gcc_mock.c -o gcc_mock.o && \
+		$(AR) -r libgcc_eh.a gcc_mock.o && \
+		cp libgcc_eh.a libgcc_s.a

@@ -6,6 +6,7 @@ TARGET = $(subst /x64,x86_64,$(subst /i386,i686,$(R_ARCH)))-pc-windows-gnu
 TOOLCHAIN ?= stable-msvc
 
 LIBDIR = ./rust/target/$(TARGET)/release
+LIBGCC_MOCK = $(LIBDIR)/libgcc_mock
 PKG_LIBS = -L$(LIBDIR) -lstring2path -lws2_32 -ladvapi32 -luserenv -lbcrypt
 STATLIB = $(LIBDIR)/libstring2path.a
 
@@ -13,16 +14,12 @@ all: C_clean
 
 $(SHLIB): $(STATLIB)
 
-$(STATLIB):
-	mkdir -p $(LIBDIR)/libgcc_mock
-	cd $(LIBDIR)/libgcc_mock && \
-		touch gcc_mock.c && \
-		gcc -c gcc_mock.c -o gcc_mock.o && \
-		ar -r libgcc_eh.a gcc_mock.o && \
-		cp libgcc_eh.a libgcc_s.a
-
+$(STATLIB): $(LIBGCC_MOCK)
 	@BEFORE_CARGO_BUILD@ cargo +$(TOOLCHAIN) build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
 	@AFTER_CARGO_BUILD@
+
+%$(LIBGCC_MOCK):
+	mkdir -p $@
 
 C_clean:
 	rm -Rf $(SHLIB) $(OBJECTS) @CLEAN_EXTRA@
