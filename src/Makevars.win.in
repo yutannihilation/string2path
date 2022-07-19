@@ -18,7 +18,7 @@ $(STATLIB): $(LIBGCC_MOCK)
 	@BEFORE_CARGO_BUILD@ cargo +$(TOOLCHAIN) build --target=$(TARGET) --lib --release --manifest-path=./rust/Cargo.toml
 	@AFTER_CARGO_BUILD@
 
-%$(LIBGCC_MOCK):
+$(LIBGCC_MOCK):
 	mkdir -p $@
 
 C_clean:
