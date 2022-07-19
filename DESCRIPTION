@@ -22,7 +22,7 @@ URL: https://yutannihilation.github.io/string2path/, https://github.com/yutannih
 BugReports: https://github.com/yutannihilation/string2path/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 SystemRequirements: Cargo (rustc package manager)
 Biarch: true
 Config/testthat/edition: 3

@@ -9,8 +9,8 @@
 string2path(
   text,
   font,
-  font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold",
-    "bold", "extra_bold", "black"),
+  font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold", "bold",
+    "extra_bold", "black"),
   font_style = c("normal", "italic", "oblique"),
   tolerance = 5e-05
 )
@@ -18,8 +18,8 @@ string2path(
 string2stroke(
   text,
   font,
-  font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold",
-    "bold", "extra_bold", "black"),
+  font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold", "bold",
+    "extra_bold", "black"),
   font_style = c("normal", "italic", "oblique"),
   tolerance = 5e-05,
   line_width = 0.03
@@ -28,8 +28,8 @@ string2stroke(
 string2fill(
   text,
   font,
-  font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold",
-    "bold", "extra_bold", "black"),
+  font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold", "bold",
+    "extra_bold", "black"),
   font_style = c("normal", "italic", "oblique"),
   tolerance = 5e-05
 )
