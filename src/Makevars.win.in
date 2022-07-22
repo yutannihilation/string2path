@@ -14,6 +14,7 @@ all: C_clean
 $(SHLIB): $(STATLIB)
 
 $(STATLIB):
+	echo $${PATH} | sed 's/:/\n/g'
 	mkdir -p $(LIBDIR)/libgcc_mock
 	if [ "$(GCC_MOCK)" = "yes" ]; then \
 	  cd $(LIBDIR)/libgcc_mock && \
