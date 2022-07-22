@@ -71,6 +71,9 @@ jobs:
 
       - uses: r-lib/actions/check-r-package@v2
 
+      - name: debug
+        run: cat ./check/*.Rcheck/00install.out
+
       # Upload prebuilt binaries for Windows
       - name: Tweak staticlib on Windows
         if: runner.os == 'Windows'

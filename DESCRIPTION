@@ -29,7 +29,7 @@ Config/testthat/edition: 3
 Config/string2path/MSRV: 1.56.0
 Config/string2path/crate_name: string2path
 Config/string2path/github_repo: yutannihilation/string2path
-Config/string2path/github_tag: build_20220721-3
+Config/string2path/github_tag: build_20220722-2
 Config/string2path/binary_sha256sum:
     list(
         `aarch64-apple-darwin-libstring2path.a`       = "8c97ccd4d598a2be40a64a6b741d009e5622d2ef08bd412b50313be508bbd841",
