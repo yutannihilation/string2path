@@ -26,11 +26,12 @@ $(STATLIB):
 	    cp libgcc_eh.a libgcc_s.a; \
 	fi
 
-	# vendoring
+	# vendoring (Note: to avoid NOTE of "Found the following hidden files and
+	# directories", .cargo needs to be created here)
 	if [ "$(VENDORING)" = "yes" ]; then \
 	  $(TAR) --extract --xz -f ./rust/vendor.tar.xz -C ./rust && \
-	  mkdir -p ./rust/.cargo && \
-	  cp ./cargo_vendor_config.toml ./rust/.cargo/config.toml; \
+	    mkdir -p ./rust/.cargo && \
+	    cp ./cargo_vendor_config.toml ./rust/.cargo/config.toml; \
 	fi
 
 	@BEFORE_CARGO_BUILD@ cd ./rust && cargo +$(TOOLCHAIN) build --target=$(TARGET) --lib --release --offline
