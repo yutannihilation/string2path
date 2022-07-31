@@ -5,8 +5,10 @@
 /fonts
 
 src/.cargo
+src/rust/vendor/
 
 # Generated from src/Makevars.in
 src/Makevars
 src/Makevars.win
 docs
+

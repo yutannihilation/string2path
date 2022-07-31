@@ -9,6 +9,7 @@
 
 ^src/.cargo$
 ^src/rust/.vscode$
+^src/rust/vendor$
 ^src/Makevars.win$
 ^src/Makevars$
 
