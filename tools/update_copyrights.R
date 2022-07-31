@@ -1,12 +1,11 @@
 library(RcppTOML)
 
-manifests <- list.files("src/rust/vendor", pattern = "Cargo.toml", recursive = TRUE, full.names = TRUE)
+VENDOR_PATH <- "src/rust/vendor"
+manifests <- list.files(VENDOR_PATH, pattern = "Cargo.toml", recursive = TRUE)
 
-l <- lapply(manifests, \(x) RcppTOML::parseTOML(x)$package)
+l <- lapply(manifests, \(x) RcppTOML::parseTOML(file.path(VENDOR_PATH, x))$package)
 
 names <- vapply(l, \(x) x[["name"]], FUN.VALUE = character(1L))
-
-files <- paste0(dirname(manifests), "/*")
 
 authors <- vapply(l, \(x) {
   # Remove email addresses
@@ -16,11 +15,21 @@ authors <- vapply(l, \(x) {
 
 licenses <- vapply(l, \(x) x[["license"]], FUN.VALUE = character(1L))
 
+files <- paste0("vendor/", dirname(manifests), "/*")
+
 dir.create("inst", showWarnings = FALSE)
 
 cat("This package contains the Rust source code of the dependencies in src/rust/vendor.tar.xz
-The copyright information (the authors and the licenses) are listed below.
-'Files' field shows the paths after extraction.
+The authorships and the licenses are listed below. In summary, all libraries are
+distributed either under the MIT license or under MIT/Apache-2.0 dual license [1].
+
+Note that, when no Cargo (Rust’s build system and package manager) installation
+is found, the pre-compiled binary is downloaded on building this package. The
+binary is compiled using the same Rust code, so the authorships are the same.
+
+[1]: The unicode-indent library shows 'Unicode-DFS-2016', but it's not about the
+    Rust code in the library. Please refer to the License section of the README
+    (https://crates.io/crates/unicode-ident) for the details.
 
 ===============================
 
