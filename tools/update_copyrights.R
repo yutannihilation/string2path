@@ -23,9 +23,10 @@ cat("This package contains the Rust source code of the dependencies in src/rust/
 The authorships and the licenses are listed below. In summary, all libraries are
 distributed either under the MIT license or under MIT/Apache-2.0 dual license [1].
 
-Note that, when no Cargo (Rust’s build system and package manager) installation
-is found, the pre-compiled binary is downloaded on building this package. The
-binary is compiled using the same Rust code, so the authorships are the same.
+Note that, when Cargo (Rust’s build system and package manager) is not installed
+on the machine, the pre-compiled binary is downloaded on building this package.
+The binary is compiled using the same Rust code, so the authorships and the
+licenses are the same as listed here.
 
 [1]: The unicode-indent library shows 'Unicode-DFS-2016', but it's not about the
     Rust code in the library. Please refer to the License section of the README
