@@ -11,6 +11,7 @@ Description: Extract glyph information from font data, and translate the
     outline curves to flattened paths or tessellated polygons. The converted
     data is returned as a 'data.frame' in easy-to-plot format.
 License: MIT + file LICENSE
+Copyright: file inst/COPYRIGHTS
 Depends:
     R (>= 4.1)
 Imports:

@@ -1,0 +1,213 @@
+This package contains the Rust source code of the dependencies in src/rust/vendor.tar.xz
+The copyright information (the authors and the licenses) are listed below.
+'Files' field shows the paths after extraction.
+
+===============================
+
+Files:   src/rust/vendor/arrayvec/*
+Name:    arrayvec
+Authors: bluss
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/autocfg/*
+Name:    autocfg
+Authors: Josh Stone
+License: Apache-2.0 OR MIT
+
+------------------------------
+
+Files:   src/rust/vendor/cfg-if/*
+Name:    cfg-if
+Authors: Alex Crichton
+License: MIT/Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/euclid/*
+Name:    euclid
+Authors: The Servo Project Developers
+License: MIT / Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/extendr-api/*
+Name:    extendr-api
+Authors: andy-thomason, Thomas Down, Mossa Merhi Reimert, Claus O. Wilke, Hiroaki Yutani, Ilia A. Kosenkov
+License: MIT
+
+------------------------------
+
+Files:   src/rust/vendor/extendr-engine/*
+Name:    extendr-engine
+Authors: andy-thomason, Thomas Down, Mossa Merhi Reimert, Claus O. Wilke, Hiroaki Yutani, Ilia A. Kosenkov
+License: MIT
+
+------------------------------
+
+Files:   src/rust/vendor/extendr-macros/*
+Name:    extendr-macros
+Authors: andy-thomason, Thomas Down, Mossa Merhi Reimert, Claus O. Wilke, Hiroaki Yutani, Ilia A. Kosenkov
+License: MIT
+
+------------------------------
+
+Files:   src/rust/vendor/float_next_after/*
+Name:    float_next_after
+Authors: Bronson Brown-deVost
+License: MIT
+
+------------------------------
+
+Files:   src/rust/vendor/fontdb/*
+Name:    fontdb
+Authors: Evgeniy Reizner
+License: MIT
+
+------------------------------
+
+Files:   src/rust/vendor/lazy_static/*
+Name:    lazy_static
+Authors: Marvin Löbel
+License: MIT/Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/libc/*
+Name:    libc
+Authors: The Rust Project Developers
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/libR-sys/*
+Name:    libR-sys
+Authors: andy-thomason, Thomas Down, Mossa Merhi Reimert, Claus O. Wilke, Ilia Kosenkov, Hiroaki Yutani
+License: MIT
+
+------------------------------
+
+Files:   src/rust/vendor/log/*
+Name:    log
+Authors: The Rust Project Developers
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/lyon/*
+Name:    lyon
+Authors: Nicolas Silva
+License: MIT/Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/lyon_algorithms/*
+Name:    lyon_algorithms
+Authors: Nicolas Silva
+License: MIT/Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/lyon_geom/*
+Name:    lyon_geom
+Authors: Nicolas Silva
+License: MIT/Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/lyon_path/*
+Name:    lyon_path
+Authors: Nicolas Silva
+License: MIT/Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/lyon_tessellation/*
+Name:    lyon_tessellation
+Authors: Nicolas Silva
+License: MIT/Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/memmap2/*
+Name:    memmap2
+Authors: Dan Burkert, Yevhenii Reizner
+License: MIT/Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/num-traits/*
+Name:    num-traits
+Authors: The Rust Project Developers
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/once_cell/*
+Name:    once_cell
+Authors: Aleksey Kladov
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/paste/*
+Name:    paste
+Authors: David Tolnay
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/proc-macro2/*
+Name:    proc-macro2
+Authors: David Tolnay, Alex Crichton
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/quote/*
+Name:    quote
+Authors: David Tolnay
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/syn/*
+Name:    syn
+Authors: David Tolnay
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/ttf-parser/*
+Name:    ttf-parser
+Authors: Yevhenii Reizner
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/unicode-ident/*
+Name:    unicode-ident
+Authors: David Tolnay
+License: (MIT OR Apache-2.0) AND Unicode-DFS-2016
+
+------------------------------
+
+Files:   src/rust/vendor/winapi-i686-pc-windows-gnu/*
+Name:    winapi-i686-pc-windows-gnu
+Authors: Peter Atashian
+License: MIT/Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/winapi-x86_64-pc-windows-gnu/*
+Name:    winapi-x86_64-pc-windows-gnu
+Authors: Peter Atashian
+License: MIT/Apache-2.0
+
+------------------------------
+
+Files:   src/rust/vendor/winapi/*
+Name:    winapi
+Authors: Peter Atashian
+License: MIT/Apache-2.0

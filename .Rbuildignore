@@ -7,7 +7,7 @@
 ^\.github$
 ^fonts$
 
-^src/.cargo$
+^src/rust/.cargo$
 ^src/rust/.vscode$
 ^src/rust/vendor$
 ^src/Makevars.win$

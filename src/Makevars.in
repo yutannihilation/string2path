@@ -24,6 +24,6 @@ C_clean:
 	rm -Rf $(SHLIB) $(OBJECTS) ./rust/.cargo @CLEAN_EXTRA@
 
 clean:
-	rm -Rf $(SHLIB) $(OBJECTS) $(STATLIB) ./rust/.cargo ./rust/target
+	rm -Rf $(SHLIB) $(OBJECTS) $(STATLIB) ./rust/.cargo ./rust/vendor ./rust/target
 
 .PHONY: all C_clean clean
