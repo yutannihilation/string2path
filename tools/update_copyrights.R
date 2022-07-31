@@ -27,10 +27,10 @@ The copyright information (the authors and the licenses) are listed below.
 ", file = "inst/COPYRIGHTS")
 
 cat(paste(
-  "Files:   ", files,    "\n",
   "Name:    ", names,    "\n",
   "Authors: ", authors,  "\n",
   "License: ", licenses, "\n",
+  "Files:   ", files,    "\n",
   sep = "",
   collapse = "\n------------------------------\n\n"
 ), file = "inst/COPYRIGHTS", append = TRUE)
