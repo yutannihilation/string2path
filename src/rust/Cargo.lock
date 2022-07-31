@@ -32,7 +32,7 @@ dependencies = [
 [[package]]
 name = "extendr-api"
 version = "0.3.1"
-source = "git+https://github.com/yutannihilation/extendr.git?rev=bb9e905dd1aede43387b88b28b620e8411707e24#bb9e905dd1aede43387b88b28b620e8411707e24"
+source = "git+https://github.com/yutannihilation/extendr.git?rev=336583f340346119f67bdb4a173f9c70a011dfa6#336583f340346119f67bdb4a173f9c70a011dfa6"
 dependencies = [
  "extendr-engine",
  "extendr-macros",
@@ -44,7 +44,7 @@ dependencies = [
 [[package]]
 name = "extendr-engine"
 version = "0.3.1"
-source = "git+https://github.com/yutannihilation/extendr.git?rev=bb9e905dd1aede43387b88b28b620e8411707e24#bb9e905dd1aede43387b88b28b620e8411707e24"
+source = "git+https://github.com/yutannihilation/extendr.git?rev=336583f340346119f67bdb4a173f9c70a011dfa6#336583f340346119f67bdb4a173f9c70a011dfa6"
 dependencies = [
  "libR-sys",
 ]
@@ -52,7 +52,7 @@ dependencies = [
 [[package]]
 name = "extendr-macros"
 version = "0.3.1"
-source = "git+https://github.com/yutannihilation/extendr.git?rev=bb9e905dd1aede43387b88b28b620e8411707e24#bb9e905dd1aede43387b88b28b620e8411707e24"
+source = "git+https://github.com/yutannihilation/extendr.git?rev=336583f340346119f67bdb4a173f9c70a011dfa6#336583f340346119f67bdb4a173f9c70a011dfa6"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -88,7 +88,7 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 [[package]]
 name = "libR-sys"
 version = "0.3.0"
-source = "git+https://github.com/yutannihilation/libR-sys.git?rev=fdfb89328eb313cd6a6222991be94c9cff9fe73c#fdfb89328eb313cd6a6222991be94c9cff9fe73c"
+source = "git+https://github.com/yutannihilation/libR-sys.git?rev=b7dc6ac0449cf6905d60b281fff7b06655c1c9f3#b7dc6ac0449cf6905d60b281fff7b06655c1c9f3"
 
 [[package]]
 name = "libc"

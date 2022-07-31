@@ -7,11 +7,8 @@ edition = "2021"
 crate-type = ["staticlib"]
 
 [dependencies]
-extendr-api = { git = "https://github.com/yutannihilation/extendr.git", rev = "bb9e905dd1aede43387b88b28b620e8411707e24" }
+extendr-api = { git = "https://github.com/yutannihilation/extendr.git", rev = "336583f340346119f67bdb4a173f9c70a011dfa6" }
 fontdb = "0.9.1"
 lyon = "1.0"
 once_cell = "1.13.0"
 ttf-parser = "0.15"
-
-[patch.crates-io]
-libR-sys = { git = "https://github.com/yutannihilation/libR-sys.git", rev = "fdfb89328eb313cd6a6222991be94c9cff9fe73c" }
