@@ -13,3 +13,7 @@ tar \
   --create \
   --file=vendor.tar.xz \
   vendor
+
+echo "############################################"
+echo "  UPDATE src/cargo_vendor_config.toml !!!"
+echo "############################################"

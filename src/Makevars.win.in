@@ -5,6 +5,9 @@ TARGET = $(subst /x64,x86_64,$(subst /i386,i686,$(R_ARCH)))-pc-windows-gnu
 # This is provided in Makevars.ucrt for R >= 4.2
 TOOLCHAIN ?= stable-msvc
 
+# TODO
+VENDORING = yes
+
 LIBDIR = ./rust/target/$(TARGET)/release
 PKG_LIBS = -L$(LIBDIR) -lstring2path -lws2_32 -ladvapi32 -luserenv -lbcrypt
 STATLIB = $(LIBDIR)/libstring2path.a
@@ -17,19 +20,26 @@ $(STATLIB):
 	mkdir -p $(LIBDIR)/libgcc_mock
 	if [ "$(GCC_MOCK)" = "yes" ]; then \
 	  cd $(LIBDIR)/libgcc_mock && \
-		  touch gcc_mock.c && \
-		  $(CXX) -c gcc_mock.c -o gcc_mock.o && \
-		  $(AR) -r libgcc_eh.a gcc_mock.o && \
-		  cp libgcc_eh.a libgcc_s.a; \
+	    touch gcc_mock.c && \
+	    $(CXX) -c gcc_mock.c -o gcc_mock.o && \
+	    $(AR) -r libgcc_eh.a gcc_mock.o && \
+	    cp libgcc_eh.a libgcc_s.a; \
 	fi
-	$(TAR) --extract --xz -f ./rust/vendor.tar.xz -C ./rust
+
+	# vendoring
+	if [ "$(VENDORING)" = "yes" ]; then \
+	  $(TAR) --extract --xz -f ./rust/vendor.tar.xz -C ./rust && \
+	  mkdir -p ./rust/.cargo && \
+	  cp ./cargo_vendor_config.toml ./rust/.cargo/config.toml; \
+	fi
+
 	@BEFORE_CARGO_BUILD@ cd ./rust && cargo +$(TOOLCHAIN) build --target=$(TARGET) --lib --release --offline
 	@AFTER_CARGO_BUILD@
 
 C_clean:
-	rm -Rf $(SHLIB) $(OBJECTS) @CLEAN_EXTRA@
+	rm -Rf $(SHLIB) $(OBJECTS) ./rust/.cargo @CLEAN_EXTRA@
 
 clean:
-	rm -Rf $(SHLIB) $(OBJECTS) $(STATLIB) ./rust/target
+	rm -Rf $(SHLIB) $(OBJECTS) $(STATLIB) ./rust/.cargo ./rust/target
 
 .PHONY: all C_clean clean
