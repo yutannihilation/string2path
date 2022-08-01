@@ -110,6 +110,10 @@ jobs:
 
           (
             export LIBRSYS_R_VERSION="$(Rscript ./tools/print_r_version.R)"
+            # TODO: need to tweak libR-sys
+            export R_HOME="foo"
+            export R_INCLUDE_DIR="foo"
+
             . "${HOME}/.cargo/env"
             cd ./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/
             cargo build --target=aarch64-apple-darwin --lib --release --offline
