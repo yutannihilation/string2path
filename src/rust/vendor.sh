@@ -14,6 +14,10 @@ tar \
   --file=vendor.tar.xz \
   vendor
 
-echo "############################################"
-echo "  UPDATE src/cargo_vendor_config.toml !!!"
-echo "############################################"
+echo
+echo
+echo "#############################################"
+echo "#                                           #"
+echo "#  UPDATE src/cargo_vendor_config.toml !!!  #"
+echo "#                                           #"
+echo "#############################################"

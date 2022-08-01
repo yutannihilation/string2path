@@ -14,6 +14,7 @@ licenses are the same as listed here.
 ===============================
 
 Name:    arrayvec
+Version: 0.7.2
 Authors: bluss
 License: MIT OR Apache-2.0
 Files:   vendor/arrayvec/*
@@ -21,6 +22,7 @@ Files:   vendor/arrayvec/*
 ------------------------------
 
 Name:    autocfg
+Version: 1.1.0
 Authors: Josh Stone
 License: Apache-2.0 OR MIT
 Files:   vendor/autocfg/*
@@ -28,6 +30,7 @@ Files:   vendor/autocfg/*
 ------------------------------
 
 Name:    cfg-if
+Version: 1.0.0
 Authors: Alex Crichton
 License: MIT/Apache-2.0
 Files:   vendor/cfg-if/*
@@ -35,6 +38,7 @@ Files:   vendor/cfg-if/*
 ------------------------------
 
 Name:    euclid
+Version: 0.22.7
 Authors: The Servo Project Developers
 License: MIT / Apache-2.0
 Files:   vendor/euclid/*
@@ -42,6 +46,7 @@ Files:   vendor/euclid/*
 ------------------------------
 
 Name:    extendr-api
+Version: 0.3.1
 Authors: andy-thomason, Thomas Down, Mossa Merhi Reimert, Claus O. Wilke, Hiroaki Yutani, Ilia A. Kosenkov
 License: MIT
 Files:   vendor/extendr-api/*
@@ -49,6 +54,7 @@ Files:   vendor/extendr-api/*
 ------------------------------
 
 Name:    extendr-engine
+Version: 0.3.1
 Authors: andy-thomason, Thomas Down, Mossa Merhi Reimert, Claus O. Wilke, Hiroaki Yutani, Ilia A. Kosenkov
 License: MIT
 Files:   vendor/extendr-engine/*
@@ -56,6 +62,7 @@ Files:   vendor/extendr-engine/*
 ------------------------------
 
 Name:    extendr-macros
+Version: 0.3.1
 Authors: andy-thomason, Thomas Down, Mossa Merhi Reimert, Claus O. Wilke, Hiroaki Yutani, Ilia A. Kosenkov
 License: MIT
 Files:   vendor/extendr-macros/*
@@ -63,6 +70,7 @@ Files:   vendor/extendr-macros/*
 ------------------------------
 
 Name:    float_next_after
+Version: 0.1.5
 Authors: Bronson Brown-deVost
 License: MIT
 Files:   vendor/float_next_after/*
@@ -70,6 +78,7 @@ Files:   vendor/float_next_after/*
 ------------------------------
 
 Name:    fontdb
+Version: 0.9.1
 Authors: Evgeniy Reizner
 License: MIT
 Files:   vendor/fontdb/*
@@ -77,6 +86,7 @@ Files:   vendor/fontdb/*
 ------------------------------
 
 Name:    lazy_static
+Version: 1.4.0
 Authors: Marvin Löbel
 License: MIT/Apache-2.0
 Files:   vendor/lazy_static/*
@@ -84,6 +94,7 @@ Files:   vendor/lazy_static/*
 ------------------------------
 
 Name:    libc
+Version: 0.2.126
 Authors: The Rust Project Developers
 License: MIT OR Apache-2.0
 Files:   vendor/libc/*
@@ -91,6 +102,7 @@ Files:   vendor/libc/*
 ------------------------------
 
 Name:    libR-sys
+Version: 0.3.0
 Authors: andy-thomason, Thomas Down, Mossa Merhi Reimert, Claus O. Wilke, Ilia Kosenkov, Hiroaki Yutani
 License: MIT
 Files:   vendor/libR-sys/*
@@ -98,6 +110,7 @@ Files:   vendor/libR-sys/*
 ------------------------------
 
 Name:    log
+Version: 0.4.17
 Authors: The Rust Project Developers
 License: MIT OR Apache-2.0
 Files:   vendor/log/*
@@ -105,6 +118,7 @@ Files:   vendor/log/*
 ------------------------------
 
 Name:    lyon
+Version: 1.0.0
 Authors: Nicolas Silva
 License: MIT/Apache-2.0
 Files:   vendor/lyon/*
@@ -112,6 +126,7 @@ Files:   vendor/lyon/*
 ------------------------------
 
 Name:    lyon_algorithms
+Version: 1.0.0
 Authors: Nicolas Silva
 License: MIT/Apache-2.0
 Files:   vendor/lyon_algorithms/*
@@ -119,6 +134,7 @@ Files:   vendor/lyon_algorithms/*
 ------------------------------
 
 Name:    lyon_geom
+Version: 1.0.1
 Authors: Nicolas Silva
 License: MIT/Apache-2.0
 Files:   vendor/lyon_geom/*
@@ -126,6 +142,7 @@ Files:   vendor/lyon_geom/*
 ------------------------------
 
 Name:    lyon_path
+Version: 1.0.0
 Authors: Nicolas Silva
 License: MIT/Apache-2.0
 Files:   vendor/lyon_path/*
@@ -133,6 +150,7 @@ Files:   vendor/lyon_path/*
 ------------------------------
 
 Name:    lyon_tessellation
+Version: 1.0.1
 Authors: Nicolas Silva
 License: MIT/Apache-2.0
 Files:   vendor/lyon_tessellation/*
@@ -140,6 +158,7 @@ Files:   vendor/lyon_tessellation/*
 ------------------------------
 
 Name:    memmap2
+Version: 0.5.5
 Authors: Dan Burkert, Yevhenii Reizner
 License: MIT/Apache-2.0
 Files:   vendor/memmap2/*
@@ -147,6 +166,7 @@ Files:   vendor/memmap2/*
 ------------------------------
 
 Name:    num-traits
+Version: 0.2.15
 Authors: The Rust Project Developers
 License: MIT OR Apache-2.0
 Files:   vendor/num-traits/*
@@ -154,6 +174,7 @@ Files:   vendor/num-traits/*
 ------------------------------
 
 Name:    once_cell
+Version: 1.13.0
 Authors: Aleksey Kladov
 License: MIT OR Apache-2.0
 Files:   vendor/once_cell/*
@@ -161,6 +182,7 @@ Files:   vendor/once_cell/*
 ------------------------------
 
 Name:    paste
+Version: 1.0.7
 Authors: David Tolnay
 License: MIT OR Apache-2.0
 Files:   vendor/paste/*
@@ -168,6 +190,7 @@ Files:   vendor/paste/*
 ------------------------------
 
 Name:    proc-macro2
+Version: 1.0.40
 Authors: David Tolnay, Alex Crichton
 License: MIT OR Apache-2.0
 Files:   vendor/proc-macro2/*
@@ -175,6 +198,7 @@ Files:   vendor/proc-macro2/*
 ------------------------------
 
 Name:    quote
+Version: 1.0.20
 Authors: David Tolnay
 License: MIT OR Apache-2.0
 Files:   vendor/quote/*
@@ -182,6 +206,7 @@ Files:   vendor/quote/*
 ------------------------------
 
 Name:    syn
+Version: 1.0.98
 Authors: David Tolnay
 License: MIT OR Apache-2.0
 Files:   vendor/syn/*
@@ -189,6 +214,7 @@ Files:   vendor/syn/*
 ------------------------------
 
 Name:    ttf-parser
+Version: 0.15.2
 Authors: Yevhenii Reizner
 License: MIT OR Apache-2.0
 Files:   vendor/ttf-parser/*
@@ -196,6 +222,7 @@ Files:   vendor/ttf-parser/*
 ------------------------------
 
 Name:    unicode-ident
+Version: 1.0.2
 Authors: David Tolnay
 License: (MIT OR Apache-2.0) AND Unicode-DFS-2016
 Files:   vendor/unicode-ident/*

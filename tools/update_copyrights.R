@@ -6,6 +6,7 @@ manifests <- list.files(VENDOR_PATH, pattern = "Cargo.toml", recursive = TRUE)
 l <- lapply(manifests, \(x) RcppTOML::parseTOML(file.path(VENDOR_PATH, x))$package)
 
 names <- vapply(l, \(x) x[["name"]], FUN.VALUE = character(1L))
+versions <- vapply(l, \(x) x[["version"]], FUN.VALUE = character(1L))
 
 authors <- vapply(l, \(x) {
   # Remove email addresses
@@ -38,6 +39,7 @@ licenses are the same as listed here.
 
 cat(paste(
   "Name:    ", names,    "\n",
+  "Version: ", versions, "\n",
   "Authors: ", authors,  "\n",
   "License: ", licenses, "\n",
   "Files:   ", files,    "\n",
