@@ -16,8 +16,6 @@ authors <- vapply(l, \(x) {
 
 licenses <- vapply(l, \(x) x[["license"]], FUN.VALUE = character(1L))
 
-files <- paste0("vendor/", dirname(manifests), "/*")
-
 dir.create("inst", showWarnings = FALSE)
 
 cat("This package contains the Rust source code of the dependencies in src/rust/vendor.tar.xz
@@ -30,8 +28,8 @@ The binary is compiled using the same Rust code, so the authorships and the
 licenses are the same as listed here.
 
 [1]: The unicode-indent library shows 'Unicode-DFS-2016', but it's not about the
-    Rust code in the library. Please refer to the License section of the README
-    (https://crates.io/crates/unicode-ident) for the details.
+    Rust code in the library. Please refer to the License section of the library's
+    README (https://crates.io/crates/unicode-ident) for the details.
 
 ===============================
 
@@ -42,7 +40,6 @@ cat(paste(
   "Version: ", versions, "\n",
   "Authors: ", authors,  "\n",
   "License: ", licenses, "\n",
-  "Files:   ", files,    "\n",
   sep = "",
   collapse = "\n------------------------------\n\n"
 ), file = "inst/COPYRIGHTS", append = TRUE)
