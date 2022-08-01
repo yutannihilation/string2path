@@ -107,9 +107,11 @@ jobs:
 
           # For M1 macOS
           rustup target add aarch64-apple-darwin
-          $env:LIBRSYS_R_VERSION="$(Rscript ./tools/print_r_version.R)" && `
-            . "${HOME}/.cargo/env" && `
-            cargo build --target=aarch64-apple-darwin --lib --release --manifest-path=./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/Cargo.toml
+
+          $env:LIBRSYS_R_VERSION="$(Rscript ./tools/print_r_version.R)"
+          echo $env:LIBRSYS_R_VERSION
+          . "${HOME}/.cargo/env" && cargo build --target=aarch64-apple-darwin --lib --release --manifest-path=./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/Cargo.toml
+
           mv ./check/string2path.Rcheck/00_pkg_src/string2path/src/rust/target/aarch64-apple-darwin/release/libstring2path.a staticlib/aarch64-apple-darwin-libstring2path.a
 
           ls ./staticlib
