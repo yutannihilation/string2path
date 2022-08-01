@@ -21,3 +21,5 @@
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
 ^CRAN-RELEASE$
+
+^check$
