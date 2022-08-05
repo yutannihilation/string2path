@@ -23,3 +23,5 @@
 ^CRAN-RELEASE$
 
 ^check$
+
+^update_authors\.R$
