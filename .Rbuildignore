@@ -3,7 +3,7 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^README\.md$
-^man/figures/README-.*$
+^man/figures/.*$
 ^\.github$
 ^fonts$
 
