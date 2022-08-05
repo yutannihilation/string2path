@@ -8,12 +8,12 @@ Authors@R:
              email = "yutani.ini@gmail.com",
              comment = c(ORCID = "0000-0002-3385-7233")),
       person(given = "The authors of the dependency Rust crates",
-             role = c("cph")))
+             role = c("ctb"),
+             comment = "see inst/AUTHORS file for details"))
 Description: Extract glyph information from font data, and translate the
     outline curves to flattened paths or tessellated polygons. The converted
     data is returned as a 'data.frame' in easy-to-plot format.
 License: MIT + file LICENSE
-Copyright: file inst/COPYRIGHTS
 Depends:
     R (>= 4.1)
 Imports:
