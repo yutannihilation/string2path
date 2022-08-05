@@ -57,7 +57,8 @@ jobs:
       - name: Additional Rust set up for Windows (R < 4.2)
         if: runner.os == 'Windows' && matrix.config.r == 'oldrel'
         run: |
-          sed -i "s/-lbcrypt//" src/Makevars.win.in
+          sed -i -e "s/-lbcrypt//" "s/stable-msvc/${{ matrix.config.rust }}/" src/Makevars.win.in
+          cat src/Makevars.win.in
           rustup target add i686-pc-windows-gnu
           rustup target add x86_64-pc-windows-gnu
 
