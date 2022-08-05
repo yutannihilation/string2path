@@ -1,5 +1,7 @@
+LIBRSYS_R_VERSION=$("${R_HOME}/bin/Rscript" "./tools/print_r_version.R")
+
 # Variables used for tweaking Makevars
-BEFORE_CARGO_BUILD=''
+BEFORE_CARGO_BUILD="export LIBRSYS_R_VERSION=\"${LIBRSYS_R_VERSION}\" \\&\\&"
 AFTER_CARGO_BUILD=''
 CLEAN_EXTRA=''
 

@@ -3,12 +3,14 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^README\.md$
-^man/figures/README-.*$
+^man/figures/.*$
 ^\.github$
 ^fonts$
 
 ^src/.cargo$
+^src/rust/.cargo$
 ^src/rust/.vscode$
+^src/rust/vendor$
 ^src/Makevars.win$
 ^src/Makevars$
 
@@ -19,3 +21,7 @@
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
 ^CRAN-RELEASE$
+
+^check$
+
+^update_authors\.R$

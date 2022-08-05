@@ -2,11 +2,14 @@ Package: string2path
 Title: Rendering Font into 'data.frame'
 Version: 0.1.0.9000
 Authors@R: 
-    person(given = "Hiroaki",
-           family = "Yutani",
-           role = c("aut", "cre"),
-           email = "yutani.ini@gmail.com",
-           comment = c(ORCID = "0000-0002-3385-7233"))
+    c(person(given = "Hiroaki",
+             family = "Yutani",
+             role = c("aut", "cre"),
+             email = "yutani.ini@gmail.com",
+             comment = c(ORCID = "0000-0002-3385-7233")),
+      person(given = "The authors of the dependency Rust crates",
+             role = c("ctb"),
+             comment = "see inst/AUTHORS file for details"))
 Description: Extract glyph information from font data, and translate the
     outline curves to flattened paths or tessellated polygons. The converted
     data is returned as a 'data.frame' in easy-to-plot format.
@@ -29,12 +32,12 @@ Config/testthat/edition: 3
 Config/string2path/MSRV: 1.56.0
 Config/string2path/crate_name: string2path
 Config/string2path/github_repo: yutannihilation/string2path
-Config/string2path/github_tag: build_20220722-2
+Config/string2path/github_tag: build_20220801-11
 Config/string2path/binary_sha256sum:
     list(
-        `aarch64-apple-darwin-libstring2path.a`       = "8c97ccd4d598a2be40a64a6b741d009e5622d2ef08bd412b50313be508bbd841",
-        `i686-pc-windows-gnu-libstring2path.a`        = "412c98c640a54d5699bb7c6e11556ee44621532dbba30e3a4e24807205380f90",
-        `ucrt-x86_64-pc-windows-gnu-libstring2path.a` = "4512d850269880f9a9dd5ceeabf32a61dcc831e0e46ab1556f68dcf3272f1413",
-        `x86_64-apple-darwin-libstring2path.a`        = "339fb0ce0fe8ad2adf2da6d3038ed9d3b446ade8cfc3e3c88ed06902b675397c",
-        `x86_64-pc-windows-gnu-libstring2path.a`      = "ad9eb6aee32780bbd0c162a14929234b07da30c3c2b54361ef52db57cdc52d9d"
+        `aarch64-apple-darwin-libstring2path.a`       = "be9395c67fa3b215197ac4144b325c07d74265a679a03aa52197139baccbb6d7",
+        `i686-pc-windows-gnu-libstring2path.a`        = "1851c29a1278fd39d88cce8fcd2a15bc0281c7de52d49fd199ee05aee6f9f2c1",
+        `ucrt-x86_64-pc-windows-gnu-libstring2path.a` = "d79795b3282fddf0b180e7effa67143cd21efa1bae48a84c70f9628103b7ebad",
+        `x86_64-apple-darwin-libstring2path.a`        = "761bea016437230213353e8882821b7bbe411c3b3c8e4774d78a251041279d16",
+        `x86_64-pc-windows-gnu-libstring2path.a`      = "fe3ae7c9e9feadecee39b4f264141675e6a31cc388480af9897dc53f453b8dd9"
     )

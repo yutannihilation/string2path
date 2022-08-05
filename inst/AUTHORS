@@ -1,0 +1,104 @@
+The authors of the dependency Rust crates:
+
+arrayvec (version 0.7.2):
+  bluss
+
+autocfg (version 1.1.0):
+  Josh Stone
+
+cfg-if (version 1.0.0):
+  Alex Crichton
+
+euclid (version 0.22.7):
+  The Servo Project Developers
+
+extendr-api (version 0.3.1):
+  andy-thomason
+  Thomas Down
+  Mossa Merhi Reimert
+  Claus O. Wilke
+  Hiroaki Yutani
+  Ilia A. Kosenkov
+
+extendr-engine (version 0.3.1):
+  andy-thomason
+  Thomas Down
+  Mossa Merhi Reimert
+  Claus O. Wilke
+  Hiroaki Yutani
+  Ilia A. Kosenkov
+
+extendr-macros (version 0.3.1):
+  andy-thomason
+  Thomas Down
+  Mossa Merhi Reimert
+  Claus O. Wilke
+  Hiroaki Yutani
+  Ilia A. Kosenkov
+
+float_next_after (version 0.1.5):
+  Bronson Brown-deVost
+
+fontdb (version 0.9.1):
+  Evgeniy Reizner
+
+lazy_static (version 1.4.0):
+  Marvin Löbel
+
+libc (version 0.2.126):
+  The Rust Project Developers
+
+libR-sys (version 0.3.0):
+  andy-thomason
+  Thomas Down
+  Mossa Merhi Reimert
+  Claus O. Wilke
+  Ilia Kosenkov
+  Hiroaki Yutani
+
+log (version 0.4.17):
+  The Rust Project Developers
+
+lyon (version 1.0.0):
+  Nicolas Silva
+
+lyon_algorithms (version 1.0.0):
+  Nicolas Silva
+
+lyon_geom (version 1.0.1):
+  Nicolas Silva
+
+lyon_path (version 1.0.0):
+  Nicolas Silva
+
+lyon_tessellation (version 1.0.1):
+  Nicolas Silva
+
+memmap2 (version 0.5.5):
+  Dan Burkert
+  Yevhenii Reizner
+
+num-traits (version 0.2.15):
+  The Rust Project Developers
+
+once_cell (version 1.13.0):
+  Aleksey Kladov
+
+paste (version 1.0.7):
+  David Tolnay
+
+proc-macro2 (version 1.0.40):
+  David Tolnay
+  Alex Crichton
+
+quote (version 1.0.20):
+  David Tolnay
+
+syn (version 1.0.98):
+  David Tolnay
+
+ttf-parser (version 0.15.2):
+  Yevhenii Reizner
+
+unicode-ident (version 1.0.2):
+  David Tolnay

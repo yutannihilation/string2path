@@ -20,10 +20,8 @@ jobs:
         config:
           - {os: windows-latest, r: 'release', rtools-version: '42'}
           - {os: windows-latest, r: 'devel',   rtools-version: '42'}
-          - {os: windows-latest, r: 'devel',   rtools-version: '42'}
-          - {os: windows-latest, r: 'oldrel'}
+          - {os: windows-latest, r: 'oldrel' }
           - {os: macOS-latest,   r: 'release'}
-          # TODO: test M1 macOS
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
