@@ -22,7 +22,7 @@ jobs:
         config:
           - {os: windows-latest, r: 'release',  rust: 'stable-gnu', rtools-version: '42'}
           - {os: windows-latest, r: 'devel',    rust: 'stable-gnu', rtools-version: '42'}
-          - {os: windows-latest, r: 'oldrel',   rust: 'stable-msvc'}
+          - {os: windows-latest, r: 'oldrel',   rust: '1.56.1-msvc'}
           - {os: macOS-latest,   r: 'release',  rust: 'stable'     }
           - {os: ubuntu-20.04,   r: 'release',  rust: 'stable'     }
           - {os: ubuntu-20.04,   r: 'devel',    rust: 'stable'     }
@@ -38,13 +38,13 @@ jobs:
 
       - name: Set up Rust
         if: runner.os != 'Windows' || matrix.config.r != 'oldrel'
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.config.rust }}
 
       - name: Set up Rust for Windows (R < 4.2)
         if: runner.os == 'Windows' && matrix.config.r == 'oldrel'
-        uses: dtolnay/rust-toolchain@1.56.1
+        uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.config.rust }}
 
