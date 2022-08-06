@@ -1,5 +1,12 @@
 # string2path (development version)
 
+* This is a maintenance release to fix some mistakes pointed by the CRAN
+  maintainer.
+
+## Breaking changes
+
+* Drop support for R < 4.2.
+
 # string2path 0.1.0
 
 ## Breaking changes
