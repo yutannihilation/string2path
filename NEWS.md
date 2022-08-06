@@ -1,4 +1,4 @@
-# string2path (development version)
+# string2path 0.1.1
 
 * This is a maintenance release to fix some mistakes pointed by the CRAN
   maintainer.
