@@ -22,7 +22,7 @@ $(STATLIB):
 	@AFTER_CARGO_BUILD@
 
 C_clean:
-	rm -Rf $(SHLIB) $(OBJECTS) ./rust/.cargo @CLEAN_EXTRA@
+	rm -Rf $(SHLIB) $(OBJECTS) ./rust/.cargo $(STATLIB)
 
 clean:
 	rm -Rf $(SHLIB) $(OBJECTS) $(STATLIB) ./rust/.cargo ./rust/vendor ./rust/target
