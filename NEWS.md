@@ -1,3 +1,5 @@
+# string2path (development version)
+
 # string2path 0.1.2
 
 * This is a maintenance release to disable downloading pre-compiled binaries in
