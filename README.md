@@ -19,27 +19,24 @@ each glyph, based on a font data. Under the hood, this package is
 powered by [extendr](https://extendr.github.io/) framework to use these
 two Rust crates:
 
--   [ttf-parser](https://github.com/RazrFalcon/ttf-parser) for parsing
-    font data. TrueType font (`.ttf`) and OpenType font (`.otf`) are
-    supported.
--   [lyon](https://github.com/nical/lyon/) for tessellation of polygons
-    and flattening the curves.
+- [ttf-parser](https://github.com/RazrFalcon/ttf-parser) for parsing
+  font data. TrueType font (`.ttf`) and OpenType font (`.otf`) are
+  supported.
+- [lyon](https://github.com/nical/lyon/) for tessellation of polygons
+  and flattening the curves.
 
 ## Installation
 
-If you are using macOS or Windows, you are lucky. Since this repository
-provides the pre-compiled binary for you, you don’t need to install Rust
-toolchains!
-
-Otherwise (i.e. Linux), you need to have Rust toolchain installed before
-trying to install this package. See
-<https://www.rust-lang.org/tools/install> for the installation
-instructions.
-
 ``` r
 install.packages("string2path")
+```
 
-# Or the development version from r-universe:
+### Development version
+
+The development version is available on
+[R-universe](https://r-universe.dev/):
+
+``` r
 install.packages("string2path",
   repos = c(
     yutannihilation = "https://yutannihilation.r-universe.dev",
@@ -47,6 +44,11 @@ install.packages("string2path",
   )
 )
 ```
+
+If you want to install from source, you need to have Rust toolchain
+installed before trying to install this package. See
+<https://www.rust-lang.org/tools/install> for the installation
+instructions.
 
 ## Example
 
@@ -97,7 +99,7 @@ style (e.g. `"italic"`).
 
 ``` r
 dump_fontdb()
-#> # A tibble: 447 × 5
+#> # A tibble: 448 × 5
 #>    source                                  index family        weight style 
 #>    <chr>                                   <dbl> <chr>         <chr>  <chr> 
 #>  1 "C:\\Windows\\Fonts\\arial.ttf"             0 Arial         normal normal
@@ -110,8 +112,7 @@ dump_fontdb()
 #>  8 "C:\\Windows\\Fonts\\BIZ-UDGothicB.ttc"     1 BIZ UDPGothic bold   normal
 #>  9 "C:\\Windows\\Fonts\\BIZ-UDGothicR.ttc"     0 BIZ UDGothic  normal normal
 #> 10 "C:\\Windows\\Fonts\\BIZ-UDGothicR.ttc"     1 BIZ UDPGothic normal normal
-#> # … with 437 more rows
-#> # ℹ Use `print(n = ...)` to see more rows
+#> # … with 438 more rows
 ```
 
 You can also specify the font file directly. Pomicons is a font
