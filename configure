@@ -1,9 +1,9 @@
+# The envvar used in libR-sys crate
 LIBRSYS_R_VERSION=$("${R_HOME}/bin/Rscript" "./tools/print_r_version.R")
 
 # Variables used for tweaking Makevars
 BEFORE_CARGO_BUILD="export LIBRSYS_R_VERSION=\"${LIBRSYS_R_VERSION}\" \\&\\&"
 AFTER_CARGO_BUILD=''
-CLEAN_EXTRA=''
 
 # Even when `cargo` is on `PATH`, `rustc` might not. We need to source
 # ~/.cargo/env to ensure PATH is configured correctly in some cases
@@ -15,27 +15,14 @@ if [ -e "${HOME}/.cargo/env" ]; then
   BEFORE_CARGO_BUILD="${BEFORE_CARGO_BUILD} . \"${HOME}/.cargo/env\" \\&\\&"
 fi
 
-# Check the Rust installation, and, if not available, try downloading the
-# precompiled binary.
+# Check the Rust installation, and abort if not available
 "${R_HOME}/bin/Rscript" "./tools/configure.R"
 
 ret=$?
 
-case $ret in
-  # The case when Rust is available
-  0)
-    CLEAN_EXTRA='$(STATLIB)'
-    ;;
-
-  # The case when the precompiled binary is used
-  100)
-    ;;
-
-  # The case when both Rust and the precompiled binary are unavailable (or the
-  # R script failed some unexpected error)
-  *)
-    exit $ret
-esac
+if [ $ret -ne 0 ]; then
+  exit $ret
+fi
 
 # If it's on CRAN, a package is not allowed to write in any other place than the
 # temporary directory on installation. So, we need to tweak Makevars to make the
@@ -48,7 +35,6 @@ else
 fi
 
 sed \
-  -e "s|@CLEAN_EXTRA@|${CLEAN_EXTRA}|" \
   -e "s|@BEFORE_CARGO_BUILD@|${BEFORE_CARGO_BUILD}|" \
   -e "s|@AFTER_CARGO_BUILD@|${AFTER_CARGO_BUILD}|" \
   src/Makevars.in > src/Makevars

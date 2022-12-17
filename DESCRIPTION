@@ -15,7 +15,7 @@ Description: Extract glyph information from font data, and translate the
     data is returned as a 'data.frame' in easy-to-plot format.
 License: MIT + file LICENSE
 Depends:
-    R (>= 4.1)
+    R (>= 4.2)
 Imports:
     tibble,
     cli
@@ -30,14 +30,3 @@ SystemRequirements: Cargo (rustc package manager)
 Biarch: true
 Config/testthat/edition: 3
 Config/string2path/MSRV: 1.56.0
-Config/string2path/crate_name: string2path
-Config/string2path/github_repo: yutannihilation/string2path
-Config/string2path/github_tag: build_20220801-11
-Config/string2path/binary_sha256sum:
-    list(
-        `aarch64-apple-darwin-libstring2path.a`       = "be9395c67fa3b215197ac4144b325c07d74265a679a03aa52197139baccbb6d7",
-        `i686-pc-windows-gnu-libstring2path.a`        = "1851c29a1278fd39d88cce8fcd2a15bc0281c7de52d49fd199ee05aee6f9f2c1",
-        `ucrt-x86_64-pc-windows-gnu-libstring2path.a` = "d79795b3282fddf0b180e7effa67143cd21efa1bae48a84c70f9628103b7ebad",
-        `x86_64-apple-darwin-libstring2path.a`        = "761bea016437230213353e8882821b7bbe411c3b3c8e4774d78a251041279d16",
-        `x86_64-pc-windows-gnu-libstring2path.a`      = "fe3ae7c9e9feadecee39b4f264141675e6a31cc388480af9897dc53f453b8dd9"
-    )

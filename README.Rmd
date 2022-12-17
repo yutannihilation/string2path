@@ -32,17 +32,15 @@ Under the hood, this package is powered by [extendr](https://extendr.github.io/)
 
 ## Installation
 
-If you are using macOS or Windows, you are lucky. Since this repository provides
-the pre-compiled binary for you, you don't need to install Rust toolchains!
-
-Otherwise (i.e. Linux), you need to have Rust toolchain installed before trying
-to install this package.  See <https://www.rust-lang.org/tools/install> for the
-installation instructions. 
-
 ``` r
 install.packages("string2path")
+```
 
-# Or the development version from r-universe:
+### Development version
+
+The development version is available on [R-universe](https://r-universe.dev/):
+
+``` r
 install.packages("string2path",
   repos = c(
     yutannihilation = "https://yutannihilation.r-universe.dev",
@@ -50,6 +48,10 @@ install.packages("string2path",
   )
 )
 ```
+
+If you want to install from source, you need to have Rust toolchain installed
+before trying to install this package.  See <https://www.rust-lang.org/tools/install>
+for the installation instructions.
 
 ## Example
 
