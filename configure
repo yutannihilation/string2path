@@ -15,8 +15,7 @@ if [ -e "${HOME}/.cargo/env" ]; then
   BEFORE_CARGO_BUILD="${BEFORE_CARGO_BUILD} . \"${HOME}/.cargo/env\" \\&\\&"
 fi
 
-# Check the Rust installation, and, if not available, try downloading the
-# precompiled binary.
+# Check the Rust installation, and abort if not available
 "${R_HOME}/bin/Rscript" "./tools/configure.R"
 
 ret=$?
@@ -27,12 +26,7 @@ case $ret in
     CLEAN_EXTRA='$(STATLIB)'
     ;;
 
-  # The case when the precompiled binary is used
-  100)
-    ;;
-
-  # The case when both Rust and the precompiled binary are unavailable (or the
-  # R script failed some unexpected error)
+  # The case when the Rust is unavailable (or some unexpected error happened)
   *)
     exit $ret
 esac

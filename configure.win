@@ -5,8 +5,7 @@ BEFORE_CARGO_BUILD="export LIBRSYS_R_VERSION=\"${LIBRSYS_R_VERSION}\" \\&\\&"
 AFTER_CARGO_BUILD=''
 CLEAN_EXTRA=''
 
-# Check the Rust installation, and, if not available, try downloading the
-# precompiled binary.
+# Check the Rust installation, and abort if not available
 "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "./tools/configure.R"
 
 ret=$?
@@ -21,8 +20,7 @@ case $ret in
   100)
     ;;
 
-  # The case when both Rust and the precompiled binary are unavailable (or the
-  # R script failed some unexpected error)
+  # The case when the Rust is unavailable (or some unexpected error happened)
   *)
     exit $ret
 esac

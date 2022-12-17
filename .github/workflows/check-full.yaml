@@ -29,8 +29,6 @@ jobs:
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      # used in tools/configure_utils.sh
-      ABORT_WHEN_NO_CARGO: "true"
 
     steps:
       - uses: actions/checkout@v2
