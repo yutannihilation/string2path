@@ -1,3 +1,4 @@
+# The envvar used in libR-sys crate
 LIBRSYS_R_VERSION=$("${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "./tools/print_r_version.R")
 
 # Variables used for tweaking Makevars
