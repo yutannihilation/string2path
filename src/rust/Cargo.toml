@@ -7,7 +7,7 @@ edition = "2021"
 crate-type = ["staticlib"]
 
 [dependencies]
-extendr-api = { git = "https://github.com/yutannihilation/extendr.git", rev = "9f1df33636cc5940474bc6707103aa6275d3816e" }
+extendr-api = { git = "https://github.com/yutannihilation/extendr.git", rev = "9400ef70d45ec23de3234c45d0f77acc8638f1a5" }
 fontdb = "0.9.1"
 lyon = "1.0"
 once_cell = "1.13.0"
