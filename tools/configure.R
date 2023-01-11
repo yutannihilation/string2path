@@ -111,6 +111,13 @@ check_cargo <- function() {
     cat("*** Checking if the required Rust target is installed\n")
 
     targets <- safe_system2("rustup", c("target", "list", "--installed"))
+
+    # rustup might not exist if Rust is installed directly via the .msi installer
+    # in that case, just ignore and pray that the compilation will succeed.
+    if (!isTRUE(targets$success)) {
+      return(invisible(TRUE))
+    }
+
     if (!isTRUE("x86_64-pc-windows-gnu" %in% targets$output)) {
       msg <- "The required target x86_64-pc-windows-gnu is not installed"
       stop(errorCondition(msg, class = c("string2path_error_cargo_check", "error")))
