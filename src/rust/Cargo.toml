@@ -6,6 +6,9 @@ edition = "2021"
 [lib]
 crate-type = ["staticlib"]
 
+[profile.release]
+lto = true
+
 [dependencies]
 extendr-api = { git = "https://github.com/yutannihilation/extendr.git", rev = "9400ef70d45ec23de3234c45d0f77acc8638f1a5" }
 fontdb = "0.9.1"
