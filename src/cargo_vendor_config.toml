@@ -1,14 +1,14 @@
 [source.crates-io]
 replace-with = "vendored-sources"
 
-[source."https://github.com/yutannihilation/extendr.git"]
-git = "https://github.com/yutannihilation/extendr.git"
-rev = "9400ef70d45ec23de3234c45d0f77acc8638f1a5"
+[source."https://github.com/extendr/libR-sys"]
+git = "https://github.com/extendr/libR-sys"
+rev = "687b2e63cae19cde11f6d0d32c93812357e43590"
 replace-with = "vendored-sources"
 
-[source."https://github.com/yutannihilation/libR-sys.git"]
-git = "https://github.com/yutannihilation/libR-sys.git"
-rev = "d91909b2086822abdc1306e9345627c6b41af78f"
+[source."https://github.com/yutannihilation/extendr.git"]
+git = "https://github.com/yutannihilation/extendr.git"
+rev = "7255f06f4977790d70a02dd15a937b0d3dbb6367"
 replace-with = "vendored-sources"
 
 [source.vendored-sources]
