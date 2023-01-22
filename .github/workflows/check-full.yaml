@@ -21,15 +21,14 @@ jobs:
       matrix:
         config:
           - {os: windows-latest, r: 'release',  rust: 'stable-msvc', rtools-version: '42'}
-          - {os: windows-latest, r: 'release',  rust: 'stable-gnu',  rtools-version: '42'}
-          - {os: windows-latest, r: 'devel',    rust: 'stable-msvc', rtools-version: '42'}
+          - {os: windows-latest, r: 'devel',    rust: 'stable-msvc'}
           - {os: macOS-latest,   r: 'release',  rust: 'stable'     }
-          - {os: ubuntu-20.04,   r: 'release',  rust: 'stable'     }
-          - {os: ubuntu-20.04,   r: 'devel',    rust: 'stable'     }
-          - {os: ubuntu-20.04,   r: 'release',  rust: 'nightly'    }
+          - {os: ubuntu-22.04,   r: 'release',  rust: 'stable'     }
+          - {os: ubuntu-22.04,   r: 'devel',    rust: 'stable'     }
+          - {os: ubuntu-22.04,   r: 'release',  rust: 'nightly'    }
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@master
