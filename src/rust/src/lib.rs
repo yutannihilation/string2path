@@ -238,11 +238,11 @@ mod tests {
         assert!(result
             .x
             .iter()
-            .any(|&i| 0. - 0.1 <= i && i <= 100. / 125. + 0.1));
+            .any(|&i| (0. - 0.1..=100. / 125. + 0.1).contains(&i)));
         assert!(result
             .y
             .iter()
-            .any(|&i| 0. - 0.1 <= i && i <= 100. / 125. + 0.1));
+            .any(|&i| (0. - 0.1..=100. / 125. + 0.1).contains(&i)));
     }
 
     #[test]
