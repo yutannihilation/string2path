@@ -3,12 +3,12 @@ replace-with = "vendored-sources"
 
 [source."https://github.com/extendr/libR-sys"]
 git = "https://github.com/extendr/libR-sys"
-rev = "687b2e63cae19cde11f6d0d32c93812357e43590"
+rev = "ccd2a3a4b46f06953e88607c728cf7c106ee3abd"
 replace-with = "vendored-sources"
 
 [source."https://github.com/yutannihilation/extendr.git"]
 git = "https://github.com/yutannihilation/extendr.git"
-rev = "7255f06f4977790d70a02dd15a937b0d3dbb6367"
+rev = "fb6ea0463fcfacc167fe35c309bb4740f09c354f"
 replace-with = "vendored-sources"
 
 [source.vendored-sources]
