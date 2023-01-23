@@ -140,7 +140,7 @@ impl LyonPathBuilder {
         face_index: u32,
     ) -> std::result::Result<(), FontLoadingError> {
         // TODO: handle error
-        let font = ttf_parser::Face::from_slice(font_data, face_index)?;
+        let font = ttf_parser::Face::parse(font_data, face_index)?;
         let facetables = font.tables();
 
         let height = font.height() as f32;

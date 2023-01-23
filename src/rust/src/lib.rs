@@ -147,7 +147,15 @@ fn dump_fontdb_impl() -> Robj {
         });
 
         index.push(f.index);
-        family.push(f.family.clone());
+
+        // TODO: Now fontdb returns multiple family names (localized one?),
+        //       but the current code can accept only one.
+        let family_name = if f.families.is_empty() {
+            "".to_string()
+        } else {
+            f.families[0].0.clone()
+        };
+        family.push(family_name);
 
         #[rustfmt::skip]
         weight.push(
@@ -230,11 +238,11 @@ mod tests {
         assert!(result
             .x
             .iter()
-            .any(|&i| 0. - 0.1 <= i && i <= 100. / 125. + 0.1));
+            .any(|&i| (0. - 0.1..=100. / 125. + 0.1).contains(&i)));
         assert!(result
             .y
             .iter()
-            .any(|&i| 0. - 0.1 <= i && i <= 100. / 125. + 0.1));
+            .any(|&i| (0. - 0.1..=100. / 125. + 0.1).contains(&i)));
     }
 
     #[test]

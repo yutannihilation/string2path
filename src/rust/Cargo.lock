@@ -32,7 +32,7 @@ dependencies = [
 [[package]]
 name = "extendr-api"
 version = "0.3.1"
-source = "git+https://github.com/yutannihilation/extendr.git?rev=7255f06f4977790d70a02dd15a937b0d3dbb6367#7255f06f4977790d70a02dd15a937b0d3dbb6367"
+source = "git+https://github.com/yutannihilation/extendr.git?rev=fb6ea0463fcfacc167fe35c309bb4740f09c354f#fb6ea0463fcfacc167fe35c309bb4740f09c354f"
 dependencies = [
  "extendr-engine",
  "extendr-macros",
@@ -44,7 +44,7 @@ dependencies = [
 [[package]]
 name = "extendr-engine"
 version = "0.3.1"
-source = "git+https://github.com/yutannihilation/extendr.git?rev=7255f06f4977790d70a02dd15a937b0d3dbb6367#7255f06f4977790d70a02dd15a937b0d3dbb6367"
+source = "git+https://github.com/yutannihilation/extendr.git?rev=fb6ea0463fcfacc167fe35c309bb4740f09c354f#fb6ea0463fcfacc167fe35c309bb4740f09c354f"
 dependencies = [
  "libR-sys",
 ]
@@ -52,7 +52,7 @@ dependencies = [
 [[package]]
 name = "extendr-macros"
 version = "0.3.1"
-source = "git+https://github.com/yutannihilation/extendr.git?rev=7255f06f4977790d70a02dd15a937b0d3dbb6367#7255f06f4977790d70a02dd15a937b0d3dbb6367"
+source = "git+https://github.com/yutannihilation/extendr.git?rev=fb6ea0463fcfacc167fe35c309bb4740f09c354f#fb6ea0463fcfacc167fe35c309bb4740f09c354f"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -70,13 +70,13 @@ dependencies = [
 
 [[package]]
 name = "fontdb"
-version = "0.9.3"
+version = "0.11.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d52186a39c335aa6f79fc0bf1c3cf854870b6ad4e50a7bb8a59b4ba1331f478a"
+checksum = "652aa0009b1406e40114685c96ea2c01069e1c035ad6c340999fa08213fad4c5"
 dependencies = [
  "log",
  "memmap2",
- "ttf-parser 0.17.1",
+ "ttf-parser",
 ]
 
 [[package]]
@@ -88,7 +88,7 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 [[package]]
 name = "libR-sys"
 version = "0.3.0"
-source = "git+https://github.com/extendr/libR-sys?rev=687b2e63cae19cde11f6d0d32c93812357e43590#687b2e63cae19cde11f6d0d32c93812357e43590"
+source = "git+https://github.com/extendr/libR-sys?rev=ccd2a3a4b46f06953e88607c728cf7c106ee3abd#ccd2a3a4b46f06953e88607c728cf7c106ee3abd"
 
 [[package]]
 name = "libc"
@@ -196,9 +196,9 @@ checksum = "d01a5bd0424d00070b0098dd17ebca6f961a959dead1dbcbbbc1d1cd8d3deeba"
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.49"
+version = "1.0.50"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "57a8eca9f9c4ffde41714334dee777596264c7825420f521abc92b5b5deb63a5"
+checksum = "6ef7d57beacfaf2d8aee5937dab7b7f28de3cb8b1828479bb5de2a7106f2bae2"
 dependencies = [
  "unicode-ident",
 ]
@@ -220,7 +220,7 @@ dependencies = [
  "fontdb",
  "lyon",
  "once_cell",
- "ttf-parser 0.15.2",
+ "ttf-parser",
 ]
 
 [[package]]
@@ -256,15 +256,9 @@ dependencies = [
 
 [[package]]
 name = "ttf-parser"
-version = "0.15.2"
+version = "0.18.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b3e06c9b9d80ed6b745c7159c40b311ad2916abb34a49e9be2653b90db0d8dd"
-
-[[package]]
-name = "ttf-parser"
-version = "0.17.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "375812fa44dab6df41c195cd2f7fecb488f6c09fbaafb62807488cefab642bff"
+checksum = "0609f771ad9c6155384897e1df4d948e692667cc0588548b68eb44d052b27633"
 
 [[package]]
 name = "unicode-ident"
