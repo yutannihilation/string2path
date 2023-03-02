@@ -1,12 +1,8 @@
 on:
   push:
-    branches:
-      - main
-    tags:
-      - 'build*'
+    branches: [$default_branch]
   pull_request:
-    branches:
-      - main
+    branches: [$default_branch]
 
 name: R-CMD-check
 
