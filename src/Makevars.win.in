@@ -16,8 +16,6 @@ all: C_clean
 $(SHLIB): $(STATLIB)
 
 $(STATLIB):
-	mkdir -p $(LIBDIR)/libgcc_mock && touch $(LIBDIR)/libgcc_mock/libgcc_eh.a
-
 	# vendoring (Note: to avoid NOTE of "Found the following hidden files and
 	# directories", .cargo needs to be created here)
 	if [ "$(VENDORING)" = "yes" ]; then \
