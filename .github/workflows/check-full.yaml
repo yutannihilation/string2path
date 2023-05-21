@@ -1,8 +1,8 @@
 on:
   push:
-    branches: [main]
+    branches: [tmp-various-rust-versions]
   pull_request:
-    branches: [main]
+    branches: [tmp-various-rust-versions]
 
 name: R-CMD-check
 
@@ -16,12 +16,14 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: 'release',  rust: 'stable-msvc'}
-          - {os: windows-latest, r: 'devel',    rust: 'stable-msvc'}
-          - {os: macOS-latest,   r: 'release',  rust: 'stable'     }
-          - {os: ubuntu-latest,  r: 'release',  rust: 'stable'     }
-          - {os: ubuntu-latest,  r: 'devel',    rust: 'stable'     }
-          - {os: ubuntu-latest,  r: 'release',  rust: 'nightly'    }
+          - {os: windows-latest, r: 'release',  rust: '1.69.0'}
+          - {os: windows-latest, r: 'release',  rust: '1.68.0'}
+          - {os: windows-latest, r: 'release',  rust: '1.67.0'}
+          - {os: windows-latest, r: 'release',  rust: '1.66.0'}
+          - {os: windows-latest, r: 'release',  rust: '1.65.0'}
+          - {os: windows-latest, r: 'release',  rust: '1.64.0'}
+          - {os: windows-latest, r: 'release',  rust: '1.63.0'}
+          - {os: windows-latest, r: 'release',  rust: '1.62.0'}
 
     steps:
       - uses: actions/checkout@v3
