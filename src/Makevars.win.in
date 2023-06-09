@@ -8,7 +8,7 @@ CARGO_LINKER = x86_64-w64-mingw32.static.posix-gcc.exe
 VENDORING = yes
 
 LIBDIR = ./rust/target/$(TARGET)/release
-PKG_LIBS = -L$(LIBDIR) -lstring2path -lws2_32 -ladvapi32 -luserenv -lbcrypt
+PKG_LIBS = -L$(LIBDIR) -lstring2path -lws2_32 -ladvapi32 -luserenv -lbcrypt -lntdll
 STATLIB = $(LIBDIR)/libstring2path.a
 
 all: C_clean
