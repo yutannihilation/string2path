@@ -1,6 +1,6 @@
 Package: string2path
 Title: Rendering Font into 'data.frame'
-Version: 0.1.3.9000
+Version: 0.1.4
 Authors@R: 
     c(person(given = "Hiroaki",
              family = "Yutani",
