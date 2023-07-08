@@ -31,8 +31,8 @@ dependencies = [
 
 [[package]]
 name = "extendr-api"
-version = "0.3.1"
-source = "git+https://github.com/yutannihilation/extendr.git?rev=fb6ea0463fcfacc167fe35c309bb4740f09c354f#fb6ea0463fcfacc167fe35c309bb4740f09c354f"
+version = "0.4.0"
+source = "git+https://github.com/extendr/extendr.git?rev=dcbc870556ea297f0e2a1eddf615421f316b1931#dcbc870556ea297f0e2a1eddf615421f316b1931"
 dependencies = [
  "extendr-engine",
  "extendr-macros",
@@ -43,16 +43,16 @@ dependencies = [
 
 [[package]]
 name = "extendr-engine"
-version = "0.3.1"
-source = "git+https://github.com/yutannihilation/extendr.git?rev=fb6ea0463fcfacc167fe35c309bb4740f09c354f#fb6ea0463fcfacc167fe35c309bb4740f09c354f"
+version = "0.4.0"
+source = "git+https://github.com/extendr/extendr.git?rev=dcbc870556ea297f0e2a1eddf615421f316b1931#dcbc870556ea297f0e2a1eddf615421f316b1931"
 dependencies = [
  "libR-sys",
 ]
 
 [[package]]
 name = "extendr-macros"
-version = "0.3.1"
-source = "git+https://github.com/yutannihilation/extendr.git?rev=fb6ea0463fcfacc167fe35c309bb4740f09c354f#fb6ea0463fcfacc167fe35c309bb4740f09c354f"
+version = "0.4.0"
+source = "git+https://github.com/extendr/extendr.git?rev=dcbc870556ea297f0e2a1eddf615421f316b1931#dcbc870556ea297f0e2a1eddf615421f316b1931"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -87,8 +87,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "libR-sys"
-version = "0.3.0"
-source = "git+https://github.com/extendr/libR-sys?rev=ccd2a3a4b46f06953e88607c728cf7c106ee3abd#ccd2a3a4b46f06953e88607c728cf7c106ee3abd"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "470a5563a65d7ca413e2fda72d6e13d0b732c4b52ed561d774f6f349b6bdf1fb"
 
 [[package]]
 name = "libc"
@@ -196,9 +197,9 @@ checksum = "d01a5bd0424d00070b0098dd17ebca6f961a959dead1dbcbbbc1d1cd8d3deeba"
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.50"
+version = "1.0.63"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6ef7d57beacfaf2d8aee5937dab7b7f28de3cb8b1828479bb5de2a7106f2bae2"
+checksum = "7b368fba921b0dce7e60f5e04ec15e565b3303972b42bcfde1d0713b881959eb"
 dependencies = [
  "unicode-ident",
 ]
