@@ -32,7 +32,7 @@ dependencies = [
 [[package]]
 name = "extendr-api"
 version = "0.4.0"
-source = "git+https://github.com/extendr/extendr.git?rev=dcbc870556ea297f0e2a1eddf615421f316b1931#dcbc870556ea297f0e2a1eddf615421f316b1931"
+source = "git+https://github.com/yutannihilation/extendr.git?rev=037815e463d34c8e91366dab0f34c7158334fc9a#037815e463d34c8e91366dab0f34c7158334fc9a"
 dependencies = [
  "extendr-engine",
  "extendr-macros",
@@ -44,7 +44,7 @@ dependencies = [
 [[package]]
 name = "extendr-engine"
 version = "0.4.0"
-source = "git+https://github.com/extendr/extendr.git?rev=dcbc870556ea297f0e2a1eddf615421f316b1931#dcbc870556ea297f0e2a1eddf615421f316b1931"
+source = "git+https://github.com/yutannihilation/extendr.git?rev=037815e463d34c8e91366dab0f34c7158334fc9a#037815e463d34c8e91366dab0f34c7158334fc9a"
 dependencies = [
  "libR-sys",
 ]
@@ -52,7 +52,7 @@ dependencies = [
 [[package]]
 name = "extendr-macros"
 version = "0.4.0"
-source = "git+https://github.com/extendr/extendr.git?rev=dcbc870556ea297f0e2a1eddf615421f316b1931#dcbc870556ea297f0e2a1eddf615421f316b1931"
+source = "git+https://github.com/yutannihilation/extendr.git?rev=037815e463d34c8e91366dab0f34c7158334fc9a#037815e463d34c8e91366dab0f34c7158334fc9a"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -88,8 +88,7 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 [[package]]
 name = "libR-sys"
 version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "470a5563a65d7ca413e2fda72d6e13d0b732c4b52ed561d774f6f349b6bdf1fb"
+source = "git+https://github.com/yutannihilation/libR-sys?branch=fix/ignore-non-existent-r-library-path#1c0884a01daeba8db458c46c0119d1708ecb83eb"
 
 [[package]]
 name = "libc"
