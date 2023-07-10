@@ -88,7 +88,7 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 [[package]]
 name = "libR-sys"
 version = "0.5.0"
-source = "git+https://github.com/yutannihilation/libR-sys?branch=fix/ignore-non-existent-r-library-path#1c0884a01daeba8db458c46c0119d1708ecb83eb"
+source = "git+https://github.com/yutannihilation/libR-sys?branch=fix/ignore-non-existent-r-library-path#08cb4bb802b745e5ee5c63e8d5eb8dcae52e37a0"
 
 [[package]]
 name = "libc"
