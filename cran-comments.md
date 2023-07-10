@@ -1,6 +1,7 @@
 ## Comments
 
-This release is a maintenance release to fix build failure on Windows with Rust 1.70.
+This release is a maintenance release to fix build failure with the MKL build of R.
+I apologize for this trouble.
 
 ## R CMD check results
 
