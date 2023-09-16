@@ -139,19 +139,19 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/dump_fontdb.html">dump_fontdb</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 448 × 5</span></span>
-<span><span class="co">#&gt;    source                                  index family        weight style </span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;                                   &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt; </span></span>
+<span><span class="co">#&gt;    x                                           y family        weight style </span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;                                   &lt;int&gt; &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt; </span></span>
 <span><span class="co">#&gt;  1 "C:\\Windows\\Fonts\\arial.ttf"             0 Arial         normal normal</span></span>
 <span><span class="co">#&gt;  2 "C:\\Windows\\Fonts\\arialbd.ttf"           0 Arial         bold   normal</span></span>
 <span><span class="co">#&gt;  3 "C:\\Windows\\Fonts\\arialbi.ttf"           0 Arial         bold   italic</span></span>
 <span><span class="co">#&gt;  4 "C:\\Windows\\Fonts\\ariali.ttf"            0 Arial         normal italic</span></span>
-<span><span class="co">#&gt;  5 "C:\\Windows\\Fonts\\ariblk.ttf"            0 Arial Black   black  normal</span></span>
+<span><span class="co">#&gt;  5 "C:\\Windows\\Fonts\\ariblk.ttf"            0 Arial         black  normal</span></span>
 <span><span class="co">#&gt;  6 "C:\\Windows\\Fonts\\bahnschrift.ttf"       0 Bahnschrift   normal normal</span></span>
 <span><span class="co">#&gt;  7 "C:\\Windows\\Fonts\\BIZ-UDGothicB.ttc"     0 BIZ UDGothic  bold   normal</span></span>
 <span><span class="co">#&gt;  8 "C:\\Windows\\Fonts\\BIZ-UDGothicB.ttc"     1 BIZ UDPGothic bold   normal</span></span>
 <span><span class="co">#&gt;  9 "C:\\Windows\\Fonts\\BIZ-UDGothicR.ttc"     0 BIZ UDGothic  normal normal</span></span>
 <span><span class="co">#&gt; 10 "C:\\Windows\\Fonts\\BIZ-UDGothicR.ttc"     1 BIZ UDPGothic normal normal</span></span>
-<span><span class="co">#&gt; # … with 438 more rows</span></span></code></pre></div>
+<span><span class="co">#&gt; # ℹ 438 more rows</span></span></code></pre></div>
 <p>You can also specify the font file directly. Pomicons is a font available on <a href="https://github.com/gabrielelana/pomicons" class="external-link">gabrielelana/pomicons</a>, licensed under SIL OFL 1.1.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pomicons_file</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu">here</span><span class="op">(</span><span class="st">"fonts"</span>, <span class="st">"Pomicons.ttf"</span><span class="op">)</span></span>
