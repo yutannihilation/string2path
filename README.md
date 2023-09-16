@@ -16,8 +16,10 @@ badge](https://yutannihilation.r-universe.dev/badges/string2path)](https://yutan
 
 The string2path R package converts a text to paths of the outlines of
 each glyph, based on a font data. Under the hood, this package is
-powered by [extendr](https://extendr.github.io/) framework to use these
-two Rust crates:
+powered by [my esoteric
+framework](https://github.com/yutannihilation/savvy/), which is an
+experiment for improving [extendr](https://extendr.github.io/)
+framework, to use these two Rust crates:
 
 - [ttf-parser](https://github.com/RazrFalcon/ttf-parser) for parsing
   font data. TrueType font (`.ttf`) and OpenType font (`.otf`) are
