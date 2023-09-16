@@ -5,7 +5,7 @@ TARGET = x86_64-pc-windows-gnu
 CARGO_LINKER = x86_64-w64-mingw32.static.posix-gcc.exe
 
 # TODO
-VENDORING = no
+VENDORING = yes
 
 LIBDIR = ./rust/target/$(TARGET)/release
 PKG_LIBS = -L$(LIBDIR) -lstring2path -lws2_32 -ladvapi32 -luserenv -lbcrypt -lntdll
@@ -26,7 +26,7 @@ $(STATLIB):
 	    cp ./cargo_vendor_config.toml ./rust/.cargo/config.toml; \
 	fi
 
-	@BEFORE_CARGO_BUILD@ cd ./rust && cargo build --target=$(TARGET) --lib --release
+	@BEFORE_CARGO_BUILD@ cd ./rust && cargo build --target=$(TARGET) --lib --release --offline
 	@AFTER_CARGO_BUILD@
 
 C_clean:
