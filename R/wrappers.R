@@ -1,7 +1,6 @@
 #' @useDynLib string2path, .registration = TRUE
 #' @keywords internal
-"_PACKAGE"
-
+NULL
 
 string2path_family <- function(text, font_family, font_weight, font_style, tolerance) {
   .Call(savvy_string2path_family, text, font_family, font_weight, font_style, tolerance)
