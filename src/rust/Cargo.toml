@@ -10,7 +10,7 @@ crate-type = ["staticlib"]
 lto = true
 
 [dependencies]
-extendr-api = { git = "https://github.com/yutannihilation/extendr.git", rev = "037815e463d34c8e91366dab0f34c7158334fc9a" }
+savvy = { git = "https://github.com/yutannihilation/savvy.git" }
 fontdb = "0.11"
 lyon = "1.0"
 once_cell = "1.17.0"

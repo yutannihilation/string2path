@@ -6,99 +6,93 @@ arrayvec (version 0.7.2):
 autocfg (version 1.1.0):
   Josh Stone
 
+cc (version 1.0.83):
+  Alex Crichton
+
 cfg-if (version 1.0.0):
   Alex Crichton
 
 euclid (version 0.22.7):
   The Servo Project Developers
 
-extendr-api (version 0.3.1):
-  andy-thomason
-  Thomas Down
-  Mossa Merhi Reimert
-  Claus O. Wilke
-  Hiroaki Yutani
-  Ilia A. Kosenkov
-
-extendr-engine (version 0.3.1):
-  andy-thomason
-  Thomas Down
-  Mossa Merhi Reimert
-  Claus O. Wilke
-  Hiroaki Yutani
-  Ilia A. Kosenkov
-
-extendr-macros (version 0.3.1):
-  andy-thomason
-  Thomas Down
-  Mossa Merhi Reimert
-  Claus O. Wilke
-  Hiroaki Yutani
-  Ilia A. Kosenkov
-
 float_next_after (version 0.1.5):
   Bronson Brown-deVost
 
-fontdb (version 0.9.1):
+fontdb (version 0.11.2):
   Evgeniy Reizner
 
-lazy_static (version 1.4.0):
-  Marvin Löbel
-
-libc (version 0.2.126):
+libc (version 0.2.139):
   The Rust Project Developers
 
-libR-sys (version 0.3.0):
+libm (version 0.2.6):
+  Jorge Aparicio
+
+libR-sys (version 0.6.0):
   andy-thomason
   Thomas Down
   Mossa Merhi Reimert
   Claus O. Wilke
-  Ilia Kosenkov
+  Ilia A. Kosenkov
   Hiroaki Yutani
 
 log (version 0.4.17):
   The Rust Project Developers
 
-lyon (version 1.0.0):
+lyon (version 1.0.1):
   Nicolas Silva
 
-lyon_algorithms (version 1.0.0):
+lyon_algorithms (version 1.0.2):
   Nicolas Silva
 
-lyon_geom (version 1.0.1):
+lyon_geom (version 1.0.4):
   Nicolas Silva
 
-lyon_path (version 1.0.0):
+lyon_path (version 1.0.3):
   Nicolas Silva
 
-lyon_tessellation (version 1.0.1):
+lyon_tessellation (version 1.0.8):
   Nicolas Silva
 
-memmap2 (version 0.5.5):
+memmap2 (version 0.5.8):
   Dan Burkert
   Yevhenii Reizner
 
 num-traits (version 0.2.15):
   The Rust Project Developers
 
-once_cell (version 1.13.0):
+once_cell (version 1.17.0):
   Aleksey Kladov
 
-paste (version 1.0.7):
-  David Tolnay
-
-proc-macro2 (version 1.0.40):
+proc-macro2 (version 1.0.63):
   David Tolnay
   Alex Crichton
 
-quote (version 1.0.20):
+quote (version 1.0.30):
   David Tolnay
 
-syn (version 1.0.98):
+savvy-bindgen (version 0.1.6):
+  Hiroaki Yutani
+
+savvy-macro (version 0.1.6):
+  Hiroaki Yutani
+
+savvy (version 0.1.6):
+  Hiroaki Yutani
+
+syn (version 1.0.107):
   David Tolnay
 
-ttf-parser (version 0.15.2):
+syn (version 2.0.32):
+  David Tolnay
+
+thiserror-impl (version 1.0.38):
+  David Tolnay
+
+thiserror (version 1.0.38):
+  David Tolnay
+
+ttf-parser (version 0.18.1):
   Yevhenii Reizner
 
-unicode-ident (version 1.0.2):
+unicode-ident (version 1.0.6):
   David Tolnay

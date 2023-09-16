@@ -1,6 +1,6 @@
-use extendr_api::prelude::*;
 use font::FONTDB;
 use result::FontDBTibble;
+use savvy::savvy;
 
 mod builder;
 mod font;
@@ -19,11 +19,11 @@ fn string2any_family(
     font_family: &str,
     font_weight: &str,
     font_style: &str,
-    tolerance: f32,
-    line_width: f32,
+    tolerance: f64,
+    line_width: f64,
     ct: ConversionType,
-) -> Robj {
-    let mut builder = builder::LyonPathBuilder::new(tolerance, line_width);
+) -> savvy::Result<savvy::SEXP> {
+    let mut builder = builder::LyonPathBuilder::new(tolerance as _, line_width as _);
 
     builder
         .outline(text, font_family, font_weight, font_style)
@@ -35,17 +35,17 @@ fn string2any_family(
         ConversionType::Fill => builder.into_fill(),
     };
 
-    result.try_into().unwrap()
+    Ok(result.into())
 }
 
 fn string2any_file(
     text: &str,
     font_file: &str,
-    tolerance: f32,
-    line_width: f32,
+    tolerance: f64,
+    line_width: f64,
     ct: ConversionType,
-) -> Robj {
-    let mut builder = builder::LyonPathBuilder::new(tolerance, line_width);
+) -> savvy::Result<savvy::SEXP> {
+    let mut builder = builder::LyonPathBuilder::new(tolerance as _, line_width as _);
 
     builder.outline_from_file(text, font_file).unwrap();
 
@@ -55,17 +55,17 @@ fn string2any_file(
         ConversionType::Fill => builder.into_fill(),
     };
 
-    result.try_into().unwrap()
+    Ok(result.into())
 }
 
-#[extendr(use_try_from = true)]
+#[savvy]
 fn string2path_family(
     text: &str,
     font_family: &str,
     font_weight: &str,
     font_style: &str,
-    tolerance: f32,
-) -> Robj {
+    tolerance: f64,
+) -> savvy::Result<savvy::SEXP> {
     string2any_family(
         text,
         font_family,
@@ -77,20 +77,20 @@ fn string2path_family(
     )
 }
 
-#[extendr(use_try_from = true)]
-fn string2path_file(text: &str, font_file: &str, tolerance: f32) -> Robj {
+#[savvy]
+fn string2path_file(text: &str, font_file: &str, tolerance: f64) -> savvy::Result<savvy::SEXP> {
     string2any_file(text, font_file, tolerance, 0., ConversionType::Path)
 }
 
-#[extendr(use_try_from = true)]
+#[savvy]
 fn string2stroke_family(
     text: &str,
     font_family: &str,
     font_weight: &str,
     font_style: &str,
-    tolerance: f32,
-    line_width: f32,
-) -> Robj {
+    tolerance: f64,
+    line_width: f64,
+) -> savvy::Result<savvy::SEXP> {
     string2any_family(
         text,
         font_family,
@@ -102,19 +102,24 @@ fn string2stroke_family(
     )
 }
 
-#[extendr(use_try_from = true)]
-fn string2stroke_file(text: &str, font_file: &str, tolerance: f32, line_width: f32) -> Robj {
+#[savvy]
+fn string2stroke_file(
+    text: &str,
+    font_file: &str,
+    tolerance: f64,
+    line_width: f64,
+) -> savvy::Result<savvy::SEXP> {
     string2any_file(text, font_file, tolerance, line_width, ConversionType::Path)
 }
 
-#[extendr(use_try_from = true)]
+#[savvy]
 fn string2fill_family(
     text: &str,
     font_family: &str,
     font_weight: &str,
     font_style: &str,
-    tolerance: f32,
-) -> Robj {
+    tolerance: f64,
+) -> savvy::Result<savvy::SEXP> {
     string2any_family(
         text,
         font_family,
@@ -126,15 +131,15 @@ fn string2fill_family(
     )
 }
 
-#[extendr(use_try_from = true)]
-fn string2fill_file(text: &str, font_file: &str, tolerance: f32) -> Robj {
+#[savvy]
+fn string2fill_file(text: &str, font_file: &str, tolerance: f64) -> savvy::Result<savvy::SEXP> {
     string2any_file(text, font_file, tolerance, 0., ConversionType::Path)
 }
 
-#[extendr(use_try_from = true)]
-fn dump_fontdb_impl() -> Robj {
+#[savvy]
+fn dump_fontdb_impl() -> savvy::Result<savvy::SEXP> {
     let mut source: Vec<String> = Vec::new();
-    let mut index: Vec<u32> = Vec::new();
+    let mut index: Vec<i32> = Vec::new();
     let mut family: Vec<String> = Vec::new();
     let mut weight: Vec<String> = Vec::new();
     let mut style: Vec<String> = Vec::new();
@@ -146,7 +151,7 @@ fn dump_fontdb_impl() -> Robj {
             fontdb::Source::SharedFile(ref path, _) => path.to_string_lossy().to_string(),
         });
 
-        index.push(f.index);
+        index.push(f.index as _);
 
         // TODO: Now fontdb returns multiple family names (localized one?),
         //       but the current code can accept only one.
@@ -193,21 +198,7 @@ fn dump_fontdb_impl() -> Robj {
         style,
     };
 
-    result.try_into().unwrap()
-}
-
-// Macro to generate exports.
-// This ensures exported functions are registered with R.
-// See corresponding C code in `entrypoint.c`.
-extendr_module! {
-    mod string2path;
-    fn string2path_family;
-    fn string2path_file;
-    fn string2stroke_family;
-    fn string2stroke_file;
-    fn string2fill_family;
-    fn string2fill_file;
-    fn dump_fontdb_impl;
+    Ok(result.into())
 }
 
 #[cfg(test)]

@@ -1,5 +1,3 @@
-use extendr_api::prelude::*;
-
 use crate::builder::LyonPathBuilder;
 
 use once_cell::sync::Lazy;
@@ -93,7 +91,7 @@ impl LyonPathBuilder {
             return result.unwrap_or(Ok(()));
         }
 
-        reprintln!("No font face matched with the specified conditions. Falling back to the default font...");
+        savvy::r_eprint("No font face matched with the specified conditions. Falling back to the default font...");
 
         // 2. If not found, try the fallback query which should hit at least one font
 
@@ -112,7 +110,7 @@ impl LyonPathBuilder {
 
         // 3. When no fonts are available, return an error.
 
-        reprintln!("No font is available!");
+        savvy::r_eprint("No font is available!");
 
         Err(FontLoadingError::NoAvailableFonts)
     }

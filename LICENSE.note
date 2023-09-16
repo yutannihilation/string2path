@@ -29,6 +29,13 @@ License: Apache-2.0 OR MIT
 
 ------------------------------
 
+Name:    cc
+Files:   vendor/cc/*
+Authors: Alex Crichton
+License: MIT OR Apache-2.0
+
+------------------------------
+
 Name:    cfg-if
 Files:   vendor/cfg-if/*
 Authors: Alex Crichton
@@ -40,27 +47,6 @@ Name:    euclid
 Files:   vendor/euclid/*
 Authors: The Servo Project Developers
 License: MIT / Apache-2.0
-
-------------------------------
-
-Name:    extendr-api
-Files:   vendor/extendr-api/*
-Authors: andy-thomason, Thomas Down, Mossa Merhi Reimert, Claus O. Wilke, Hiroaki Yutani, Ilia A. Kosenkov
-License: MIT
-
-------------------------------
-
-Name:    extendr-engine
-Files:   vendor/extendr-engine/*
-Authors: andy-thomason, Thomas Down, Mossa Merhi Reimert, Claus O. Wilke, Hiroaki Yutani, Ilia A. Kosenkov
-License: MIT
-
-------------------------------
-
-Name:    extendr-macros
-Files:   vendor/extendr-macros/*
-Authors: andy-thomason, Thomas Down, Mossa Merhi Reimert, Claus O. Wilke, Hiroaki Yutani, Ilia A. Kosenkov
-License: MIT
 
 ------------------------------
 
@@ -78,13 +64,6 @@ License: MIT
 
 ------------------------------
 
-Name:    lazy_static
-Files:   vendor/lazy_static/*
-Authors: Marvin Löbel
-License: MIT/Apache-2.0
-
-------------------------------
-
 Name:    libc
 Files:   vendor/libc/*
 Authors: The Rust Project Developers
@@ -92,9 +71,16 @@ License: MIT OR Apache-2.0
 
 ------------------------------
 
+Name:    libm
+Files:   vendor/libm/*
+Authors: Jorge Aparicio
+License: MIT OR Apache-2.0
+
+------------------------------
+
 Name:    libR-sys
 Files:   vendor/libR-sys/*
-Authors: andy-thomason, Thomas Down, Mossa Merhi Reimert, Claus O. Wilke, Ilia Kosenkov, Hiroaki Yutani
+Authors: andy-thomason, Thomas Down, Mossa Merhi Reimert, Claus O. Wilke, Ilia A. Kosenkov, Hiroaki Yutani
 License: MIT
 
 ------------------------------
@@ -109,42 +95,42 @@ License: MIT OR Apache-2.0
 Name:    lyon
 Files:   vendor/lyon/*
 Authors: Nicolas Silva
-License: MIT/Apache-2.0
+License: MIT OR Apache-2.0
 
 ------------------------------
 
 Name:    lyon_algorithms
 Files:   vendor/lyon_algorithms/*
 Authors: Nicolas Silva
-License: MIT/Apache-2.0
+License: MIT OR Apache-2.0
 
 ------------------------------
 
 Name:    lyon_geom
 Files:   vendor/lyon_geom/*
 Authors: Nicolas Silva
-License: MIT/Apache-2.0
+License: MIT OR Apache-2.0
 
 ------------------------------
 
 Name:    lyon_path
 Files:   vendor/lyon_path/*
 Authors: Nicolas Silva
-License: MIT/Apache-2.0
+License: MIT OR Apache-2.0
 
 ------------------------------
 
 Name:    lyon_tessellation
 Files:   vendor/lyon_tessellation/*
 Authors: Nicolas Silva
-License: MIT/Apache-2.0
+License: MIT OR Apache-2.0
 
 ------------------------------
 
 Name:    memmap2
 Files:   vendor/memmap2/*
 Authors: Dan Burkert, Yevhenii Reizner
-License: MIT/Apache-2.0
+License: MIT OR Apache-2.0
 
 ------------------------------
 
@@ -158,13 +144,6 @@ License: MIT OR Apache-2.0
 Name:    once_cell
 Files:   vendor/once_cell/*
 Authors: Aleksey Kladov
-License: MIT OR Apache-2.0
-
-------------------------------
-
-Name:    paste
-Files:   vendor/paste/*
-Authors: David Tolnay
 License: MIT OR Apache-2.0
 
 ------------------------------
@@ -183,8 +162,50 @@ License: MIT OR Apache-2.0
 
 ------------------------------
 
+Name:    savvy-bindgen
+Files:   vendor/savvy-bindgen/*
+Authors: Hiroaki Yutani
+License: MIT
+
+------------------------------
+
+Name:    savvy-macro
+Files:   vendor/savvy-macro/*
+Authors: Hiroaki Yutani
+License: MIT
+
+------------------------------
+
+Name:    savvy
+Files:   vendor/savvy/*
+Authors: Hiroaki Yutani
+License: MIT
+
+------------------------------
+
 Name:    syn
 Files:   vendor/syn/*
+Authors: David Tolnay
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    syn
+Files:   vendor/syn/*
+Authors: David Tolnay
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    thiserror-impl
+Files:   vendor/thiserror-impl/*
+Authors: David Tolnay
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    thiserror
+Files:   vendor/thiserror/*
 Authors: David Tolnay
 License: MIT OR Apache-2.0
 

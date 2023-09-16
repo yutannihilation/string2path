@@ -1,16 +1,13 @@
 [source.crates-io]
 replace-with = "vendored-sources"
 
-[source."git+https://github.com/yutannihilation/extendr.git?rev=037815e463d34c8e91366dab0f34c7158334fc9a"]
-git = "https://github.com/yutannihilation/extendr.git"
-rev = "037815e463d34c8e91366dab0f34c7158334fc9a"
+[source."git+https://github.com/extendr/libR-sys"]
+git = "https://github.com/extendr/libR-sys"
 replace-with = "vendored-sources"
 
-[source."git+https://github.com/yutannihilation/libR-sys?branch=fix/ignore-non-existent-r-library-path"]
-git = "https://github.com/yutannihilation/libR-sys"
-branch = "fix/ignore-non-existent-r-library-path"
+[source."git+https://github.com/yutannihilation/savvy.git"]
+git = "https://github.com/yutannihilation/savvy.git"
 replace-with = "vendored-sources"
 
 [source.vendored-sources]
 directory = "vendor"
-

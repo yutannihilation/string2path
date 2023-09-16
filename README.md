@@ -100,19 +100,19 @@ style (e.g. `"italic"`).
 ``` r
 dump_fontdb()
 #> # A tibble: 448 × 5
-#>    source                                  index family        weight style 
-#>    <chr>                                   <dbl> <chr>         <chr>  <chr> 
+#>    x                                           y family        weight style 
+#>    <chr>                                   <int> <chr>         <chr>  <chr> 
 #>  1 "C:\\Windows\\Fonts\\arial.ttf"             0 Arial         normal normal
 #>  2 "C:\\Windows\\Fonts\\arialbd.ttf"           0 Arial         bold   normal
 #>  3 "C:\\Windows\\Fonts\\arialbi.ttf"           0 Arial         bold   italic
 #>  4 "C:\\Windows\\Fonts\\ariali.ttf"            0 Arial         normal italic
-#>  5 "C:\\Windows\\Fonts\\ariblk.ttf"            0 Arial Black   black  normal
+#>  5 "C:\\Windows\\Fonts\\ariblk.ttf"            0 Arial         black  normal
 #>  6 "C:\\Windows\\Fonts\\bahnschrift.ttf"       0 Bahnschrift   normal normal
 #>  7 "C:\\Windows\\Fonts\\BIZ-UDGothicB.ttc"     0 BIZ UDGothic  bold   normal
 #>  8 "C:\\Windows\\Fonts\\BIZ-UDGothicB.ttc"     1 BIZ UDPGothic bold   normal
 #>  9 "C:\\Windows\\Fonts\\BIZ-UDGothicR.ttc"     0 BIZ UDGothic  normal normal
 #> 10 "C:\\Windows\\Fonts\\BIZ-UDGothicR.ttc"     1 BIZ UDPGothic normal normal
-#> # … with 438 more rows
+#> # ℹ 438 more rows
 ```
 
 You can also specify the font file directly. Pomicons is a font
@@ -197,7 +197,7 @@ for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
 <img src="man/figures/README-example3-.gif" width="75%" />
 
 Note that `tolerance` parameter behaves a bit differently on
-`string2fill()` and `string2stroke()`. But, in either case, 1e-5 \~ 1e-6
+`string2fill()` and `string2stroke()`. But, in either case, 1e-5 ~ 1e-6
 should be enough.
 
 ``` r
