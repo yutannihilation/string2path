@@ -5,7 +5,7 @@
     Output
       # A tibble: 4 x 4
             x     y glyph_id path_id
-        <dbl> <dbl>    <dbl>   <dbl>
+        <dbl> <dbl>    <int>   <int>
       1 0     0            0       0
       2 0.800 0.800        0       0
       3 0     0.800        0       0
@@ -18,7 +18,7 @@
     Output
       # A tibble: 4 x 4
             x     y glyph_id path_id
-        <dbl> <dbl>    <dbl>   <dbl>
+        <dbl> <dbl>    <int>   <int>
       1 0     0            0       0
       2 0.800 0.800        0       0
       3 0     0.800        0       0
@@ -31,7 +31,7 @@
     Output
       # A tibble: 4 x 4
             x     y glyph_id path_id
-        <dbl> <dbl>    <dbl>   <dbl>
+        <dbl> <dbl>    <int>   <int>
       1 0     0            0       0
       2 0.800 0.800        0       0
       3 0     0.800        0       0
@@ -44,7 +44,7 @@
     Output
       # A tibble: 25 x 4
                 x     y glyph_id path_id
-            <dbl> <dbl>    <dbl>   <dbl>
+            <dbl> <dbl>    <int>   <int>
        1 -0.00131 0            0       0
        2  0.245   0.641        0       0
        3  0.336   0.641        0       0
@@ -64,7 +64,7 @@
     Output
       # A tibble: 150 x 5
              x       y glyph_id path_id triangle_id
-         <dbl>   <dbl>    <dbl>   <dbl>       <dbl>
+         <dbl>   <dbl>    <int>   <int>       <int>
        1 0.255  0.626         0       0           0
        2 0.234  0.656         0       0           0
        3 0.346  0.656         0       0           0
@@ -84,7 +84,7 @@
     Output
       # A tibble: 75 x 5
                 x     y glyph_id path_id triangle_id
-            <dbl> <dbl>    <dbl>   <dbl>       <dbl>
+            <dbl> <dbl>    <int>   <int>       <int>
        1  0.0887  0            0       0           0
        2 -0.00131 0            0       0           0
        3  0.159   0.194        0       0           0

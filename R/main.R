@@ -86,12 +86,12 @@ string2path <- function(
     }
 
     font <- path.expand(font)
-    string2path_file(text, font, tolerance)
+    tibble::as_tibble(string2path_file(text, font, tolerance))
   } else {
     font_weight <- match.arg(font_weight)
     font_style <- match.arg(font_style)
 
-    string2path_family(text, font, font_weight, font_style, tolerance)
+    tibble::as_tibble(string2path_family(text, font, font_weight, font_style, tolerance))
   }
 }
 
@@ -114,12 +114,12 @@ string2stroke <- function(
     }
 
     font <- path.expand(font)
-    string2stroke_file(text, font, tolerance, line_width)
+    tibble::as_tibble(string2stroke_file(text, font, tolerance, line_width))
   } else {
     font_weight <- match.arg(font_weight)
     font_style <- match.arg(font_style)
 
-    string2stroke_family(text, font, font_weight, font_style, tolerance, line_width)
+    tibble::as_tibble(string2stroke_family(text, font, font_weight, font_style, tolerance, line_width))
   }
 }
 
@@ -141,12 +141,12 @@ string2fill <- function(
     }
 
     font <- path.expand(font)
-    string2fill_file(text, font, tolerance)
+    tibble::as_tibble(string2fill_file(text, font, tolerance))
   } else {
     font_weight <- match.arg(font_weight)
     font_style <- match.arg(font_style)
 
-    string2fill_family(text, font, font_weight, font_style, tolerance)
+    tibble::as_tibble(string2fill_family(text, font, font_weight, font_style, tolerance))
   }
 }
 

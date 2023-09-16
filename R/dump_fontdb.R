@@ -14,5 +14,5 @@
 #'
 #' @export
 dump_fontdb <- function() {
-  dump_fontdb_impl()
+  tibble::as_tibble(dump_fontdb_impl())
 }

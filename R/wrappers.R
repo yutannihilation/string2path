@@ -34,7 +34,7 @@ string2fill_file <- function(text, font_file, tolerance) {
 
 
 dump_fontdb_impl <- function() {
-  .Call(savvy_dump_fontdb_impl, )
+  .Call(savvy_dump_fontdb_impl)
 }
 
 
