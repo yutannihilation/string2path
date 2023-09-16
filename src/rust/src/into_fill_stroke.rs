@@ -86,19 +86,19 @@ impl LyonPathBuilder {
 }
 
 fn extract_vertex_buffer(geometry: VertexBuffers<Vertex, usize>) -> PathTibble {
-    let mut x: Vec<f32> = Vec::new();
-    let mut y: Vec<f32> = Vec::new();
-    let mut glyph_id: Vec<u32> = Vec::new();
-    let mut path_id: Vec<u32> = Vec::new();
-    let mut triangle_id: Vec<u32> = Vec::new();
+    let mut x: Vec<f64> = Vec::new();
+    let mut y: Vec<f64> = Vec::new();
+    let mut glyph_id: Vec<i32> = Vec::new();
+    let mut path_id: Vec<i32> = Vec::new();
+    let mut triangle_id: Vec<i32> = Vec::new();
 
     for (n, &i) in geometry.indices.iter().enumerate() {
         if let Some(v) = geometry.vertices.get(i) {
-            x.push(v.position.x);
-            y.push(v.position.y);
-            glyph_id.push(v.glyph_id);
-            path_id.push(v.path_id);
-            triangle_id.push(n as u32 / 3);
+            x.push(v.position.x as _);
+            y.push(v.position.y as _);
+            glyph_id.push(v.glyph_id as _);
+            path_id.push(v.path_id as _);
+            triangle_id.push(n as i32 / 3);
         }
     }
 
