@@ -19,7 +19,7 @@ $(STATLIB):
 	    cp ./cargo_vendor_config.toml ./rust/.cargo/config.toml; \
 	fi
 
-	@BEFORE_CARGO_BUILD@ cd ./rust && cargo build --lib --release $(OFFLINE_OPTION)
+	@BEFORE_CARGO_BUILD@ cd ./rust && cargo build --jobs 1 --lib --release $(OFFLINE_OPTION)
 	@AFTER_CARGO_BUILD@
 
 C_clean:
