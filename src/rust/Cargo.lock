@@ -181,8 +181,8 @@ dependencies = [
 
 [[package]]
 name = "savvy"
-version = "0.1.6"
-source = "git+https://github.com/yutannihilation/savvy.git#20333082d4e2f95bd783e216248ee7096ea96e53"
+version = "0.1.8"
+source = "git+https://github.com/yutannihilation/savvy.git#be81b65a167d858a31d7b6b62d2e960ccda33b95"
 dependencies = [
  "cc",
  "libR-sys",
@@ -192,8 +192,8 @@ dependencies = [
 
 [[package]]
 name = "savvy-bindgen"
-version = "0.1.6"
-source = "git+https://github.com/yutannihilation/savvy.git#20333082d4e2f95bd783e216248ee7096ea96e53"
+version = "0.1.8"
+source = "git+https://github.com/yutannihilation/savvy.git#be81b65a167d858a31d7b6b62d2e960ccda33b95"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -202,8 +202,8 @@ dependencies = [
 
 [[package]]
 name = "savvy-macro"
-version = "0.1.6"
-source = "git+https://github.com/yutannihilation/savvy.git#20333082d4e2f95bd783e216248ee7096ea96e53"
+version = "0.1.8"
+source = "git+https://github.com/yutannihilation/savvy.git#be81b65a167d858a31d7b6b62d2e960ccda33b95"
 dependencies = [
  "proc-macro2",
  "quote",
