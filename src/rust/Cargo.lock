@@ -61,7 +61,8 @@ dependencies = [
 [[package]]
 name = "libR-sys"
 version = "0.6.0"
-source = "git+https://github.com/extendr/libR-sys#9ed726c4a34110f3bc25d0e80ecbf8c60d0adfa0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a34aaa68a201f71eab5df5a67d1326add8aaf029434e939353bcab0534919ff1"
 
 [[package]]
 name = "libc"
@@ -181,8 +182,9 @@ dependencies = [
 
 [[package]]
 name = "savvy"
-version = "0.1.8"
-source = "git+https://github.com/yutannihilation/savvy.git#be81b65a167d858a31d7b6b62d2e960ccda33b95"
+version = "0.1.13"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b84664a0a301d8631be5425b9851c6a85b26486bb9f00a630c53eca1ba039349"
 dependencies = [
  "cc",
  "libR-sys",
@@ -192,8 +194,9 @@ dependencies = [
 
 [[package]]
 name = "savvy-bindgen"
-version = "0.1.8"
-source = "git+https://github.com/yutannihilation/savvy.git#be81b65a167d858a31d7b6b62d2e960ccda33b95"
+version = "0.1.13"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4c9a30bd7623555619d04f08488fe2620b656b3df983df8f0f030ccba1203211"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -202,8 +205,9 @@ dependencies = [
 
 [[package]]
 name = "savvy-macro"
-version = "0.1.8"
-source = "git+https://github.com/yutannihilation/savvy.git#be81b65a167d858a31d7b6b62d2e960ccda33b95"
+version = "0.1.13"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "26ed3689151e6b6b12531d8de0432c59a27efe06c87aab336b68ed0de3164183"
 dependencies = [
  "proc-macro2",
  "quote",

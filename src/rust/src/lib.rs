@@ -35,7 +35,7 @@ fn string2any_family(
         ConversionType::Fill => builder.into_fill(),
     };
 
-    Ok(result.into())
+    result.try_into()
 }
 
 fn string2any_file(
@@ -55,7 +55,7 @@ fn string2any_file(
         ConversionType::Fill => builder.into_fill(),
     };
 
-    Ok(result.into())
+    result.try_into()
 }
 
 #[savvy]
@@ -198,7 +198,7 @@ fn dump_fontdb_impl() -> savvy::Result<savvy::SEXP> {
         style,
     };
 
-    Ok(result.into())
+    result.try_into()
 }
 
 #[cfg(test)]

@@ -18,6 +18,20 @@ pub enum FontLoadingError {
     NoAvailableFonts,
 }
 
+impl From<FontLoadingError> for savvy::Error {
+    fn from(value: FontLoadingError) -> Self {
+        let msg = match value {
+            FontLoadingError::FaceParsingError(err) => err.to_string(),
+            FontLoadingError::IOError(err) => err.to_string(),
+            FontLoadingError::NoAvailableFonts => {
+                "No available fonts is found on the machine".to_string()
+            }
+        };
+
+        savvy::Error::new(&msg)
+    }
+}
+
 impl Display for FontLoadingError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -51,7 +65,7 @@ impl LyonPathBuilder {
         font_family: &str,
         font_weight: &str,
         font_style: &str,
-    ) -> std::result::Result<(), FontLoadingError> {
+    ) -> savvy::Result<()> {
         #[rustfmt::skip]
         let weight = match font_weight {
             "thin"       => fontdb::Weight::THIN,
@@ -91,7 +105,7 @@ impl LyonPathBuilder {
             return result.unwrap_or(Ok(()));
         }
 
-        savvy::r_eprint("No font face matched with the specified conditions. Falling back to the default font...");
+        savvy::r_eprint("No font face matched with the specified conditions. Falling back to the default font...")?;
 
         // 2. If not found, try the fallback query which should hit at least one font
 
@@ -110,22 +124,19 @@ impl LyonPathBuilder {
 
         // 3. When no fonts are available, return an error.
 
-        savvy::r_eprint("No font is available!");
+        savvy::r_eprint("No font is available!")?;
 
-        Err(FontLoadingError::NoAvailableFonts)
+        Err(FontLoadingError::NoAvailableFonts.into())
     }
 
-    pub fn outline_from_file(
-        &mut self,
-        text: &str,
-        font_file: &str,
-    ) -> std::result::Result<(), FontLoadingError> {
+    pub fn outline_from_file(&mut self, text: &str, font_file: &str) -> savvy::Result<()> {
         // NOTE: Technically, fontdb can load file data with .load_font_file().
         //       It might simplify the implimentation, but it would require us
         //       to specify a query, but we don't know how to query the exact
         //       information in the file. So, having another implimentation is
         //       probably reasonable for now.
-        let font_data_raw = std::fs::read(font_file)?;
+        let font_data_raw =
+            std::fs::read(font_file).map_err(|e| savvy::Error::new(&e.to_string()))?;
         self.outline_inner(text, font_data_raw.as_slice(), 0)?;
 
         Ok(())
@@ -136,9 +147,10 @@ impl LyonPathBuilder {
         text: &str,
         font_data: &[u8],
         face_index: u32,
-    ) -> std::result::Result<(), FontLoadingError> {
+    ) -> savvy::Result<()> {
         // TODO: handle error
-        let font = ttf_parser::Face::parse(font_data, face_index)?;
+        let font = ttf_parser::Face::parse(font_data, face_index)
+            .map_err(|e| savvy::Error::new(&e.to_string()))?;
         let facetables = font.tables();
 
         let height = font.height() as f32;
