@@ -2,7 +2,6 @@ use crate::builder::LyonPathBuilder;
 
 use once_cell::sync::Lazy;
 
-use std::{error::Error, fmt::Display};
 use ttf_parser::GlyphId;
 
 pub(crate) static FONTDB: Lazy<fontdb::Database> = Lazy::new(|| {
@@ -18,6 +17,18 @@ pub enum FontLoadingError {
     NoAvailableFonts,
 }
 
+impl From<ttf_parser::FaceParsingError> for FontLoadingError {
+    fn from(err: ttf_parser::FaceParsingError) -> Self {
+        Self::FaceParsingError(err)
+    }
+}
+
+impl From<std::io::Error> for FontLoadingError {
+    fn from(err: std::io::Error) -> Self {
+        Self::IOError(err)
+    }
+}
+
 impl From<FontLoadingError> for savvy::Error {
     fn from(value: FontLoadingError) -> Self {
         let msg = match value {
@@ -29,32 +40,6 @@ impl From<FontLoadingError> for savvy::Error {
         };
 
         savvy::Error::new(&msg)
-    }
-}
-
-impl Display for FontLoadingError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            FontLoadingError::FaceParsingError(err) => err.fmt(f),
-            FontLoadingError::IOError(err) => err.fmt(f),
-            FontLoadingError::NoAvailableFonts => {
-                write!(f, "No available fonts is found on the machine")
-            }
-        }
-    }
-}
-
-impl Error for FontLoadingError {}
-
-impl From<ttf_parser::FaceParsingError> for FontLoadingError {
-    fn from(err: ttf_parser::FaceParsingError) -> Self {
-        Self::FaceParsingError(err)
-    }
-}
-
-impl From<std::io::Error> for FontLoadingError {
-    fn from(err: std::io::Error) -> Self {
-        Self::IOError(err)
     }
 }
 
