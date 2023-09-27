@@ -24,7 +24,7 @@ jobs:
           - {os: ubuntu-latest,  r: 'release',  rust: 'nightly'    }
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@master
@@ -35,9 +35,7 @@ jobs:
         with:
           r-version: ${{ matrix.config.r }}
           rtools-version: ${{ matrix.config.rtools-version }}
-          # TODO: Enable RSPM where possible
-          use-public-rspm: false
-          # use-public-rspm: ${{ matrix.config.r != 'devel' }}
+          use-public-rspm: true
 
       - uses: r-lib/actions/setup-pandoc@v2
 
