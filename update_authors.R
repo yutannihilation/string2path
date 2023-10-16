@@ -11,6 +11,11 @@ manifests <- list.files(VENDOR_PATH, pattern = "Cargo.toml", recursive = TRUE)
 l <- lapply(manifests, \(x) RcppTOML::parseTOML(file.path(VENDOR_PATH, x))$package)
 
 names <- vapply(l, \(x) x[["name"]], FUN.VALUE = character(1L))
+
+idx <- names != "{}"
+l <- l[idx]
+names <- names[idx]
+
 versions <- vapply(l, \(x) x[["version"]], FUN.VALUE = character(1L))
 
 authors <- vapply(l, \(x) {

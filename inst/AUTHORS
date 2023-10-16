@@ -1,6 +1,6 @@
 The authors of the dependency Rust crates:
 
-arrayvec (version 0.7.2):
+arrayvec (version 0.7.4):
   bluss
 
 autocfg (version 1.1.0):
@@ -9,22 +9,22 @@ autocfg (version 1.1.0):
 cc (version 1.0.83):
   Alex Crichton
 
-cfg-if (version 1.0.0):
-  Alex Crichton
-
-euclid (version 0.22.7):
+euclid (version 0.22.9):
   The Servo Project Developers
 
 float_next_after (version 0.1.5):
   Bronson Brown-deVost
 
-fontdb (version 0.11.2):
-  Evgeniy Reizner
+fontconfig-parser (version 0.5.3):
+  
 
-libc (version 0.2.139):
+fontdb (version 0.15.0):
+  Yevhenii Reizner
+
+libc (version 0.2.149):
   The Rust Project Developers
 
-libm (version 0.2.6):
+libm (version 0.2.8):
   Jorge Aparicio
 
 libR-sys (version 0.6.0):
@@ -35,64 +35,82 @@ libR-sys (version 0.6.0):
   Ilia A. Kosenkov
   Hiroaki Yutani
 
-log (version 0.4.17):
+log (version 0.4.20):
   The Rust Project Developers
 
 lyon (version 1.0.1):
   Nicolas Silva
 
-lyon_algorithms (version 1.0.2):
+lyon_algorithms (version 1.0.3):
   Nicolas Silva
 
 lyon_geom (version 1.0.4):
   Nicolas Silva
 
-lyon_path (version 1.0.3):
+lyon_path (version 1.0.4):
   Nicolas Silva
 
-lyon_tessellation (version 1.0.8):
+lyon_tessellation (version 1.0.10):
   Nicolas Silva
 
-memmap2 (version 0.5.8):
+memmap2 (version 0.8.0):
   Dan Burkert
   Yevhenii Reizner
 
-num-traits (version 0.2.15):
+num-traits (version 0.2.17):
   The Rust Project Developers
 
-once_cell (version 1.17.0):
+once_cell (version 1.18.0):
   Aleksey Kladov
 
-proc-macro2 (version 1.0.63):
+proc-macro2 (version 1.0.69):
   David Tolnay
   Alex Crichton
 
-quote (version 1.0.30):
+quote (version 1.0.33):
   David Tolnay
 
-savvy-bindgen (version 0.1.6):
-  Hiroaki Yutani
-
-savvy-macro (version 0.1.6):
-  Hiroaki Yutani
-
-savvy (version 0.1.6):
-  Hiroaki Yutani
-
-syn (version 1.0.107):
-  David Tolnay
-
-syn (version 2.0.32):
-  David Tolnay
-
-thiserror-impl (version 1.0.38):
-  David Tolnay
-
-thiserror (version 1.0.38):
-  David Tolnay
-
-ttf-parser (version 0.18.1):
+roxmltree (version 0.18.1):
   Yevhenii Reizner
 
-unicode-ident (version 1.0.6):
+savvy-bindgen (version 0.1.16):
+  Hiroaki Yutani
+
+savvy-macro (version 0.1.16):
+  Hiroaki Yutani
+
+savvy (version 0.1.16):
+  Hiroaki Yutani
+
+slotmap (version 1.0.6):
+  Orson Peters
+
+syn (version 2.0.38):
   David Tolnay
+
+thiserror-impl (version 1.0.49):
+  David Tolnay
+
+thiserror (version 1.0.49):
+  David Tolnay
+
+tinyvec (version 1.6.0):
+  Lokathor
+
+tinyvec_macros (version 0.1.1):
+  Soveu
+
+ttf-parser (version 0.19.2):
+  Yevhenii Reizner
+
+ttf-parser (version 0.20.0):
+  Yevhenii Reizner
+
+unicode-ident (version 1.0.12):
+  David Tolnay
+
+version_check (version 0.9.4):
+  Sergio Benitez
+
+xmlparser (version 0.13.6):
+  Yevhenii Reizner
