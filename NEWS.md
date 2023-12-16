@@ -1,4 +1,6 @@
-# string2path (development version)
+# string2path 0.1.6
+
+* This is a maintenance release to update the dependency Rust crates.
 
 # string2path 0.1.5
 
