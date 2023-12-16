@@ -16,10 +16,9 @@ badge](https://yutannihilation.r-universe.dev/badges/string2path)](https://yutan
 
 The string2path R package converts a text to paths of the outlines of
 each glyph, based on a font data. Under the hood, this package is
-powered by [my esoteric
-framework](https://github.com/yutannihilation/savvy/), which is an
-experiment for improving [extendr](https://extendr.github.io/)
-framework, to use these two Rust crates:
+powered by [the savvy
+framework](https://yutannihilation.github.io/savvy/savvy/index.html) to
+use these two Rust crates:
 
 - [ttf-parser](https://github.com/RazrFalcon/ttf-parser) for parsing
   font data. TrueType font (`.ttf`) and OpenType font (`.otf`) are
@@ -87,6 +86,112 @@ ggplot(d) +
   theme_minimal() +
   coord_equal() +
   transition_reveal(rowid)
+#> `geom_path()`: Each group consists of only one observation.
+#> ℹ Do you need to adjust the group aesthetic?
+#> `geom_path()`: Each group consists of only one observation.
+#> ℹ Do you need to adjust the group aesthetic?
+#> 
+#> Rendering [=>-------------------------------------------] at 17 fps ~ eta:  6s
+#> 
+#> Rendering [==>------------------------------------------] at 18 fps ~ eta:  5s
+#> 
+#> Rendering [===>-----------------------------------------] at 18 fps ~ eta:  5s
+#> 
+#> Rendering [====>----------------------------------------] at 18 fps ~ eta:  5s
+#> 
+#> Rendering [=====>---------------------------------------] at 19 fps ~ eta:  5s
+#> 
+#> Rendering [=====>---------------------------------------] at 18 fps ~ eta:  5s
+#> 
+#> Rendering [======>--------------------------------------] at 18 fps ~ eta:  5s
+#> 
+#> Rendering [=======>-------------------------------------] at 18 fps ~ eta:  5s
+#> 
+#> Rendering [=======>-------------------------------------] at 18 fps ~ eta:  4s
+#> 
+#> Rendering [========>------------------------------------] at 18 fps ~ eta:  4s
+#> 
+#> Rendering [=========>-----------------------------------] at 18 fps ~ eta:  4s
+#> 
+#> Rendering [==========>----------------------------------] at 18 fps ~ eta:  4s
+#> 
+#> Rendering [===========>---------------------------------] at 18 fps ~ eta:  4s
+#> 
+#> Rendering [============>--------------------------------] at 18 fps ~ eta:  4s
+#> 
+#> Rendering [=============>-------------------------------] at 18 fps ~ eta:  4s
+#> 
+#> Rendering [==============>------------------------------] at 17 fps ~ eta:  4s
+#> 
+#> Rendering [==============>------------------------------] at 18 fps ~ eta:  4s
+#> 
+#> Rendering [===============>-----------------------------] at 18 fps ~ eta:  4s
+#> 
+#> Rendering [================>----------------------------] at 18 fps ~ eta:  4s
+#> 
+#> Rendering [=================>---------------------------] at 18 fps ~ eta:  3s
+#> 
+#> Rendering [==================>--------------------------] at 18 fps ~ eta:  3s
+#> 
+#> Rendering [===================>-------------------------] at 18 fps ~ eta:  3s
+#> 
+#> Rendering [====================>------------------------] at 18 fps ~ eta:  3s
+#> 
+#> Rendering [=====================>-----------------------] at 18 fps ~ eta:  3s
+#> 
+#> Rendering [======================>----------------------] at 18 fps ~ eta:  3s
+#> 
+#> Rendering [=======================>---------------------] at 18 fps ~ eta:  3s
+#> 
+#> Rendering [=======================>---------------------] at 18 fps ~ eta:  2s
+#> 
+#> Rendering [========================>--------------------] at 18 fps ~ eta:  2s
+#> 
+#> Rendering [=========================>-------------------] at 19 fps ~ eta:  2s
+#> 
+#> Rendering [==========================>------------------] at 19 fps ~ eta:  2s
+#> 
+#> Rendering [===========================>-----------------] at 19 fps ~ eta:  2s
+#> 
+#> Rendering [============================>----------------] at 19 fps ~ eta:  2s
+#> 
+#> Rendering [=============================>---------------] at 19 fps ~ eta:  2s
+#> 
+#> Rendering [==============================>--------------] at 19 fps ~ eta:  2s
+#> 
+#> Rendering [===============================>-------------] at 19 fps ~ eta:  2s
+#> 
+#> Rendering [===============================>-------------] at 19 fps ~ eta:  1s
+#> 
+#> Rendering [================================>------------] at 19 fps ~ eta:  1s
+#> 
+#> Rendering [=================================>-----------] at 19 fps ~ eta:  1s
+#> 
+#> Rendering [==================================>----------] at 19 fps ~ eta:  1s
+#> 
+#> Rendering [===================================>---------] at 19 fps ~ eta:  1s
+#> 
+#> Rendering [====================================>--------] at 19 fps ~ eta:  1s
+#> 
+#> Rendering [=====================================>-------] at 19 fps ~ eta:  1s
+#> 
+#> Rendering [======================================>------] at 19 fps ~ eta:  1s
+#> 
+#> Rendering [=======================================>-----] at 19 fps ~ eta:  1s
+#> 
+#> Rendering [========================================>----] at 19 fps ~ eta:  0s
+#> 
+#> Rendering [=========================================>---] at 19 fps ~ eta:  0s
+#> 
+#> Rendering [==========================================>--] at 19 fps ~ eta:  0s
+#> 
+#> Rendering [===========================================>-] at 19 fps ~ eta:  0s
+#> 
+#> Rendering [============================================>] at 19 fps ~ eta:  0s
+#> 
+#> Rendering [=============================================] at 19 fps ~ eta:  0s
+#>                                                                               
+#> 
 ```
 
 <img src="man/figures/README-example-1.gif" width="75%" />
