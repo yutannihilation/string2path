@@ -27,14 +27,6 @@ libc (version 0.2.149):
 libm (version 0.2.8):
   Jorge Aparicio
 
-libR-sys (version 0.6.0):
-  andy-thomason
-  Thomas Down
-  Mossa Merhi Reimert
-  Claus O. Wilke
-  Ilia A. Kosenkov
-  Hiroaki Yutani
-
 log (version 0.4.20):
   The Rust Project Developers
 
@@ -73,13 +65,16 @@ quote (version 1.0.33):
 roxmltree (version 0.18.1):
   Yevhenii Reizner
 
-savvy-bindgen (version 0.1.16):
+savvy-bindgen (version 0.1.19):
   Hiroaki Yutani
 
-savvy-macro (version 0.1.16):
+savvy-ffi (version 0.1.19):
   Hiroaki Yutani
 
-savvy (version 0.1.16):
+savvy-macro (version 0.1.19):
+  Hiroaki Yutani
+
+savvy (version 0.1.19):
   Hiroaki Yutani
 
 slotmap (version 1.0.6):

@@ -78,13 +78,6 @@ License: MIT OR Apache-2.0
 
 ------------------------------
 
-Name:    libR-sys
-Files:   vendor/libR-sys/*
-Authors: andy-thomason, Thomas Down, Mossa Merhi Reimert, Claus O. Wilke, Ilia A. Kosenkov, Hiroaki Yutani
-License: MIT
-
-------------------------------
-
 Name:    log
 Files:   vendor/log/*
 Authors: The Rust Project Developers
@@ -171,6 +164,13 @@ License: MIT OR Apache-2.0
 
 Name:    savvy-bindgen
 Files:   vendor/savvy-bindgen/*
+Authors: Hiroaki Yutani
+License: MIT
+
+------------------------------
+
+Name:    savvy-ffi
+Files:   vendor/savvy-ffi/*
 Authors: Hiroaki Yutani
 License: MIT
 
