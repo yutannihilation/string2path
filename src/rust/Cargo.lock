@@ -65,12 +65,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "libR-sys"
-version = "0.6.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a34aaa68a201f71eab5df5a67d1326add8aaf029434e939353bcab0534919ff1"
-
-[[package]]
 name = "libc"
 version = "0.2.149"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -194,13 +188,13 @@ dependencies = [
 
 [[package]]
 name = "savvy"
-version = "0.1.16"
+version = "0.1.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2ad9a4352787da4cf33a23eae9316b7b5551254ff98a59598b1db5ce600a9835"
+checksum = "5f4fde07ca332736e5df239a4bcfbbb30cb76c997f4e084694426cf960a275b2"
 dependencies = [
  "cc",
- "libR-sys",
  "once_cell",
+ "savvy-ffi",
  "savvy-macro",
 ]
 
@@ -214,6 +208,12 @@ dependencies = [
  "quote",
  "syn",
 ]
+
+[[package]]
+name = "savvy-ffi"
+version = "0.1.19"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3405f314296bdb504aaec0f5ff3551b74917be9dd9d2e36949a672b202b34382"
 
 [[package]]
 name = "savvy-macro"
