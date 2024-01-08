@@ -24,12 +24,6 @@ tweak_for_arm64_macos()
           aarch64-apple-darwin*)
             TARGET="aarch64-apple-darwin"
             TARGET_ARG="--target ${TARGET}"
-            # TODO: ugly hack to install aarch64-apple-darwin target on R-universe
-            # c.f. https://github.com/r-universe-org/build-and-check/blob/261f7fc891adc7d4475501506821dc76275eaed9/macos-cross/action.yml#L26
-            if [ -n "${ARROW_R_DEV}" ]; then
-              echo "[DEBUG] Installing aarch64-apple-darwin target"
-              BEFORE_CARGO_BUILD="${BEFORE_CARGO_BUILD}"' rustup target add aarch64-apple-darwin \&\&'
-            fi
             ;;
         esac
         ;;
