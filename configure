@@ -10,7 +10,7 @@ EOF
   exit 0
 }
 
-args()
+tweak_for_aarm64_macos()
 {
   while [ 0 -lt $# ]; do
     OPT="$1"
@@ -24,6 +24,12 @@ args()
           aarch64-apple-darwin*)
             TARGET="aarch64-apple-darwin"
             TARGET_ARG="--target ${TARGET}"
+            # TODO: ugly hack to install aarch64-apple-darwin target on R-universe
+            # c.f. https://github.com/r-universe-org/build-and-check/blob/261f7fc891adc7d4475501506821dc76275eaed9/macos-cross/action.yml#L26
+            if [ -n "${ARROW_R_DEV}" ]; then
+              echo "[DEBUG] Installing aarch64-apple-darwin target"
+              BEFORE_CARGO_BUILD="${BEFORE_CARGO_BUILD}"' rustup target add aarch64-apple-darwin \&\&'
+            fi
             ;;
         esac
         ;;
@@ -31,10 +37,6 @@ args()
     esac
   done
 }
-
-# define $TARGET and $TARGET_ARG if provided via --build arg
-# c.f. https://www.gnu.org/prep/standards/html_node/Configuration.html
-args $*
 
 # The envvar used in libR-sys crate
 LIBRSYS_R_VERSION=$("${R_HOME}/bin/Rscript" "./tools/print_r_version.R")
@@ -71,6 +73,10 @@ if [ "${NOT_CRAN}" != "true" ]; then
 else
   echo "*** Detected NOT_CRAN=true, do not override CARGO_HOME"
 fi
+
+# define $TARGET and $TARGET_ARG if provided via --build arg
+# c.f. https://www.gnu.org/prep/standards/html_node/Configuration.html
+tweak_for_aarm64_macos $*
 
 sed \
   -e "s|@BEFORE_CARGO_BUILD@|${BEFORE_CARGO_BUILD}|" \
