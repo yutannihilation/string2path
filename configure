@@ -1,8 +1,5 @@
-# The envvar used in libR-sys crate
-LIBRSYS_R_VERSION=$("${R_HOME}/bin/Rscript" "./tools/print_r_version.R")
-
 # Variables used for tweaking Makevars
-BEFORE_CARGO_BUILD="export LIBRSYS_R_VERSION=\"${LIBRSYS_R_VERSION}\" \\&\\&"
+BEFORE_CARGO_BUILD=''
 AFTER_CARGO_BUILD=''
 
 # Even when `cargo` is on `PATH`, `rustc` might not. We need to source
