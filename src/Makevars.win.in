@@ -1,5 +1,4 @@
 TARGET = x86_64-pc-windows-gnu
-TARGET_ARG = --target $(TARGET)
 
 # Rtools42 doesn't have the linker in the location that cargo expects, so we
 # need to overwrite it via configuration.
@@ -28,7 +27,7 @@ $(STATLIB):
 	    cp ./cargo_vendor_config.toml ./rust/.cargo/config.toml; \
 	fi
 
-	@BEFORE_CARGO_BUILD@ cd ./rust && cargo build --jobs 1 $(TARGET_ARG) --lib --release $(OFFLINE_OPTION)
+	@BEFORE_CARGO_BUILD@ cd ./rust && cargo build --jobs 1 --target $(TARGET) --lib --release $(OFFLINE_OPTION)
 	@AFTER_CARGO_BUILD@
 
 C_clean:

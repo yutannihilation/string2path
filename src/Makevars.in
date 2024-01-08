@@ -1,11 +1,8 @@
-TARGET = @TARGET@
-TARGET_ARG = @TARGET_ARG@
-
 # TODO
 VENDORING = yes
 OFFLINE_OPTION = --offline
 
-LIBDIR = ./rust/target/$(TARGET)/release
+LIBDIR = ./rust/target/release
 PKG_LIBS = -L$(LIBDIR) -lstring2path
 STATLIB = $(LIBDIR)/libstring2path.a
 
@@ -22,7 +19,7 @@ $(STATLIB):
 	    cp ./cargo_vendor_config.toml ./rust/.cargo/config.toml; \
 	fi
 
-	@BEFORE_CARGO_BUILD@ cd ./rust && cargo build --jobs 1 $(TARGET_ARG) --lib --release $(OFFLINE_OPTION)
+	@BEFORE_CARGO_BUILD@ cd ./rust && cargo build --jobs 1 --lib --release $(OFFLINE_OPTION)
 	@AFTER_CARGO_BUILD@
 
 C_clean:
