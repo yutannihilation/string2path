@@ -1,3 +1,41 @@
+#!/bin/sh
+
+usage()
+{
+  cat - <<EOF
+Options:
+  --help   show help
+  --build  specify target
+EOF
+  exit 0
+}
+
+args()
+{
+  while [ 0 -lt $# ]; do
+    OPT="$1"
+    shift 1
+    case "${OPT}" in
+      --help|-h)
+        usage
+        ;;
+      --build=*)
+        case $(echo "${OPT}" | cut -c 9-) in
+          aarch64-apple-darwin*)
+            TARGET="aarch64-apple-darwin"
+            TARGET_ARG="--target ${TARGET}"
+            ;;
+        esac
+        ;;
+      # ignore unknown options silently
+    esac
+  done
+}
+
+# define $TARGET and $TARGET_ARG if provided via --build arg
+# c.f. https://www.gnu.org/prep/standards/html_node/Configuration.html
+args $*
+
 # The envvar used in libR-sys crate
 LIBRSYS_R_VERSION=$("${R_HOME}/bin/Rscript" "./tools/print_r_version.R")
 
@@ -37,6 +75,8 @@ fi
 sed \
   -e "s|@BEFORE_CARGO_BUILD@|${BEFORE_CARGO_BUILD}|" \
   -e "s|@AFTER_CARGO_BUILD@|${AFTER_CARGO_BUILD}|" \
+  -e "s|@TARGET@|${TARGET}|" \
+  -e "s|@TARGET_ARG@|${TARGET_ARG}|" \
   src/Makevars.in > src/Makevars
 
 # Uncomment this to debug
