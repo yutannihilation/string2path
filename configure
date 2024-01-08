@@ -10,7 +10,7 @@ EOF
   exit 0
 }
 
-tweak_for_aarm64_macos()
+tweak_for_arm64_macos()
 {
   while [ 0 -lt $# ]; do
     OPT="$1"
@@ -76,7 +76,7 @@ fi
 
 # define $TARGET and $TARGET_ARG if provided via --build arg
 # c.f. https://www.gnu.org/prep/standards/html_node/Configuration.html
-tweak_for_aarm64_macos $*
+tweak_for_arm64_macos $*
 
 sed \
   -e "s|@BEFORE_CARGO_BUILD@|${BEFORE_CARGO_BUILD}|" \
