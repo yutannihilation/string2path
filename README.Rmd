@@ -59,7 +59,9 @@ for the installation instructions.
 
 ### `string2path()`
 
-```{r example}
+```{r}
+#| label: example
+#| message: false
 library(string2path)
 library(ggplot2)
 
@@ -94,7 +96,8 @@ on my local machine, so the same code might not run on your environment. You can
 use `dump_fontdb()` to see the available combination of font family (e.g. `"Arial"`),
 weight (e.g. `"bold"`), and style (e.g. `"italic"`).
 
-```{r dump}
+```{r}
+#| label: dump
 dump_fontdb()
 ```
 
@@ -103,6 +106,7 @@ You can also specify the font file directly. Pomicons is a font available on
 SIL OFL 1.1.
 
 ```{r}
+#| label: icon_font
 pomicons_file <- here::here("fonts", "Pomicons.ttf")
 if (!file.exists(pomicons_file)) {
   dir.create(dirname(pomicons_file))
@@ -123,7 +127,8 @@ ggplot(d_tmp) +
 
 ### `string2fill()`
 
-```{r example2}
+```{r}
+#| label: example2
 d <- string2fill("abc", "Iosevka SS08", font_weight = "bold", font_style = "italic")
 
 ggplot(d) +
@@ -137,7 +142,9 @@ ggplot(d) +
 
 ### `string2stroke()`
 
-```{r string2stroke,animation.hook='gifski'}
+```{r}
+#| label: string2stroke
+#| animation.hook: gifski
 for (w in 1:9 * 0.01) {
   d <- string2stroke("abc","Iosevka SS08", font_weight = "bold", font_style = "italic", line_width = w)
   
@@ -158,7 +165,9 @@ for (w in 1:9 * 0.01) {
 
 `tolerance` controls resolution of the tessellation. You can reduce tolerance to get higher resolutions.
 
-```{r example3, animation.hook='gifski'}
+```{r}
+#| label: example3
+#| animation.hook: gifski
 for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
   d <- string2fill("abc", "Iosevka SS08", font_weight = "bold", font_style = "italic", tolerance = tolerance)
   
@@ -175,7 +184,9 @@ for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
 Note that `tolerance` parameter behaves a bit differently on `string2fill()` and `string2stroke()`.
 But, in either case, 1e-5 ~ 1e-6 should be enough.
 
-```{r example4, animation.hook='gifski'}
+```{r}
+#| label: example4
+#| animation.hook: gifski
 for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
   d <- string2path("abc", "Iosevka SS08", font_weight = "bold", font_style = "italic", tolerance = tolerance)
   
