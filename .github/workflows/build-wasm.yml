@@ -1,0 +1,20 @@
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+name: Build WASM
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout calling repository
+        uses: actions/checkout@v4
+
+      - name: Build wasm packages
+        uses: yutannihilation/r-wasm-actions/build-rwasm@main
+        with:
+          packages: |
+            local::.

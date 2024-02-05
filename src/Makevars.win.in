@@ -4,9 +4,8 @@ TARGET = x86_64-pc-windows-gnu
 # need to overwrite it via configuration.
 CARGO_LINKER = x86_64-w64-mingw32.static.posix-gcc.exe
 
-# TODO
-VENDORING = yes
-OFFLINE_OPTION = --offline
+VENDORING = @VENDORING@
+OFFLINE_OPTION = @OFFLINE_OPTION@
 
 LIBDIR = ./rust/target/$(TARGET)/release
 PKG_LIBS = -L$(LIBDIR) -lstring2path -lws2_32 -ladvapi32 -luserenv -lbcrypt -lntdll
