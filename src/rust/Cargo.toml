@@ -10,7 +10,7 @@ crate-type = ["staticlib"]
 lto = true
 
 [dependencies]
-savvy = "0"
+savvy = "0.2.11"
 fontdb = "0.15"
 lyon = "1.0"
 once_cell = "1"

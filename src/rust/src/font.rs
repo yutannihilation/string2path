@@ -90,7 +90,7 @@ impl LyonPathBuilder {
             return result.unwrap_or(Ok(()));
         }
 
-        savvy::r_eprint("No font face matched with the specified conditions. Falling back to the default font...")?;
+        savvy::r_eprint!("No font face matched with the specified conditions. Falling back to the default font...");
 
         // 2. If not found, try the fallback query which should hit at least one font
 
@@ -109,7 +109,7 @@ impl LyonPathBuilder {
 
         // 3. When no fonts are available, return an error.
 
-        savvy::r_eprint("No font is available!")?;
+        savvy::r_eprint!("No font is available!");
 
         Err(FontLoadingError::NoAvailableFonts.into())
     }

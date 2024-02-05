@@ -65,16 +65,16 @@ quote (version 1.0.33):
 roxmltree (version 0.18.1):
   Yevhenii Reizner
 
-savvy-bindgen (version 0.1.19):
+savvy-bindgen (version 0.2.11):
   Hiroaki Yutani
 
-savvy-ffi (version 0.1.19):
+savvy-ffi (version 0.2.11):
   Hiroaki Yutani
 
-savvy-macro (version 0.1.19):
+savvy-macro (version 0.2.11):
   Hiroaki Yutani
 
-savvy (version 0.1.19):
+savvy (version 0.2.11):
   Hiroaki Yutani
 
 slotmap (version 1.0.6):
