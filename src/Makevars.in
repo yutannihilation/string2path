@@ -1,9 +1,9 @@
-WEBR = @WEBR@
+TARGET = @TARGET@
 
 VENDORING = @VENDORING@
 OFFLINE_OPTION = @OFFLINE_OPTION@
 
-LIBDIR = ./rust/target/release
+LIBDIR = ./rust/target/$(TARGET)/release
 PKG_LIBS = -L$(LIBDIR) -lstring2path
 STATLIB = $(LIBDIR)/libstring2path.a
 
@@ -20,13 +20,13 @@ $(STATLIB):
 	    cp ./cargo_vendor_config.toml ./rust/.cargo/config.toml; \
 	fi
 
-	if [ "$(WEBR)" != "yes" ]; then \
+	if [ "$(TARGET)" != "wasm32-unknown-emscripten" ]; then \
 	  @BEFORE_CARGO_BUILD@ cd ./rust && cargo build --jobs 1 --lib --release $(OFFLINE_OPTION); \
 	else \
 	  export CC="$(CC)" && \
 	  export CFLAGS="$(CFLAGS)" && \
 	  export CARGO_PROFILE_RELEASE_PANIC="abort" && \
-	  @BEFORE_CARGO_BUILD@ cd ./rust && cargo +nightly build --lib --release --target wasm32-unknown-emscripten -Zbuild-std=panic_abort,std $(OFFLINE_OPTION); \
+	  @BEFORE_CARGO_BUILD@ cd ./rust && cargo +nightly build --lib --release --target $(TARGET) -Zbuild-std=panic_abort,std $(OFFLINE_OPTION); \
 	fi
 	@AFTER_CARGO_BUILD@
 
