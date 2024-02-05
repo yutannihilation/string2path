@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [main, master]
 
-name: Deploy CRAN repo
+name: Build WASM
 
 jobs:
   build:
