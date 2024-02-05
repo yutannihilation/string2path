@@ -20,7 +20,7 @@ $(STATLIB):
 	    cp ./cargo_vendor_config.toml ./rust/.cargo/config.toml; \
 	fi
 
-	if [ "$(TARGET)" != "wasm32-unknown-emscripten" ]; then \
+	if [ "$(WEBR)" != "yes" ]; then \
 	  @BEFORE_CARGO_BUILD@ cd ./rust && cargo build --jobs 1 --lib --release $(OFFLINE_OPTION); \
 	else \
 	  export CC="$(CC)" && \
