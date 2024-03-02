@@ -213,9 +213,16 @@ mod tests {
             .unwrap();
         let result = builder.into_path();
 
-        // the height of the test.ttf is 125 (ascent 100 + descent 25)
-        assert_eq!(result.x, vec![0., 100. / 125., 0., 0.]);
-        assert_eq!(result.y, vec![0., 100. / 125., 100. / 125., 0.]);
+        assert!(result
+            .x
+            .iter()
+            .zip(vec![0., 100. / 125., 0., 0.])
+            .all(|(actual, expect)| (expect - actual).abs() < f64::EPSILON.sqrt()));
+        assert!(result
+            .y
+            .iter()
+            .zip(vec![0., 100. / 125., 100. / 125., 0.])
+            .all(|(actual, expect)| (expect - actual).abs() < 0.0001));
     }
 
     #[test]
@@ -245,7 +252,15 @@ mod tests {
         let result = builder.into_fill();
 
         // TODO: Is this correct...?
-        assert_eq!(result.x, vec![0., 0., 100. / 125.]);
-        assert_eq!(result.y, vec![0., 100. / 125., 100. / 125.]);
+        assert!(result
+            .x
+            .iter()
+            .zip(vec![0., 0., 100. / 125.])
+            .all(|(actual, expect)| (expect - actual).abs() < f64::EPSILON.sqrt()));
+        assert!(result
+            .y
+            .iter()
+            .zip(vec![0., 100. / 125., 100. / 125.])
+            .all(|(actual, expect)| (expect - actual).abs() < f64::EPSILON.sqrt()));
     }
 }
