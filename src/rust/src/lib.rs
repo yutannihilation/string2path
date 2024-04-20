@@ -2,11 +2,11 @@ use font::FONTDB;
 use result::FontDBTibble;
 use savvy::savvy;
 
-mod builder;
-mod font;
-mod into_fill_stroke;
-mod into_path;
-mod result;
+pub mod builder;
+pub mod font;
+pub mod into_fill_stroke;
+pub mod into_path;
+pub mod result;
 
 enum ConversionType {
     Path,
