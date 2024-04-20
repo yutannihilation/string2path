@@ -201,7 +201,7 @@ fn dump_fontdb_impl() -> savvy::Result<savvy::Sexp> {
     result.try_into()
 }
 
-#[cfg(test)]
+#[cfg(savvy_test)]
 mod tests {
     use crate::builder::LyonPathBuilder;
 
