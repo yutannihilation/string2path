@@ -6,9 +6,12 @@ library(RcppTOML)
 ## Update inst/AUTHORS
 
 VENDOR_PATH <- "src/rust/vendor"
-manifests <- list.files(VENDOR_PATH, pattern = "Cargo.toml", recursive = TRUE)
+manifests <- list.files(VENDOR_PATH, pattern = "Cargo\\.toml", recursive = TRUE)
 
-l <- lapply(manifests, \(x) RcppTOML::parseTOML(file.path(VENDOR_PATH, x))$package)
+l <- lapply(manifests, \(x) {
+  cat("parsing ", x, "\n")
+  RcppTOML::parseTOML(file.path(VENDOR_PATH, x))$package
+})
 
 names <- vapply(l, \(x) x[["name"]], FUN.VALUE = character(1L))
 
