@@ -1,5 +1,7 @@
 # string2path (development version)
 
+* This is a maintenance release to fix a build error on ARM Linux.
+
 # string2path 0.1.6
 
 * This is a maintenance release to update the dependency Rust crates.

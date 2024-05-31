@@ -30,7 +30,7 @@ Under the hood, this package is powered by [the savvy framework][savvy] to use t
 * [ttf-parser](https://github.com/RazrFalcon/ttf-parser) for parsing font data. TrueType font (`.ttf`) and OpenType font (`.otf`) are supported.
 * [lyon](https://github.com/nical/lyon/) for tessellation of polygons and flattening the curves.
 
-[savvy]: https://yutannihilation.github.io/savvy/savvy/index.html
+[savvy]: https://yutannihilation.github.io/savvy/guide/
 
 ## Installation
 
