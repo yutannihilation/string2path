@@ -39,7 +39,7 @@ License: MIT OR Apache-2.0
 Name:    euclid
 Files:   vendor/euclid/*
 Authors: The Servo Project Developers
-License: MIT / Apache-2.0
+License: MIT OR Apache-2.0
 
 ------------------------------
 

@@ -103,16 +103,16 @@ dump_fontdb()
 #> # A tibble: 448 × 5
 #>    x                                           y family        weight style 
 #>    <chr>                                   <int> <chr>         <chr>  <chr> 
-#>  1 "C:\\Windows\\Fonts\\arial.ttf"             0 Arial         normal normal
-#>  2 "C:\\Windows\\Fonts\\arialbd.ttf"           0 Arial         bold   normal
-#>  3 "C:\\Windows\\Fonts\\arialbi.ttf"           0 Arial         bold   italic
-#>  4 "C:\\Windows\\Fonts\\ariali.ttf"            0 Arial         normal italic
-#>  5 "C:\\Windows\\Fonts\\ariblk.ttf"            0 Arial         black  normal
-#>  6 "C:\\Windows\\Fonts\\bahnschrift.ttf"       0 Bahnschrift   normal normal
-#>  7 "C:\\Windows\\Fonts\\BIZ-UDGothicB.ttc"     0 BIZ UDGothic  bold   normal
-#>  8 "C:\\Windows\\Fonts\\BIZ-UDGothicB.ttc"     1 BIZ UDPGothic bold   normal
-#>  9 "C:\\Windows\\Fonts\\BIZ-UDGothicR.ttc"     0 BIZ UDGothic  normal normal
-#> 10 "C:\\Windows\\Fonts\\BIZ-UDGothicR.ttc"     1 BIZ UDPGothic normal normal
+#>  1 "C:\\WINDOWS\\Fonts\\arial.ttf"             0 Arial         normal normal
+#>  2 "C:\\WINDOWS\\Fonts\\arialbd.ttf"           0 Arial         bold   normal
+#>  3 "C:\\WINDOWS\\Fonts\\arialbi.ttf"           0 Arial         bold   italic
+#>  4 "C:\\WINDOWS\\Fonts\\ariali.ttf"            0 Arial         normal italic
+#>  5 "C:\\WINDOWS\\Fonts\\ariblk.ttf"            0 Arial         black  normal
+#>  6 "C:\\WINDOWS\\Fonts\\bahnschrift.ttf"       0 Bahnschrift   normal normal
+#>  7 "C:\\WINDOWS\\Fonts\\BIZ-UDGothicB.ttc"     0 BIZ UDGothic  bold   normal
+#>  8 "C:\\WINDOWS\\Fonts\\BIZ-UDGothicB.ttc"     1 BIZ UDPGothic bold   normal
+#>  9 "C:\\WINDOWS\\Fonts\\BIZ-UDGothicR.ttc"     0 BIZ UDGothic  normal normal
+#> 10 "C:\\WINDOWS\\Fonts\\BIZ-UDGothicR.ttc"     1 BIZ UDPGothic normal normal
 #> # ℹ 438 more rows
 ```
 
