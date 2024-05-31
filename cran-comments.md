@@ -1,2 +1,1 @@
-This release is a maintenance release to update the dependencies and switch the
-Rust-to-R interface framework. No breaking change is included.
+This release is a maintenance release to fix a build error on ARM Linux.
