@@ -21,6 +21,10 @@ if [ $ret -ne 0 ]; then
   exit $ret
 fi
 
+# Report the version of Rustc to comply with the CRAN policy
+echo "using Rust package manager: '$(cargo --version)'"
+echo "using Rust compiler: '$(rustc --version)'"
+
 # Handle webR
 if [ "$(uname)" = "Emscripten" ]; then
   TARGET="wasm32-unknown-emscripten"

@@ -11,6 +11,10 @@ if [ $ret -ne 0 ]; then
   exit $ret
 fi
 
+# Report the version of Rustc to comply with the CRAN policy
+echo "using Rust package manager: '$(cargo --version)'"
+echo "using Rust compiler: '$(rustc --version)'"
+
 # To address the change of the toolchain on R 4.2
 BEFORE_CARGO_BUILD="${BEFORE_CARGO_BUILD}"' export CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER="$(CARGO_LINKER)" \&\&'
 BEFORE_CARGO_BUILD="${BEFORE_CARGO_BUILD}"' export LIBRARY_PATH="$${LIBRARY_PATH};$(CURDIR)/$(LIBDIR)/libgcc_mock" \&\&'
