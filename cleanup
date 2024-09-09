@@ -1,1 +1,1 @@
-rm -f src/Makevars src/Makevars.win
+rm -f src/Makevars
