@@ -30,9 +30,6 @@ libm (version 0.2.8):
 log (version 0.4.21):
   The Rust Project Developers
 
-lyon (version 1.0.1):
-  Nicolas Silva
-
 lyon_algorithms (version 1.0.4):
   Nicolas Silva
 
@@ -43,6 +40,9 @@ lyon_path (version 1.0.5):
   Nicolas Silva
 
 lyon_tessellation (version 1.0.15):
+  Nicolas Silva
+
+lyon (version 1.0.1):
   Nicolas Silva
 
 memmap2 (version 0.9.4):
@@ -65,16 +65,19 @@ quote (version 1.0.36):
 roxmltree (version 0.19.0):
   Yevhenii Reizner
 
-savvy-bindgen (version 0.6.4):
+rustversion (version 1.0.17):
+  David Tolnay
+
+savvy-bindgen (version 0.6.7):
   Hiroaki Yutani
 
-savvy-ffi (version 0.6.4):
+savvy-ffi (version 0.6.7):
   Hiroaki Yutani
 
-savvy-macro (version 0.6.4):
+savvy-macro (version 0.6.7):
   Hiroaki Yutani
 
-savvy (version 0.6.4):
+savvy (version 0.6.7):
   Hiroaki Yutani
 
 slotmap (version 1.0.7):
@@ -83,11 +86,11 @@ slotmap (version 1.0.7):
 syn (version 2.0.66):
   David Tolnay
 
-tinyvec (version 1.6.0):
-  Lokathor
-
 tinyvec_macros (version 0.1.1):
   Soveu
+
+tinyvec (version 1.6.0):
+  Lokathor
 
 ttf-parser (version 0.21.1):
   Yevhenii Reizner
