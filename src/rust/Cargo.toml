@@ -6,6 +6,9 @@ edition = "2021"
 [lib]
 crate-type = ["staticlib", "lib"]
 
+[features]
+savvy_test = [] # to avoid warnings
+
 [profile.release]
 lto = true
 panic = "abort"
