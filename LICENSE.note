@@ -36,6 +36,13 @@ License: MIT OR Apache-2.0
 
 ------------------------------
 
+Name:    core_maths
+Files:   vendor/core_maths/*
+Authors: Robert Bastian <me@robertbastian.dev
+License: MIT
+
+------------------------------
+
 Name:    euclid
 Files:   vendor/euclid/*
 Authors: The Servo Project Developers
@@ -194,6 +201,13 @@ Name:    savvy
 Files:   vendor/savvy/*
 Authors: Hiroaki Yutani
 License: MIT
+
+------------------------------
+
+Name:    shlex
+Files:   vendor/shlex/*
+Authors: comex, Fenhl, Adrian Taylor, Alex Touchet, Daniel Parks, Garrett Berg
+License: MIT OR Apache-2.0
 
 ------------------------------
 
