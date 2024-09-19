@@ -1,3 +1,5 @@
+use lyon::path::traits::Build;
+
 use crate::builder::LyonPathBuilder;
 use crate::result::PathTibble;
 

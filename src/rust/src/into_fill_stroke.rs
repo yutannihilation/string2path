@@ -1,6 +1,7 @@
 use crate::{builder::LyonPathBuilder, result::PathTibble};
 
 use lyon::tessellation::*;
+use path::traits::Build;
 
 #[derive(Copy, Clone, Debug)]
 struct Vertex {
