@@ -62,12 +62,12 @@ impl TryFrom<FontDBTibble> for savvy::Sexp {
 
         out.set_name_and_value(
             0,
-            "x",
+            "source",
             <OwnedStringSexp>::try_from(value.source.as_slice())?,
         )?;
         out.set_name_and_value(
             1,
-            "y",
+            "index",
             <OwnedIntegerSexp>::try_from(value.index.as_slice())?,
         )?;
         out.set_name_and_value(
