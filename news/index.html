@@ -34,7 +34,14 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="string2path-development-version">string2path (development version)<a class="anchor" aria-label="anchor" href="#string2path-development-version"></a></h2>
-</div>
+<ul><li>Partially support COLRv1 emoji fonts.
+<ul><li>COLRv1 emoji font is a color emoji, but not all color emoji is COLRv1 format. For example, Noto Color Emoji has several variants, and it seems the primary one is CBDT/CBLC format.</li>
+<li>Additional information are currently just discarded.
+<ul><li>The color information can be useful. Currently, it’s not obvious what format (e.g. an attribute of the result data.frame?) is the best to return it to users.</li>
+<li>The clip and layer composition information are just discarded. While this can be useful, it’s not very easy to use these information in R.</li>
+</ul></li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.8" id="string2path-018">string2path 0.1.8<a class="anchor" aria-label="anchor" href="#string2path-018"></a></h2><p class="text-muted">CRAN release: 2024-08-24</p>
 <ul><li>This is a maintenance release to comply with the CRAN repository policy.</li>
@@ -106,7 +113,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
