@@ -1,8 +1,8 @@
-use crate::builder::LyonPathBuilder;
+use crate::builder::{LyonPathBuilder, LyonPathBuilderForPaint};
 
 use once_cell::sync::Lazy;
 
-use ttf_parser::GlyphId;
+use ttf_parser::{GlyphId, RgbaColor};
 
 pub(crate) static FONTDB: Lazy<fontdb::Database> = Lazy::new(|| {
     let mut db = fontdb::Database::new();
@@ -139,7 +139,7 @@ impl LyonPathBuilder {
         let facetables = font.tables();
 
         let height = font.height() as f32;
-        self.scale_factor = 1. / height;
+        self.set_scale_factor(1. / height);
         let line_height = height + font.line_gap() as f32;
 
         let mut prev_glyph: Option<GlyphId> = None;
@@ -148,8 +148,8 @@ impl LyonPathBuilder {
             if c.is_control() {
                 // If the character is a line break, move to the next line
                 if c == '\n' {
-                    self.offset_y -= line_height;
-                    self.offset_x = 0.;
+                    self.sub_offset_y(line_height);
+                    self.reset_offset_x();
                 }
                 prev_glyph = None;
                 continue;
@@ -158,13 +158,22 @@ impl LyonPathBuilder {
             let cur_glyph = font.glyph_index(c).unwrap_or(GlyphId(0));
 
             if let Some(prev_glyph) = prev_glyph {
-                self.offset_x += find_kerning(facetables, prev_glyph, cur_glyph) as f32;
+                self.add_offset_x(find_kerning(facetables, prev_glyph, cur_glyph) as f32);
             }
 
-            font.outline_glyph(cur_glyph, self);
+            if font.is_color_glyph(cur_glyph) {
+                let mut painter = LyonPathBuilderForPaint::new(self, &font);
+                let fg_color = RgbaColor::new(0, 0, 0, 255);
+                font.paint_color_glyph(cur_glyph, 1, fg_color, &mut painter);
+            } else {
+                let res = font.outline_glyph(cur_glyph, self);
+                if res.is_none() {
+                    return Err(savvy::Error::new(&format!("Failed to outline char '{c}'")));
+                }
+            }
 
             if let Some(ha) = font.glyph_hor_advance(cur_glyph) {
-                self.offset_x += ha as f32;
+                self.add_offset_x(ha as f32);
             }
 
             prev_glyph = Some(cur_glyph);

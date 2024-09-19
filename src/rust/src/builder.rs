@@ -1,19 +1,26 @@
-use lyon::math::point;
+use lyon::{geom::euclid::UnknownUnit, math::point, path::traits::PathBuilder};
+use ttf_parser::{colr::Painter, Face};
 
 pub struct LyonPathBuilder {
     // It's not very elegant to store the glyph ID (not the `glyphId` ttf-parser
     // uses, but the glyph count) and path ID in attributes, but it seems the
     // attribute is the only thing we can pass to tessellators.
-    pub builder: lyon::path::path::BuilderWithAttributes,
+    pub builder: lyon::path::builder::Transformed<
+        lyon::path::path::BuilderWithAttributes,
+        lyon::math::Transform,
+    >,
 
     pub cur_glyph_id: u32,
     pub cur_path_id: u32,
 
-    // multiply by this to scale the position into the range of [0, 1].
-    pub scale_factor: f32,
+    // This transformation is of COLR format.
+    base_transform: lyon::geom::euclid::Transform2D<f32, UnknownUnit, UnknownUnit>,
 
-    pub offset_x: f32,
-    pub offset_y: f32,
+    // multiply by this to scale the position into the range of [0, 1].
+    scale_factor: f32,
+
+    offset_x: f32,
+    offset_y: f32,
 
     pub tolerance: f32,
 
@@ -24,27 +31,80 @@ pub struct LyonPathBuilder {
 impl LyonPathBuilder {
     pub fn new(tolerance: f32, line_width: f32) -> Self {
         Self {
-            builder: lyon::path::Path::builder_with_attributes(2),
+            builder: lyon::path::Path::builder_with_attributes(2)
+                .transformed(lyon::geom::euclid::Transform2D::identity()),
             cur_glyph_id: 0,
             cur_path_id: 0,
+            base_transform: lyon::geom::euclid::Transform2D::identity(),
+            scale_factor: 1.,
             offset_x: 0.,
             offset_y: 0.,
             tolerance,
             line_width,
-            scale_factor: 1.,
         }
     }
 
     // adds offsets to x and y
-    pub(crate) fn point(&self, x: f32, y: f32) -> lyon::math::Point {
-        point(
-            (x + self.offset_x) * self.scale_factor,
-            (y + self.offset_y) * self.scale_factor,
-        )
+    pub fn point(&self, x: f32, y: f32) -> lyon::math::Point {
+        point(x, y)
     }
 
-    pub(crate) fn ids(&self) -> [f32; 2] {
+    pub fn ids(&self) -> [f32; 2] {
         [self.cur_glyph_id as _, self.cur_path_id as _]
+    }
+
+    pub fn update_transform(&mut self) {
+        let transform = self
+            .base_transform
+            .then_translate(lyon::geom::euclid::Vector2D::new(
+                self.offset_x,
+                self.offset_y,
+            ))
+            .then_scale(self.scale_factor, self.scale_factor);
+        self.builder.set_transform(transform);
+    }
+
+    pub fn set_scale_factor(&mut self, scale_factor: f32) {
+        self.scale_factor = scale_factor;
+        self.update_transform();
+    }
+
+    pub fn add_offset_x(&mut self, x: f32) {
+        self.offset_x += x;
+        self.update_transform();
+    }
+
+    pub fn add_offset_y(&mut self, y: f32) {
+        self.offset_y += y;
+        self.update_transform();
+    }
+
+    pub fn sub_offset_x(&mut self, x: f32) {
+        self.offset_x -= x;
+        self.update_transform();
+    }
+
+    pub fn sub_offset_y(&mut self, y: f32) {
+        self.offset_y -= y;
+        self.update_transform();
+    }
+
+    pub fn reset_offset_x(&mut self) {
+        self.offset_x = 0.0;
+        self.update_transform();
+    }
+
+    pub fn reset_offset_y(&mut self) {
+        self.offset_y = 0.0;
+        self.update_transform();
+    }
+
+    pub fn set_transform(
+        &mut self,
+        transform: lyon::geom::euclid::Transform2D<f32, UnknownUnit, UnknownUnit>,
+    ) {
+        self.base_transform = transform;
+        self.update_transform();
     }
 }
 
@@ -73,5 +133,64 @@ impl ttf_parser::OutlineBuilder for LyonPathBuilder {
     fn close(&mut self) {
         self.builder.end(true);
         self.cur_path_id += 1;
+    }
+}
+
+pub struct LyonPathBuilderForPaint<'a> {
+    builder: &'a mut LyonPathBuilder,
+    face: &'a Face<'a>,
+}
+
+impl<'a> LyonPathBuilderForPaint<'a> {
+    pub fn new(builder: &'a mut LyonPathBuilder, face: &'a Face<'a>) -> Self {
+        Self { builder, face }
+    }
+}
+
+impl<'a> Painter<'a> for LyonPathBuilderForPaint<'a> {
+    fn outline_glyph(&mut self, glyph_id: ttf_parser::GlyphId) {
+        self.face.outline_glyph(glyph_id, self.builder);
+    }
+
+    fn paint(&mut self, _paint: ttf_parser::colr::Paint<'a>) {
+        // ignore
+    }
+
+    fn push_clip(&mut self) {
+        // ignore
+    }
+
+    fn push_clip_box(&mut self, _clipbox: ttf_parser::colr::ClipBox) {
+        // ignore
+    }
+
+    fn pop_clip(&mut self) {
+        // ignore
+    }
+
+    fn push_layer(&mut self, _mode: ttf_parser::colr::CompositeMode) {
+        // ignore
+    }
+
+    fn pop_layer(&mut self) {
+        // ignore
+    }
+
+    fn push_transform(&mut self, transform: ttf_parser::Transform) {
+        let transform = lyon::geom::euclid::Transform2D::new(
+            // cf. https://learn.microsoft.com/en-us/typography/opentype/spec/colr#formats-12-and-13-painttransform-paintvartransform
+            transform.a, // xx
+            transform.b, // yx
+            transform.c, // xy
+            transform.d, // yy
+            transform.e, // dx
+            transform.f, // dy
+        );
+        self.builder.set_transform(transform);
+    }
+
+    fn pop_transform(&mut self) {
+        self.builder
+            .set_transform(lyon::geom::euclid::Transform2D::identity());
     }
 }
