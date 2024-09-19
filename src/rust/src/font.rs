@@ -164,12 +164,11 @@ impl LyonPathBuilder {
             if font.is_color_glyph(cur_glyph) {
                 let mut painter = LyonPathBuilderForPaint::new(self, &font);
                 let fg_color = RgbaColor::new(0, 0, 0, 255);
-                font.paint_color_glyph(cur_glyph, 1, fg_color, &mut painter);
+                let res = font.paint_color_glyph(cur_glyph, 0, fg_color, &mut painter);
+                res.ok_or_else(|| savvy::Error::new(&format!("Failed to outline char '{c}'")))?;
             } else {
                 let res = font.outline_glyph(cur_glyph, self);
-                if res.is_none() {
-                    return Err(savvy::Error::new(&format!("Failed to outline char '{c}'")));
-                }
+                res.ok_or_else(|| savvy::Error::new(&format!("Failed to outline char '{c}'")))?;
             }
 
             if let Some(ha) = font.glyph_hor_advance(cur_glyph) {

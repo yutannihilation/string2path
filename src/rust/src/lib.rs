@@ -110,7 +110,7 @@ fn string2stroke_file(
     tolerance: f64,
     line_width: f64,
 ) -> savvy::Result<savvy::Sexp> {
-    string2any_file(text, font_file, tolerance, line_width, ConversionType::Path)
+    string2any_file(text, font_file, tolerance, line_width, ConversionType::Stroke)
 }
 
 #[savvy]
@@ -134,7 +134,7 @@ fn string2fill_family(
 
 #[savvy]
 fn string2fill_file(text: &str, font_file: &str, tolerance: f64) -> savvy::Result<savvy::Sexp> {
-    string2any_file(text, font_file, tolerance, 0., ConversionType::Path)
+    string2any_file(text, font_file, tolerance, 0., ConversionType::Fill)
 }
 
 #[savvy]

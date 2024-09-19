@@ -11,6 +11,9 @@
     * The clip and layer composition information are just discarded. While
       this can be useful, it's not very easy to use these information in R.
 
+* Fix `string2fill()` and `string2stroke()`; when the second argument is a path
+  to a file, these unintentionally worked as `string2path()`.
+
 # string2path 0.1.8
 
 * This is a maintenance release to comply with the CRAN repository policy.
