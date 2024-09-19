@@ -1,8 +1,8 @@
-use crate::builder::LyonPathBuilder;
+use crate::builder::{LyonPathBuilder, LyonPathBuilderForPaint};
 
 use once_cell::sync::Lazy;
 
-use ttf_parser::GlyphId;
+use ttf_parser::{GlyphId, RgbaColor};
 
 pub(crate) static FONTDB: Lazy<fontdb::Database> = Lazy::new(|| {
     let mut db = fontdb::Database::new();
@@ -161,7 +161,16 @@ impl LyonPathBuilder {
                 self.offset_x += find_kerning(facetables, prev_glyph, cur_glyph) as f32;
             }
 
-            font.outline_glyph(cur_glyph, self);
+            if font.is_color_glyph(cur_glyph) {
+                let mut painter = LyonPathBuilderForPaint::new(self, &font);
+                let fg_color = RgbaColor::new(0, 0, 0, 255);
+                font.paint_color_glyph(cur_glyph, 1, fg_color, &mut painter);
+            } else {
+                let res = font.outline_glyph(cur_glyph, self);
+                if res.is_none() {
+                    return Err(savvy::Error::new(&format!("Failed to outline char '{c}'")));
+                }
+            }
 
             if let Some(ha) = font.glyph_hor_advance(cur_glyph) {
                 self.offset_x += ha as f32;

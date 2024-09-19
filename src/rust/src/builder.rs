@@ -1,4 +1,5 @@
 use lyon::math::point;
+use ttf_parser::{colr::Painter, Face};
 
 pub struct LyonPathBuilder {
     // It's not very elegant to store the glyph ID (not the `glyphId` ttf-parser
@@ -73,5 +74,54 @@ impl ttf_parser::OutlineBuilder for LyonPathBuilder {
     fn close(&mut self) {
         self.builder.end(true);
         self.cur_path_id += 1;
+    }
+}
+
+pub(crate) struct LyonPathBuilderForPaint<'a> {
+    builder: &'a mut LyonPathBuilder,
+    face: &'a Face<'a>,
+}
+
+impl<'a> LyonPathBuilderForPaint<'a> {
+    pub(crate) fn new(builder: &'a mut LyonPathBuilder, face: &'a Face<'a>) -> Self {
+        Self { builder, face }
+    }
+}
+
+impl<'a> Painter<'a> for LyonPathBuilderForPaint<'a> {
+    fn outline_glyph(&mut self, glyph_id: ttf_parser::GlyphId) {
+        self.face.outline_glyph(glyph_id, self.builder);
+    }
+
+    fn paint(&mut self, paint: ttf_parser::colr::Paint<'a>) {
+        // ignore
+    }
+
+    fn push_clip(&mut self) {
+        // ignore
+    }
+
+    fn push_clip_box(&mut self, clipbox: ttf_parser::colr::ClipBox) {
+        // ignore
+    }
+
+    fn pop_clip(&mut self) {
+        // ignore
+    }
+
+    fn push_layer(&mut self, mode: ttf_parser::colr::CompositeMode) {
+        // ignore
+    }
+
+    fn pop_layer(&mut self) {
+        // ignore
+    }
+
+    fn push_transform(&mut self, transform: ttf_parser::Transform) {
+        // ignore
+    }
+
+    fn pop_transform(&mut self) {
+        // ignore
     }
 }
