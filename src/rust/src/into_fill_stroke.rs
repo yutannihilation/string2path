@@ -8,6 +8,7 @@ struct Vertex {
     position: lyon::math::Point,
     glyph_id: u32,
     path_id: u32,
+    color: [u8; 4],
 }
 
 // This can have some members so that it can be used in new_vertex(), but I
@@ -22,6 +23,7 @@ impl FillVertexConstructor<Vertex> for VertexCtor {
             position: pos,
             glyph_id: attr[0] as _,
             path_id: attr[1] as _,
+            color: attr[2].to_ne_bytes(),
         }
     }
 }
@@ -34,6 +36,7 @@ impl StrokeVertexConstructor<Vertex> for VertexCtor {
             position: pos,
             glyph_id: attr[0] as _,
             path_id: attr[1] as _,
+            color: attr[2].to_ne_bytes(),
         }
     }
 }
@@ -92,6 +95,7 @@ fn extract_vertex_buffer(geometry: VertexBuffers<Vertex, usize>) -> PathTibble {
     let mut glyph_id: Vec<i32> = Vec::new();
     let mut path_id: Vec<i32> = Vec::new();
     let mut triangle_id: Vec<i32> = Vec::new();
+    let mut color: Vec<String> = Vec::new();
 
     for (n, &i) in geometry.indices.iter().enumerate() {
         if let Some(v) = geometry.vertices.get(i) {
@@ -100,6 +104,9 @@ fn extract_vertex_buffer(geometry: VertexBuffers<Vertex, usize>) -> PathTibble {
             glyph_id.push(v.glyph_id as _);
             path_id.push(v.path_id as _);
             triangle_id.push(n as i32 / 3);
+
+            let [r, g, b, a] = v.color;
+            color.push(format!("#{r:02x}{g:02x}{b:02x}{a:02x}"));
         }
     }
 
@@ -109,5 +116,6 @@ fn extract_vertex_buffer(geometry: VertexBuffers<Vertex, usize>) -> PathTibble {
         glyph_id,
         path_id,
         triangle_id: Some(triangle_id),
+        color: Some(color),
     }
 }

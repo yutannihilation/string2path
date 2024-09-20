@@ -79,6 +79,7 @@ impl LyonPathBuilder {
             glyph_id,
             path_id,
             triangle_id: None,
+            color: None, // TODO
         }
     }
 }

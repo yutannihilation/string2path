@@ -110,7 +110,13 @@ fn string2stroke_file(
     tolerance: f64,
     line_width: f64,
 ) -> savvy::Result<savvy::Sexp> {
-    string2any_file(text, font_file, tolerance, line_width, ConversionType::Stroke)
+    string2any_file(
+        text,
+        font_file,
+        tolerance,
+        line_width,
+        ConversionType::Stroke,
+    )
 }
 
 #[savvy]
