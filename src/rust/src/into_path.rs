@@ -1,3 +1,5 @@
+use ttf_parser::RgbaColor;
+
 use crate::builder::LyonPathBuilder;
 use crate::result::PathTibble;
 
@@ -10,8 +12,22 @@ impl LyonPathBuilder {
         let mut y: Vec<f64> = Vec::new();
         let mut glyph_id: Vec<i32> = Vec::new();
         let mut path_id: Vec<i32> = Vec::new();
+        let mut color: Option<Vec<String>> = if self.layer_color.is_empty() {
+            None
+        } else {
+            Some(Vec::new())
+        };
 
-        for path in paths {
+        for (path, paint_color) in paths {
+            let paint_color = match paint_color {
+                Some(RgbaColor {
+                    red,
+                    green,
+                    blue,
+                    alpha,
+                }) => format!("#{red:02x}{green:02x}{blue:02x}{alpha:02x}",),
+                None => "#00000000".to_string(),
+            };
             for p in path.iter_with_attributes() {
                 match p {
                     lyon::path::Event::Begin { at } => {
@@ -19,12 +35,18 @@ impl LyonPathBuilder {
                         path_id.push(at.1[1] as _);
                         x.push(at.0.x as _);
                         y.push(at.0.y as _);
+                        if let Some(v) = color.as_mut() {
+                            v.push(paint_color.clone())
+                        }
                     }
                     lyon::path::Event::Line { from, to } => {
                         glyph_id.push(from.1[0] as _);
                         path_id.push(from.1[1] as _);
                         x.push(to.0.x as _);
                         y.push(to.0.y as _);
+                        if let Some(v) = color.as_mut() {
+                            v.push(paint_color.clone())
+                        }
                     }
                     lyon::path::Event::Quadratic { from, ctrl, to } => {
                         let seg = lyon::geom::QuadraticBezierSegment {
@@ -38,6 +60,9 @@ impl LyonPathBuilder {
                             path_id.push(from.1[1] as _);
                             x.push(p.x as _);
                             y.push(p.y as _);
+                            if let Some(v) = color.as_mut() {
+                                v.push(paint_color.clone())
+                            }
                         }
                     }
                     lyon::path::Event::Cubic {
@@ -58,6 +83,9 @@ impl LyonPathBuilder {
                             path_id.push(from.1[1] as _);
                             x.push(p.x as _);
                             y.push(p.y as _);
+                            if let Some(v) = color.as_mut() {
+                                v.push(paint_color.clone())
+                            }
                         }
                     }
                     // glyph can be "open path," even when `close` is true. In that case, `first` should point to the begin point.
@@ -67,6 +95,9 @@ impl LyonPathBuilder {
                             path_id.push(first.1[1] as _);
                             x.push(first.0.x as _);
                             y.push(first.0.y as _);
+                            if let Some(v) = color.as_mut() {
+                                v.push(paint_color.clone())
+                            }
                         }
                     }
                 }
@@ -79,7 +110,7 @@ impl LyonPathBuilder {
             glyph_id,
             path_id,
             triangle_id: None,
-            color: None, // TODO
+            color,
         }
     }
 }

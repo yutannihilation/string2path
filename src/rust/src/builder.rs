@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use lyon::{
     geom::euclid::UnknownUnit,
     math::point,
@@ -21,13 +23,14 @@ pub struct LyonPathBuilder {
             lyon::math::Transform,
         >,
     >,
+    // one layer has only one color
+    pub layer_color: HashMap<usize, RgbaColor>,
 
     // index of builder
     pub cur_layer: usize,
 
     pub cur_glyph_id: u32,
     pub cur_path_id: u32,
-    pub cur_color: RgbaColor,
 
     // This transformation is of COLR format.
     base_transform: lyon::geom::euclid::Transform2D<f32, UnknownUnit, UnknownUnit>,
@@ -47,12 +50,12 @@ pub struct LyonPathBuilder {
 impl LyonPathBuilder {
     pub fn new(tolerance: f32, line_width: f32) -> Self {
         Self {
-            builders: vec![lyon::path::Path::builder_with_attributes(3)
+            builders: vec![lyon::path::Path::builder_with_attributes(2)
                 .transformed(lyon::geom::euclid::Transform2D::identity())],
+            layer_color: HashMap::new(),
             cur_layer: 0,
             cur_glyph_id: 0,
             cur_path_id: 0,
-            cur_color: RgbaColor::new(0, 0, 0, 255),
             base_transform: lyon::geom::euclid::Transform2D::identity(),
             scale_factor: 1.,
             offset_x: 0.,
@@ -72,9 +75,17 @@ impl LyonPathBuilder {
         &mut self.builders[self.cur_layer]
     }
 
-    pub fn build(&mut self) -> Vec<Path> {
+    pub fn build(&mut self) -> Vec<(Path, Option<RgbaColor>)> {
         let builders = self.builders.drain(0..);
-        builders.into_iter().map(|x| x.build()).collect()
+        builders
+            .into_iter()
+            .enumerate()
+            .map(|(i, x)| {
+                let path = x.build();
+                let color = self.layer_color.get(&i).cloned();
+                (path, color)
+            })
+            .collect()
     }
 
     // adds offsets to x and y
@@ -82,15 +93,8 @@ impl LyonPathBuilder {
         point(x, y)
     }
 
-    pub fn ids(&self) -> [f32; 3] {
-        let color = [
-            self.cur_color.red,
-            self.cur_color.green,
-            self.cur_color.blue,
-            self.cur_color.alpha,
-        ];
-        let color_f32 = f32::from_ne_bytes(color);
-        [self.cur_glyph_id as _, self.cur_path_id as _, color_f32]
+    pub fn ids(&self) -> [f32; 2] {
+        [self.cur_glyph_id as _, self.cur_path_id as _]
     }
 
     pub fn update_transform(&mut self) {
@@ -151,7 +155,7 @@ impl LyonPathBuilder {
         self.cur_layer += 1;
         if self.builders.len() < self.cur_layer + 1 {
             self.builders.push(
-                lyon::path::Path::builder_with_attributes(3)
+                lyon::path::Path::builder_with_attributes(2)
                     .transformed(lyon::geom::euclid::Transform2D::identity()),
             );
         }
@@ -212,48 +216,34 @@ impl<'a> LyonPathBuilderForPaint<'a> {
 
 impl<'a> Painter<'a> for LyonPathBuilderForPaint<'a> {
     fn outline_glyph(&mut self, glyph_id: ttf_parser::GlyphId) {
-        savvy::r_eprintln!("outlining layer {}", self.builder.cur_layer);
         self.face.outline_glyph(glyph_id, self.builder);
     }
 
     fn paint(&mut self, paint: Paint<'a>) {
-        savvy::r_eprintln!("painting layer {}: {paint:?}", self.builder.cur_layer);
-        match paint {
-            Paint::Solid(rgba_color) => {
-                self.builder.cur_color = rgba_color;
-            }
+        let color = match paint {
+            Paint::Solid(rgba_color) => rgba_color,
             Paint::LinearGradient(linear_gradient) => {
                 let stop = linear_gradient
                     .stops(0, &[NormalizedCoordinate::default()])
                     .next();
-                if let Some(color) = stop {
-                    self.builder.cur_color = color.color;
-                }
+                stop.map_or(RgbaColor::new(0, 0, 0, 255), |cs| cs.color)
             }
             Paint::RadialGradient(radial_gradient) => {
                 let stop = radial_gradient
                     .stops(0, &[NormalizedCoordinate::default()])
                     .next();
-                if let Some(color) = stop {
-                    self.builder.cur_color = color.color;
-                }
+                stop.map_or(RgbaColor::new(0, 0, 0, 255), |cs| cs.color)
             }
             Paint::SweepGradient(sweep_gradient) => {
                 let stop = sweep_gradient
                     .stops(0, &[NormalizedCoordinate::default()])
                     .next();
-                if let Some(color) = stop {
-                    self.builder.cur_color = color.color;
-                }
+                stop.map_or(RgbaColor::new(0, 0, 0, 255), |cs| cs.color)
             }
-        }
-        savvy::r_eprintln!(
-            "result: #{:02x}{:02x}{:02x}{:02x}",
-            self.builder.cur_color.red,
-            self.builder.cur_color.green,
-            self.builder.cur_color.blue,
-            self.builder.cur_color.alpha
-        );
+        };
+        self.builder
+            .layer_color
+            .insert(self.builder.cur_layer, color);
         self.builder.push_layer();
     }
 
@@ -270,18 +260,14 @@ impl<'a> Painter<'a> for LyonPathBuilderForPaint<'a> {
     }
 
     fn push_layer(&mut self, _mode: ttf_parser::colr::CompositeMode) {
-        // ignore mode
-        savvy::r_eprintln!("push");
-        self.builder.push_layer();
+        // ignore. Only paint can push layer
     }
 
     fn pop_layer(&mut self) {
-        savvy::r_eprintln!("pop");
-        self.builder.pop_layer();
+        // ignore
     }
 
     fn push_transform(&mut self, transform: ttf_parser::Transform) {
-        savvy::r_eprintln!("transforming layer {}", self.builder.cur_layer);
         let transform = lyon::geom::euclid::Transform2D::new(
             // cf. https://learn.microsoft.com/en-us/typography/opentype/spec/colr#formats-12-and-13-painttransform-paintvartransform
             transform.a, // xx
