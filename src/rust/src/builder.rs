@@ -8,7 +8,7 @@ use lyon::{
 };
 use ttf_parser::{
     colr::{Paint, Painter},
-    Face, RgbaColor,
+    Face, NormalizedCoordinate, RgbaColor,
 };
 
 pub struct LyonPathBuilder {
@@ -72,9 +72,9 @@ impl LyonPathBuilder {
         &mut self.builders[self.cur_layer]
     }
 
-    pub fn build(&mut self) -> Path {
-        // TODO
-        builder.build()
+    pub fn build(&mut self) -> Vec<Path> {
+        let builders = self.builders.drain(0..);
+        builders.into_iter().map(|x| x.build()).collect()
     }
 
     // adds offsets to x and y
@@ -146,11 +146,25 @@ impl LyonPathBuilder {
         self.base_transform = transform;
         self.update_transform();
     }
+
+    fn push_layer(&mut self) {
+        self.cur_layer += 1;
+        if self.builders.len() < self.cur_layer + 1 {
+            self.builders.push(
+                lyon::path::Path::builder_with_attributes(3)
+                    .transformed(lyon::geom::euclid::Transform2D::identity()),
+            );
+        }
+        self.update_transform();
+    }
+
+    fn pop_layer(&mut self) {
+        self.cur_layer -= 1;
+    }
 }
 
 impl ttf_parser::OutlineBuilder for LyonPathBuilder {
     fn move_to(&mut self, x: f32, y: f32) {
-        savvy::r_eprintln!("move_to");
         let at = self.point(x, y);
         let custom_attributes = &self.ids();
         self.cur_builder().begin(at, custom_attributes);
@@ -180,7 +194,6 @@ impl ttf_parser::OutlineBuilder for LyonPathBuilder {
     }
 
     fn close(&mut self) {
-        savvy::r_eprintln!("close");
         self.cur_builder().end(true);
         self.cur_path_id += 1;
     }
@@ -199,41 +212,49 @@ impl<'a> LyonPathBuilderForPaint<'a> {
 
 impl<'a> Painter<'a> for LyonPathBuilderForPaint<'a> {
     fn outline_glyph(&mut self, glyph_id: ttf_parser::GlyphId) {
-        savvy::r_eprintln!("outline_glyph");
+        savvy::r_eprintln!("outlining layer {}", self.builder.cur_layer);
         self.face.outline_glyph(glyph_id, self.builder);
     }
 
     fn paint(&mut self, paint: Paint<'a>) {
-        savvy::r_eprintln!("paint");
+        savvy::r_eprintln!("painting layer {}: {paint:?}", self.builder.cur_layer);
         match paint {
             Paint::Solid(rgba_color) => {
                 self.builder.cur_color = rgba_color;
             }
-            _ => {} // Paint::LinearGradient(linear_gradient) => {
-                    //     let stop = linear_gradient
-                    //         .stops(0, &[NormalizedCoordinate::default()])
-                    //         .next();
-                    //     if let Some(color) = stop {
-                    //         self.builder.cur_color = color.color;
-                    //     }
-                    // }
-                    // Paint::RadialGradient(radial_gradient) => {
-                    //     let stop = radial_gradient
-                    //         .stops(0, &[NormalizedCoordinate::default()])
-                    //         .next();
-                    //     if let Some(color) = stop {
-                    //         self.builder.cur_color = color.color;
-                    //     }
-                    // }
-                    // Paint::SweepGradient(sweep_gradient) => {
-                    //     let stop = sweep_gradient
-                    //         .stops(0, &[NormalizedCoordinate::default()])
-                    //         .next();
-                    //     if let Some(color) = stop {
-                    //         self.builder.cur_color = color.color;
-                    //     }
-                    // }
+            Paint::LinearGradient(linear_gradient) => {
+                let stop = linear_gradient
+                    .stops(0, &[NormalizedCoordinate::default()])
+                    .next();
+                if let Some(color) = stop {
+                    self.builder.cur_color = color.color;
+                }
+            }
+            Paint::RadialGradient(radial_gradient) => {
+                let stop = radial_gradient
+                    .stops(0, &[NormalizedCoordinate::default()])
+                    .next();
+                if let Some(color) = stop {
+                    self.builder.cur_color = color.color;
+                }
+            }
+            Paint::SweepGradient(sweep_gradient) => {
+                let stop = sweep_gradient
+                    .stops(0, &[NormalizedCoordinate::default()])
+                    .next();
+                if let Some(color) = stop {
+                    self.builder.cur_color = color.color;
+                }
+            }
         }
+        savvy::r_eprintln!(
+            "result: #{:02x}{:02x}{:02x}{:02x}",
+            self.builder.cur_color.red,
+            self.builder.cur_color.green,
+            self.builder.cur_color.blue,
+            self.builder.cur_color.alpha
+        );
+        self.builder.push_layer();
     }
 
     fn push_clip(&mut self) {
@@ -249,14 +270,18 @@ impl<'a> Painter<'a> for LyonPathBuilderForPaint<'a> {
     }
 
     fn push_layer(&mut self, _mode: ttf_parser::colr::CompositeMode) {
-        // ignore
+        // ignore mode
+        savvy::r_eprintln!("push");
+        self.builder.push_layer();
     }
 
     fn pop_layer(&mut self) {
-        // ignore
+        savvy::r_eprintln!("pop");
+        self.builder.pop_layer();
     }
 
     fn push_transform(&mut self, transform: ttf_parser::Transform) {
+        savvy::r_eprintln!("transforming layer {}", self.builder.cur_layer);
         let transform = lyon::geom::euclid::Transform2D::new(
             // cf. https://learn.microsoft.com/en-us/typography/opentype/spec/colr#formats-12-and-13-painttransform-paintvartransform
             transform.a, // xx
