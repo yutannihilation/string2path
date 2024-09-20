@@ -162,9 +162,11 @@ impl LyonPathBuilder {
         self.update_transform();
     }
 
-    fn pop_layer(&mut self) {
-        self.cur_layer -= 1;
-    }
+    // is this needed?
+    //
+    // fn pop_layer(&mut self) {
+    //     self.cur_layer -= 1;
+    // }
 }
 
 impl ttf_parser::OutlineBuilder for LyonPathBuilder {
