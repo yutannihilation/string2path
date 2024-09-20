@@ -25,10 +25,7 @@ fn string2any_family(
 ) -> savvy::Result<savvy::Sexp> {
     let mut builder = builder::LyonPathBuilder::new(tolerance as _, line_width as _);
 
-    let res = builder.outline(text, font_family, font_weight, font_style);
-    if let Err(e) = res {
-        return Err(savvy::Error::new(&e.to_string()));
-    }
+    builder.outline(text, font_family, font_weight, font_style)?;
 
     let result = match ct {
         ConversionType::Path => builder.into_path(),
@@ -48,7 +45,7 @@ fn string2any_file(
 ) -> savvy::Result<savvy::Sexp> {
     let mut builder = builder::LyonPathBuilder::new(tolerance as _, line_width as _);
 
-    builder.outline_from_file(text, font_file).unwrap();
+    builder.outline_from_file(text, font_file)?;
 
     let result = match ct {
         ConversionType::Path => builder.into_path(),
