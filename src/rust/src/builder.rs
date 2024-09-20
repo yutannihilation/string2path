@@ -1,14 +1,33 @@
-use lyon::{geom::euclid::UnknownUnit, math::point, path::traits::PathBuilder};
-use ttf_parser::{colr::Painter, Face};
+use std::collections::HashMap;
+
+use lyon::{
+    geom::euclid::UnknownUnit,
+    math::point,
+    path::{
+        traits::{Build, PathBuilder},
+        Path,
+    },
+};
+use ttf_parser::{
+    colr::{Paint, Painter},
+    Face, NormalizedCoordinate, RgbaColor,
+};
 
 pub struct LyonPathBuilder {
     // It's not very elegant to store the glyph ID (not the `glyphId` ttf-parser
     // uses, but the glyph count) and path ID in attributes, but it seems the
     // attribute is the only thing we can pass to tessellators.
-    pub builder: lyon::path::builder::Transformed<
-        lyon::path::path::BuilderWithAttributes,
-        lyon::math::Transform,
+    pub builders: Vec<
+        lyon::path::builder::Transformed<
+            lyon::path::path::BuilderWithAttributes,
+            lyon::math::Transform,
+        >,
     >,
+    // one layer has only one color
+    pub layer_color: HashMap<usize, RgbaColor>,
+
+    // index of builder
+    pub cur_layer: usize,
 
     pub cur_glyph_id: u32,
     pub cur_path_id: u32,
@@ -31,8 +50,10 @@ pub struct LyonPathBuilder {
 impl LyonPathBuilder {
     pub fn new(tolerance: f32, line_width: f32) -> Self {
         Self {
-            builder: lyon::path::Path::builder_with_attributes(2)
-                .transformed(lyon::geom::euclid::Transform2D::identity()),
+            builders: vec![lyon::path::Path::builder_with_attributes(2)
+                .transformed(lyon::geom::euclid::Transform2D::identity())],
+            layer_color: HashMap::new(),
+            cur_layer: 0,
             cur_glyph_id: 0,
             cur_path_id: 0,
             base_transform: lyon::geom::euclid::Transform2D::identity(),
@@ -42,6 +63,29 @@ impl LyonPathBuilder {
             tolerance,
             line_width,
         }
+    }
+
+    #[inline]
+    pub fn cur_builder(
+        &mut self,
+    ) -> &mut lyon::path::builder::Transformed<
+        lyon::path::path::BuilderWithAttributes,
+        lyon::math::Transform,
+    > {
+        &mut self.builders[self.cur_layer]
+    }
+
+    pub fn build(&mut self) -> Vec<(Path, Option<RgbaColor>)> {
+        let builders = self.builders.drain(0..);
+        builders
+            .into_iter()
+            .enumerate()
+            .map(|(i, x)| {
+                let path = x.build();
+                let color = self.layer_color.get(&i).cloned();
+                (path, color)
+            })
+            .collect()
     }
 
     // adds offsets to x and y
@@ -61,7 +105,7 @@ impl LyonPathBuilder {
                 self.offset_y,
             ))
             .then_scale(self.scale_factor, self.scale_factor);
-        self.builder.set_transform(transform);
+        self.cur_builder().set_transform(transform);
     }
 
     pub fn set_scale_factor(&mut self, scale_factor: f32) {
@@ -106,32 +150,57 @@ impl LyonPathBuilder {
         self.base_transform = transform;
         self.update_transform();
     }
+
+    fn push_layer(&mut self) {
+        self.cur_layer += 1;
+        if self.builders.len() < self.cur_layer + 1 {
+            self.builders.push(
+                lyon::path::Path::builder_with_attributes(2)
+                    .transformed(lyon::geom::euclid::Transform2D::identity()),
+            );
+        }
+        self.update_transform();
+    }
+
+    // is this needed?
+    //
+    // fn pop_layer(&mut self) {
+    //     self.cur_layer -= 1;
+    // }
 }
 
 impl ttf_parser::OutlineBuilder for LyonPathBuilder {
     fn move_to(&mut self, x: f32, y: f32) {
-        self.builder.begin(self.point(x, y), &self.ids());
+        let at = self.point(x, y);
+        let custom_attributes = &self.ids();
+        self.cur_builder().begin(at, custom_attributes);
     }
 
     fn line_to(&mut self, x: f32, y: f32) {
-        self.builder.line_to(self.point(x, y), &self.ids());
+        let to = self.point(x, y);
+        let custom_attributes = &self.ids();
+        self.cur_builder().line_to(to, custom_attributes);
     }
 
     fn quad_to(&mut self, x1: f32, y1: f32, x: f32, y: f32) {
         let ctrl = self.point(x1, y1);
         let to = self.point(x, y);
-        self.builder.quadratic_bezier_to(ctrl, to, &self.ids());
+        let custom_attributes = &self.ids();
+        self.cur_builder()
+            .quadratic_bezier_to(ctrl, to, custom_attributes);
     }
 
     fn curve_to(&mut self, x1: f32, y1: f32, x2: f32, y2: f32, x: f32, y: f32) {
         let ctrl1 = self.point(x1, y1);
         let ctrl2 = self.point(x2, y2);
         let to = self.point(x, y);
-        self.builder.cubic_bezier_to(ctrl1, ctrl2, to, &self.ids());
+        let custom_attributes = &self.ids();
+        self.cur_builder()
+            .cubic_bezier_to(ctrl1, ctrl2, to, custom_attributes);
     }
 
     fn close(&mut self) {
-        self.builder.end(true);
+        self.cur_builder().end(true);
         self.cur_path_id += 1;
     }
 }
@@ -152,8 +221,32 @@ impl<'a> Painter<'a> for LyonPathBuilderForPaint<'a> {
         self.face.outline_glyph(glyph_id, self.builder);
     }
 
-    fn paint(&mut self, _paint: ttf_parser::colr::Paint<'a>) {
-        // ignore
+    fn paint(&mut self, paint: Paint<'a>) {
+        let color = match paint {
+            Paint::Solid(rgba_color) => rgba_color,
+            Paint::LinearGradient(linear_gradient) => {
+                let stop = linear_gradient
+                    .stops(0, &[NormalizedCoordinate::default()])
+                    .next();
+                stop.map_or(RgbaColor::new(0, 0, 0, 255), |cs| cs.color)
+            }
+            Paint::RadialGradient(radial_gradient) => {
+                let stop = radial_gradient
+                    .stops(0, &[NormalizedCoordinate::default()])
+                    .next();
+                stop.map_or(RgbaColor::new(0, 0, 0, 255), |cs| cs.color)
+            }
+            Paint::SweepGradient(sweep_gradient) => {
+                let stop = sweep_gradient
+                    .stops(0, &[NormalizedCoordinate::default()])
+                    .next();
+                stop.map_or(RgbaColor::new(0, 0, 0, 255), |cs| cs.color)
+            }
+        };
+        self.builder
+            .layer_color
+            .insert(self.builder.cur_layer, color);
+        self.builder.push_layer();
     }
 
     fn push_clip(&mut self) {
@@ -169,7 +262,7 @@ impl<'a> Painter<'a> for LyonPathBuilderForPaint<'a> {
     }
 
     fn push_layer(&mut self, _mode: ttf_parser::colr::CompositeMode) {
-        // ignore
+        // ignore. Only paint can push layer
     }
 
     fn pop_layer(&mut self) {

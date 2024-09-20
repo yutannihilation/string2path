@@ -12,13 +12,21 @@ pub struct PathTibble {
     pub path_id: Vec<i32>,
     // IDs to distinguish the triangles. This field is `None` for `ConversionType::Path`.
     pub triangle_id: Option<Vec<i32>>,
+    // Color of color emoji font.
+    pub color: Option<Vec<String>>,
 }
 
 impl TryFrom<PathTibble> for savvy::Sexp {
     type Error = savvy::Error;
 
     fn try_from(value: PathTibble) -> savvy::Result<Self> {
-        let len = if value.triangle_id.is_none() { 4 } else { 5 };
+        let mut len = 4;
+        if value.triangle_id.is_some() {
+            len += 1
+        };
+        if value.color.is_some() {
+            len += 1
+        };
         let mut out = savvy::OwnedListSexp::new(len, true)?;
 
         out.set_name_and_value(0, "x", <OwnedRealSexp>::try_from(value.x.as_slice())?)?;
@@ -34,12 +42,18 @@ impl TryFrom<PathTibble> for savvy::Sexp {
             <OwnedIntegerSexp>::try_from(value.path_id.as_slice())?,
         )?;
 
+        let mut idx = 3;
         if let Some(triangle_id) = value.triangle_id {
+            idx += 1;
             out.set_name_and_value(
-                4,
+                idx,
                 "triangle_id",
                 <OwnedIntegerSexp>::try_from(triangle_id.as_slice())?,
             )?;
+        }
+        if let Some(color) = value.color {
+            idx += 1;
+            out.set_name_and_value(idx, "color", <OwnedStringSexp>::try_from(color.as_slice())?)?;
         }
 
         out.into()

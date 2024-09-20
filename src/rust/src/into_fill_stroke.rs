@@ -1,7 +1,7 @@
 use crate::{builder::LyonPathBuilder, result::PathTibble};
 
 use lyon::tessellation::*;
-use path::traits::Build;
+use ttf_parser::RgbaColor;
 
 #[derive(Copy, Clone, Debug)]
 struct Vertex {
@@ -40,74 +40,113 @@ impl StrokeVertexConstructor<Vertex> for VertexCtor {
 
 impl LyonPathBuilder {
     /// Convert the outline paths into fill as triangles.
-    pub fn into_fill(self) -> PathTibble {
-        let path = self.builder.build();
+    pub fn into_fill(mut self) -> PathTibble {
+        let paths = self.build();
+        let color = if self.layer_color.is_empty() {
+            None
+        } else {
+            Some(Vec::new())
+        };
+        let mut result = PathTibble {
+            x: Vec::new(),
+            y: Vec::new(),
+            glyph_id: Vec::new(),
+            path_id: Vec::new(),
+            triangle_id: Some(Vec::new()),
+            color,
+        };
 
         // Will contain the result of the tessellation.
-        let mut geometry: VertexBuffers<Vertex, usize> = VertexBuffers::new();
         let mut tessellator = FillTessellator::new();
         let options = FillOptions::tolerance(self.tolerance);
 
-        {
-            // Compute the tessellation.
-            tessellator
-                .tessellate_path(
-                    &path,
-                    &options,
-                    &mut BuffersBuilder::new(&mut geometry, VertexCtor {}),
-                )
-                .unwrap();
+        for (path, color) in paths {
+            let mut geometry: VertexBuffers<Vertex, usize> = VertexBuffers::new();
+            {
+                // Compute the tessellation.
+                tessellator
+                    .tessellate_path(
+                        &path,
+                        &options,
+                        &mut BuffersBuilder::new(&mut geometry, VertexCtor {}),
+                    )
+                    .unwrap();
+            }
+            extract_vertex_buffer(geometry, &mut result, color);
         }
-
-        extract_vertex_buffer(geometry)
+        result
     }
 
     /// Convert the outline paths into stroke with a specified line width as triangles.
-    pub fn into_stroke(self) -> PathTibble {
-        let path = self.builder.build();
+    pub fn into_stroke(mut self) -> PathTibble {
+        let paths = self.build();
+        let color = if self.layer_color.is_empty() {
+            None
+        } else {
+            Some(Vec::new())
+        };
+        let mut result = PathTibble {
+            x: Vec::new(),
+            y: Vec::new(),
+            glyph_id: Vec::new(),
+            path_id: Vec::new(),
+            triangle_id: Some(Vec::new()),
+            color,
+        };
 
         // Will contain the result of the tessellation.
-        let mut geometry: VertexBuffers<Vertex, usize> = VertexBuffers::new();
         let mut tessellator = StrokeTessellator::new();
         let options = StrokeOptions::tolerance(self.tolerance).with_line_width(self.line_width);
+        for (path, color) in paths {
+            let mut geometry: VertexBuffers<Vertex, usize> = VertexBuffers::new();
+            {
+                // Compute the tessellation.
+                tessellator
+                    .tessellate_path(
+                        &path,
+                        &options,
+                        &mut BuffersBuilder::new(&mut geometry, VertexCtor {}),
+                    )
+                    .unwrap();
+            }
 
-        {
-            // Compute the tessellation.
-            tessellator
-                .tessellate_path(
-                    &path,
-                    &options,
-                    &mut BuffersBuilder::new(&mut geometry, VertexCtor {}),
-                )
-                .unwrap();
+            extract_vertex_buffer(geometry, &mut result, color);
         }
-
-        extract_vertex_buffer(geometry)
+        result
     }
 }
 
-fn extract_vertex_buffer(geometry: VertexBuffers<Vertex, usize>) -> PathTibble {
-    let mut x: Vec<f64> = Vec::new();
-    let mut y: Vec<f64> = Vec::new();
-    let mut glyph_id: Vec<i32> = Vec::new();
-    let mut path_id: Vec<i32> = Vec::new();
-    let mut triangle_id: Vec<i32> = Vec::new();
-
+fn extract_vertex_buffer(
+    geometry: VertexBuffers<Vertex, usize>,
+    dst: &mut PathTibble,
+    paint_color: Option<RgbaColor>,
+) {
+    let offset = dst.triangle_id.as_ref().map_or(0, |v| match v.last() {
+        Some(last_triangle_id) => last_triangle_id + 1,
+        None => 0,
+    });
     for (n, &i) in geometry.indices.iter().enumerate() {
         if let Some(v) = geometry.vertices.get(i) {
-            x.push(v.position.x as _);
-            y.push(v.position.y as _);
-            glyph_id.push(v.glyph_id as _);
-            path_id.push(v.path_id as _);
-            triangle_id.push(n as i32 / 3);
-        }
-    }
+            dst.x.push(v.position.x as _);
+            dst.y.push(v.position.y as _);
+            dst.glyph_id.push(v.glyph_id as _);
+            dst.path_id.push(v.path_id as _);
+            if let Some(triangle_id) = &mut dst.triangle_id {
+                triangle_id.push(n as i32 / 3 + offset);
+            }
 
-    PathTibble {
-        x,
-        y,
-        glyph_id,
-        path_id,
-        triangle_id: Some(triangle_id),
+            if let Some(color) = &mut dst.color {
+                let paint_color = match paint_color {
+                    Some(RgbaColor {
+                        red,
+                        green,
+                        blue,
+                        alpha,
+                    }) => format!("#{red:02x}{green:02x}{blue:02x}{alpha:02x}",),
+                    None => "#00000000".to_string(),
+                };
+                color.push(paint_color);
+            }
+        }
     }
 }

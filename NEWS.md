@@ -5,9 +5,6 @@
     format. For example, Noto Color Emoji has several variants, and it seems
     the primary one is CBDT/CBLC format.
   * Additional information are currently just discarded.
-    * The color information can be useful. Currently, it's not obvious what
-      format (e.g. an attribute of the result data.frame?) is the best to
-      return it to users.
     * The clip and layer composition information are just discarded. While
       this can be useful, it's not very easy to use these information in R.
 
