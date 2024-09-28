@@ -20,7 +20,8 @@ Imports:
     tibble,
     cli
 Suggests:
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    vdiffr
 URL: https://yutannihilation.github.io/string2path/, https://github.com/yutannihilation/string2path
 BugReports: https://github.com/yutannihilation/string2path/issues
 Encoding: UTF-8
