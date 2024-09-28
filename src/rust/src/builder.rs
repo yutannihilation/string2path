@@ -13,16 +13,35 @@ use ttf_parser::{
     Face, NormalizedCoordinate, RgbaColor,
 };
 
-pub struct LyonPathBuilder {
+pub type FlattenedPathBuilder = lyon::path::builder::Transformed<
+    lyon::path::builder::Flattened<lyon::path::path::BuilderWithAttributes>,
+    lyon::math::Transform,
+>;
+
+pub trait BuildPath: Build<PathType = Path> + PathBuilder {
+    // TODO: lyon::path::builder::Transformed is a struct, not a trait. So, this
+    // method is needed to forward the operation.
+    fn set_transform(&mut self, transform: lyon::math::Transform);
+    fn new_builder(tolerance: f32) -> Self;
+}
+
+impl BuildPath for FlattenedPathBuilder {
+    fn set_transform(&mut self, transform: lyon::math::Transform) {
+        self.set_transform(transform);
+    }
+
+    fn new_builder(tolerance: f32) -> Self {
+        lyon::path::Path::builder_with_attributes(2)
+            .flattened(tolerance)
+            .transformed(lyon::geom::euclid::Transform2D::identity())
+    }
+}
+
+pub struct LyonPathBuilder<T: BuildPath> {
     // It's not very elegant to store the glyph ID (not the `glyphId` ttf-parser
     // uses, but the glyph count) and path ID in attributes, but it seems the
     // attribute is the only thing we can pass to tessellators.
-    pub builders: Vec<
-        lyon::path::builder::Transformed<
-            lyon::path::builder::Flattened<lyon::path::path::BuilderWithAttributes>,
-            lyon::math::Transform,
-        >,
-    >,
+    pub builders: Vec<T>,
     // one layer has only one color
     pub layer_color: HashMap<usize, RgbaColor>,
 
@@ -47,12 +66,11 @@ pub struct LyonPathBuilder {
     pub line_width: f32,
 }
 
-impl LyonPathBuilder {
+impl LyonPathBuilder<FlattenedPathBuilder> {
     pub fn new(tolerance: f32, line_width: f32) -> Self {
+        let builder = FlattenedPathBuilder::new_builder(tolerance);
         Self {
-            builders: vec![lyon::path::Path::builder_with_attributes(2)
-                .flattened(tolerance)
-                .transformed(lyon::geom::euclid::Transform2D::identity())],
+            builders: vec![builder],
             layer_color: HashMap::new(),
             cur_layer: 0,
             cur_glyph_id: 0,
@@ -65,14 +83,11 @@ impl LyonPathBuilder {
             line_width,
         }
     }
+}
 
+impl<T: BuildPath> LyonPathBuilder<T> {
     #[inline]
-    pub fn cur_builder(
-        &mut self,
-    ) -> &mut lyon::path::builder::Transformed<
-        lyon::path::builder::Flattened<lyon::path::path::BuilderWithAttributes>,
-        lyon::math::Transform,
-    > {
+    pub fn cur_builder(&mut self) -> &mut T {
         &mut self.builders[self.cur_layer]
     }
 
@@ -155,11 +170,7 @@ impl LyonPathBuilder {
     fn push_layer(&mut self) {
         self.cur_layer += 1;
         if self.builders.len() < self.cur_layer + 1 {
-            self.builders.push(
-                lyon::path::Path::builder_with_attributes(2)
-                    .flattened(self.tolerance)
-                    .transformed(lyon::geom::euclid::Transform2D::identity()),
-            );
+            self.builders.push(T::new_builder(self.tolerance));
         }
         self.update_transform();
     }
@@ -171,7 +182,7 @@ impl LyonPathBuilder {
     // }
 }
 
-impl ttf_parser::OutlineBuilder for LyonPathBuilder {
+impl<T: BuildPath> ttf_parser::OutlineBuilder for LyonPathBuilder<T> {
     fn move_to(&mut self, x: f32, y: f32) {
         let at = self.point(x, y);
         let custom_attributes = &self.ids();
@@ -207,18 +218,18 @@ impl ttf_parser::OutlineBuilder for LyonPathBuilder {
     }
 }
 
-pub struct LyonPathBuilderForPaint<'a> {
-    builder: &'a mut LyonPathBuilder,
+pub struct LyonPathBuilderForPaint<'a, T: BuildPath> {
+    builder: &'a mut LyonPathBuilder<T>,
     face: &'a Face<'a>,
 }
 
-impl<'a> LyonPathBuilderForPaint<'a> {
-    pub fn new(builder: &'a mut LyonPathBuilder, face: &'a Face<'a>) -> Self {
+impl<'a, T: BuildPath> LyonPathBuilderForPaint<'a, T> {
+    pub fn new(builder: &'a mut LyonPathBuilder<T>, face: &'a Face<'a>) -> Self {
         Self { builder, face }
     }
 }
 
-impl<'a> Painter<'a> for LyonPathBuilderForPaint<'a> {
+impl<'a, T: BuildPath> Painter<'a> for LyonPathBuilderForPaint<'a, T> {
     fn outline_glyph(&mut self, glyph_id: ttf_parser::GlyphId) {
         self.face.outline_glyph(glyph_id, self.builder);
     }
