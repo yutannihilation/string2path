@@ -14,7 +14,7 @@
 * `string2path()` now generates the same outline as `string2fill()` and 
   `string2stroke()` (#69).
 
-* `path_id` is now 1-origin.
+* `path_id` and `glyph_id` are now 1-origin.
 
 # string2path 0.1.8
 

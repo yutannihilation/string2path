@@ -53,9 +53,9 @@ impl LyonPathBuilderForPath {
                 if let Some(pos) = point {
                     result.x.push(pos.x as _);
                     result.y.push(pos.y as _);
-                    result
-                        .glyph_id
-                        .push(*self.glyph_id_map.get(&cur_path_id).unwrap_or(&0) as _);
+
+                    let cur_glyph_id = *self.glyph_id_map.get(&cur_path_id).unwrap_or(&0) as _;
+                    result.glyph_id.push(cur_glyph_id);
                     result.path_id.push(cur_path_id as _);
 
                     if let Some(v) = result.color.as_mut() {
