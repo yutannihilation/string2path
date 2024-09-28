@@ -1,10 +1,12 @@
 ---
-output: github_document
+title: "string2path"
+format: gfm
+editor: visual
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, include = FALSE}
+```{r}
+#| label: "setup"
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -18,19 +20,15 @@ knitr::opts_chunk$set(
 # string2path
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/yutannihilation/string2path/workflows/R-CMD-check/badge.svg)](https://github.com/yutannihilation/string2path/actions)
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![CRAN status](https://www.r-pkg.org/badges/version/string2path)](https://CRAN.R-project.org/package=string2path)
-[![string2path status badge](https://yutannihilation.r-universe.dev/badges/string2path)](https://yutannihilation.r-universe.dev)
+
+[![R-CMD-check](https://github.com/yutannihilation/string2path/workflows/R-CMD-check/badge.svg)](https://github.com/yutannihilation/string2path/actions) [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental) [![CRAN status](https://www.r-pkg.org/badges/version/string2path)](https://CRAN.R-project.org/package=string2path) [![string2path status badge](https://yutannihilation.r-universe.dev/badges/string2path)](https://yutannihilation.r-universe.dev)
+
 <!-- badges: end -->
 
-The string2path R package converts a text to paths of the outlines of each glyph, based on a font data.
-Under the hood, this package is powered by [the savvy framework][savvy] to use these two Rust crates:
+The string2path R package converts a text to paths of the outlines of each glyph, based on a font data. Under the hood, this package is powered by [the savvy framework](https://yutannihilation.github.io/savvy/guide/) to use these two Rust crates:
 
-* [ttf-parser](https://github.com/RazrFalcon/ttf-parser) for parsing font data. TrueType font (`.ttf`) and OpenType font (`.otf`) are supported.
-* [lyon](https://github.com/nical/lyon/) for tessellation of polygons and flattening the curves.
-
-[savvy]: https://yutannihilation.github.io/savvy/guide/
+-   [ttf-parser](https://github.com/RazrFalcon/ttf-parser) for parsing font data. TrueType font (`.ttf`) and OpenType font (`.otf`) are supported.
+-   [lyon](https://github.com/nical/lyon/) for tessellation of polygons and flattening the curves.
 
 ## Installation
 
@@ -51,9 +49,7 @@ install.packages("string2path",
 )
 ```
 
-If you want to install from source, you need to have Rust toolchain installed
-before trying to install this package.  See <https://www.rust-lang.org/tools/install>
-for the installation instructions.
+If you want to install from source, you need to have Rust toolchain installed before trying to install this package. See <https://www.rust-lang.org/tools/install> for the installation instructions.
 
 ## Example
 
@@ -91,19 +87,14 @@ ggplot(d) +
 
 #### `dump_fontdb()`
 
-Note that `"Noto Sans JP"` above (and `"Iosevka SS08"` below) is the font installed
-on my local machine, so the same code might not run on your environment. You can
-use `dump_fontdb()` to see the available combination of font family (e.g. `"Arial"`),
-weight (e.g. `"bold"`), and style (e.g. `"italic"`).
+Note that `"Noto Sans JP"` above (and `"Iosevka SS08"` below) is the font installed on my local machine, so the same code might not run on your environment. You can use `dump_fontdb()` to see the available combination of font family (e.g. `"Arial"`), weight (e.g. `"bold"`), and style (e.g. `"italic"`).
 
 ```{r}
 #| label: dump
 dump_fontdb()
 ```
 
-You can also specify the font file directly. Pomicons is a font available on
-[gabrielelana/pomicons](https://github.com/gabrielelana/pomicons), licensed under
-SIL OFL 1.1.
+You can also specify the font file directly. Pomicons is a font available on [gabrielelana/pomicons](https://github.com/gabrielelana/pomicons), licensed under SIL OFL 1.1.
 
 ```{r}
 #| label: icon_font
@@ -123,7 +114,6 @@ ggplot(d_tmp) +
   theme_minimal() +
   coord_equal()
 ```
-
 
 ### `string2fill()`
 
@@ -159,11 +149,9 @@ for (w in 1:9 * 0.01) {
 }
 ```
 
-
-
 ## `tolerance`
 
-`tolerance` controls resolution of the tessellation. You can reduce tolerance to get higher resolutions.
+`tolerance` controls resolution of the tessellation. You can reduce tolerance to get higher resolutions. In most of the cases, `1e-5` \~ `1e-6` should be enough. For more details, please refer to [lyon's official document](https://docs.rs/lyon_geom/latest/lyon_geom/#flattening).
 
 ```{r}
 #| label: example3
@@ -180,23 +168,3 @@ for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
   plot(p)
 }
 ```
-
-Note that `tolerance` parameter behaves a bit differently on `string2fill()` and `string2stroke()`.
-But, in either case, 1e-5 ~ 1e-6 should be enough.
-
-```{r}
-#| label: example4
-#| animation.hook: gifski
-for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
-  d <- string2path("abc", "Iosevka SS08", font_weight = "bold", font_style = "italic", tolerance = tolerance)
-  
-  p <- ggplot(d) +
-    geom_path(aes(x, y, group = path_id), colour = "black", linewidth = 0.5) +
-    geom_point(aes(x, y, group = path_id), colour = "black", size = 1.5) +
-    theme_minimal() +
-    coord_equal() +
-    ggtitle(paste0("tolerance: ", tolerance))
-  plot(p)
-}
-```
-
