@@ -6,19 +6,18 @@ use crate::result::PathTibble;
 impl LyonPathBuilderForPath {
     pub fn into_path(mut self) -> PathTibble {
         let paths = self.build();
-        let color = if self.layer_color.is_empty() {
+
+        let mut x = Vec::new();
+        let mut y = Vec::new();
+        let mut glyph_id = Vec::new();
+        let mut path_id = Vec::new();
+        let mut color = if self.layer_color.is_empty() {
             None
         } else {
             Some(Vec::new())
         };
-        let mut result = PathTibble {
-            x: Vec::new(),
-            y: Vec::new(),
-            glyph_id: Vec::new(),
-            path_id: Vec::new(),
-            triangle_id: None,
-            color,
-        };
+
+        let mut cur_path_id: u32 = 0;
         for (path, paint_color) in paths {
             let paint_color = match paint_color {
                 Some(RgbaColor {
@@ -29,7 +28,6 @@ impl LyonPathBuilderForPath {
                 }) => format!("#{red:02x}{green:02x}{blue:02x}{alpha:02x}",),
                 None => "#00000000".to_string(),
             };
-            let mut cur_path_id: u32 = 0;
             for p in path.iter() {
                 let point = match p {
                     lyon::path::Event::Begin { at } => {
@@ -50,19 +48,27 @@ impl LyonPathBuilderForPath {
                 };
 
                 if let Some(pos) = point {
-                    result.x.push(pos.x as _);
-                    result.y.push(pos.y as _);
-                    result
-                        .glyph_id
-                        .push(*self.glyph_id_map.get(&cur_path_id).unwrap_or(&0) as _);
-                    result.path_id.push(cur_path_id as _);
+                    x.push(pos.x as _);
+                    y.push(pos.y as _);
 
-                    if let Some(v) = result.color.as_mut() {
+                    let cur_glyph_id = *self.glyph_id_map.get(&cur_path_id).unwrap_or(&0) as _;
+                    glyph_id.push(cur_glyph_id);
+                    path_id.push(cur_path_id as _);
+
+                    if let Some(v) = color.as_mut() {
                         v.push(paint_color.clone())
                     }
                 }
             }
         }
-        result
+
+        PathTibble {
+            x,
+            y,
+            glyph_id,
+            path_id: Some(path_id),
+            triangle_id: None,
+            color,
+        }
     }
 }

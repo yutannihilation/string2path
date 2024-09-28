@@ -1,5 +1,5 @@
+# string2path
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # string2path
 
@@ -9,16 +9,17 @@
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN
-status](https://www.r-pkg.org/badges/version/string2path)](https://CRAN.R-project.org/package=string2path)
+status](https://www.r-pkg.org/badges/version/string2path.png)](https://CRAN.R-project.org/package=string2path)
 [![string2path status
-badge](https://yutannihilation.r-universe.dev/badges/string2path)](https://yutannihilation.r-universe.dev)
+badge](https://yutannihilation.r-universe.dev/badges/string2path.png)](https://yutannihilation.r-universe.dev)
+
 <!-- badges: end -->
 
 The string2path R package converts a text to paths of the outlines of
 each glyph, based on a font data. Under the hood, this package is
 powered by [the savvy
-framework](https://yutannihilation.github.io/savvy/guide/) to use
-these two Rust crates:
+framework](https://yutannihilation.github.io/savvy/guide/) to use these
+two Rust crates:
 
 - [ttf-parser](https://github.com/RazrFalcon/ttf-parser) for parsing
   font data. TrueType font (`.ttf`) and OpenType font (`.otf`) are
@@ -72,7 +73,7 @@ ggplot(d) +
   scale_colour_viridis_d(option = "H")
 ```
 
-<img src="man/figures/README-example-1.png" width="75%" />
+<img src="man/figures/README-example-1.png" style="width:75.0%" />
 
 ``` r
 
@@ -88,7 +89,7 @@ ggplot(d) +
   transition_reveal(rowid)
 ```
 
-<img src="man/figures/README-example-1.gif" width="75%" />
+<img src="man/figures/README-example-1.gif" style="width:75.0%" />
 
 #### `dump_fontdb()`
 
@@ -101,7 +102,7 @@ style (e.g. `"italic"`).
 ``` r
 dump_fontdb()
 #> # A tibble: 448 × 5
-#>    x                                           y family        weight style 
+#>    source                                  index family        weight style 
 #>    <chr>                                   <int> <chr>         <chr>  <chr> 
 #>  1 "C:\\WINDOWS\\Fonts\\arial.ttf"             0 Arial         normal normal
 #>  2 "C:\\WINDOWS\\Fonts\\arialbd.ttf"           0 Arial         bold   normal
@@ -139,7 +140,7 @@ ggplot(d_tmp) +
   coord_equal()
 ```
 
-<img src="man/figures/README-icon_font-1.png" width="75%" />
+<img src="man/figures/README-icon_font-1.png" style="width:75.0%" />
 
 ### `string2fill()`
 
@@ -155,7 +156,7 @@ ggplot(d) +
   scale_fill_viridis_d(option = "H")
 ```
 
-<img src="man/figures/README-example2-1.png" width="75%" />
+<img src="man/figures/README-example2-1.png" style="width:75.0%" />
 
 ### `string2stroke()`
 
@@ -174,12 +175,15 @@ for (w in 1:9 * 0.01) {
 }
 ```
 
-<img src="man/figures/README-string2stroke-.gif" width="75%" />
+<img src="man/figures/README-string2stroke-.gif" style="width:75.0%" />
 
 ## `tolerance`
 
 `tolerance` controls resolution of the tessellation. You can reduce
-tolerance to get higher resolutions.
+tolerance to get higher resolutions. In most of the cases, `1e-5` ~
+`1e-6` should be enough. For more details, please refer to [lyon’s
+official
+document](https://docs.rs/lyon_geom/latest/lyon_geom/#flattening).
 
 ``` r
 for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
@@ -195,24 +199,4 @@ for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
 }
 ```
 
-<img src="man/figures/README-example3-.gif" width="75%" />
-
-Note that `tolerance` parameter behaves a bit differently on
-`string2fill()` and `string2stroke()`. But, in either case, 1e-5 ~ 1e-6
-should be enough.
-
-``` r
-for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
-  d <- string2path("abc", "Iosevka SS08", font_weight = "bold", font_style = "italic", tolerance = tolerance)
-  
-  p <- ggplot(d) +
-    geom_path(aes(x, y, group = path_id), colour = "black", linewidth = 0.5) +
-    geom_point(aes(x, y, group = path_id), colour = "black", size = 1.5) +
-    theme_minimal() +
-    coord_equal() +
-    ggtitle(paste0("tolerance: ", tolerance))
-  plot(p)
-}
-```
-
-<img src="man/figures/README-example4-.gif" width="75%" />
+<img src="man/figures/README-example3-.gif" style="width:75.0%" />

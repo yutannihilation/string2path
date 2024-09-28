@@ -45,7 +45,7 @@ string2fill(
 \item{font_style}{A font style.}
 
 \item{tolerance}{Maximum distance allowed between the curve and its
-approximation. For more details, please refer to \href{https://docs.rs/lyon/0.17.5/lyon/#what-is-the-tolerance-variable-in-these-examples}{the documentation of the underlying Rust library}.}
+approximation. For more details, please refer to \href{https://docs.rs/lyon_geom/latest/lyon_geom/#flattening}{the documentation of the underlying Rust library}.}
 
 \item{line_width}{Line width of strokes.}
 }

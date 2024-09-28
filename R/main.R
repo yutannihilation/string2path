@@ -14,7 +14,7 @@
 #' @param tolerance Maximum distance allowed between the curve and its
 #'   approximation. For more details, please refer to [the documentation of the
 #'   underlying Rust
-#'   library](https://docs.rs/lyon/0.17.5/lyon/#what-is-the-tolerance-variable-in-these-examples).
+#'   library](https://docs.rs/lyon_geom/latest/lyon_geom/#flattening).
 #'
 #' @param line_width Line width of strokes.
 #'
