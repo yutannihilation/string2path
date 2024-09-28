@@ -49,8 +49,13 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="string2path">string2path<a class="anchor" aria-label="anchor" href="#string2path"></a>
 </h1></div>
+</div>
+<div class="section level1">
+<h1 id="string2path-1">string2path<a class="anchor" aria-label="anchor" href="#string2path-1"></a>
+</h1>
 <!-- badges: start -->
 
+<!-- badges: end -->
 <p>The string2path R package converts a text to paths of the outlines of each glyph, based on a font data. Under the hood, this package is powered by <a href="https://yutannihilation.github.io/savvy/guide/" class="external-link">the savvy framework</a> to use these two Rust crates:</p>
 <ul>
 <li>
@@ -81,8 +86,8 @@
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
 <div class="section level3">
-<h3 id="string2path-1">
-<code>string2path()</code><a class="anchor" aria-label="anchor" href="#string2path-1"></a>
+<h3 id="string2path-2">
+<code>string2path()</code><a class="anchor" aria-label="anchor" href="#string2path-2"></a>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yutannihilation.github.io/string2path/" class="external-link">string2path</a></span><span class="op">)</span></span>
@@ -99,7 +104,7 @@
 <span>  <span class="fu">coord_equal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">scale_colour_viridis_d</span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-example-1.png" width="75%"></p>
+<p><img src="reference/figures/README-example-1.png" style="width:75.0%"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gganimate.com" class="external-link">gganimate</a></span><span class="op">)</span></span>
@@ -112,7 +117,7 @@
 <span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">coord_equal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">transition_reveal</span><span class="op">(</span><span class="va">rowid</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-example-1.gif" width="75%"></p>
+<p><img src="reference/figures/README-example-1.gif" style="width:75.0%"></p>
 <div class="section level4">
 <h4 id="dump_fontdb">
 <code>dump_fontdb()</code><a class="anchor" aria-label="anchor" href="#dump_fontdb"></a>
@@ -121,7 +126,7 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/dump_fontdb.html">dump_fontdb</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 448 × 5</span></span>
-<span><span class="co">#&gt;    x                                           y family        weight style </span></span>
+<span><span class="co">#&gt;    source                                  index family        weight style </span></span>
 <span><span class="co">#&gt;    &lt;chr&gt;                                   &lt;int&gt; &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt; </span></span>
 <span><span class="co">#&gt;  1 "C:\\WINDOWS\\Fonts\\arial.ttf"             0 Arial         normal normal</span></span>
 <span><span class="co">#&gt;  2 "C:\\WINDOWS\\Fonts\\arialbd.ttf"           0 Arial         bold   normal</span></span>
@@ -151,7 +156,7 @@
 <span>  <span class="fu">geom_path</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, group <span class="op">=</span> <span class="va">path_id</span><span class="op">)</span>, linewidth <span class="op">=</span> <span class="fl">5</span>, colour <span class="op">=</span> <span class="st">"#26d1a9"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">coord_equal</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-icon_font-1.png" width="75%"></p>
+<p><img src="reference/figures/README-icon_font-1.png" style="width:75.0%"></p>
 </div>
 </div>
 <div class="section level3">
@@ -168,7 +173,7 @@
 <span>  <span class="fu">coord_equal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">scale_fill_viridis_d</span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-example2-1.png" width="75%"></p>
+<p><img src="reference/figures/README-example2-1.png" style="width:75.0%"></p>
 </div>
 <div class="section level3">
 <h3 id="string2stroke">
@@ -187,14 +192,14 @@
 <span>    <span class="fu">scale_fill_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"purple"</span>, <span class="st">"pink"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="reference/figures/README-string2stroke-.gif" width="75%"></p>
+<p><img src="reference/figures/README-string2stroke-.gif" style="width:75.0%"></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="tolerance">
 <code>tolerance</code><a class="anchor" aria-label="anchor" href="#tolerance"></a>
 </h2>
-<p><code>tolerance</code> controls resolution of the tessellation. You can reduce tolerance to get higher resolutions.</p>
+<p><code>tolerance</code> controls resolution of the tessellation. You can reduce tolerance to get higher resolutions. In most of the cases, <code>1e-5</code> ~ <code>1e-6</code> should be enough. For more details, please refer to <a href="https://docs.rs/lyon_geom/latest/lyon_geom/#flattening" class="external-link">lyon’s official document</a>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">tolerance</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1e-1</span>, <span class="fl">1e-2</span>, <span class="fl">1e-3</span>, <span class="fl">1e-4</span>, <span class="fl">1e-5</span>, <span class="fl">1e-6</span>, <span class="fl">1e-7</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/string2path.html">string2fill</a></span><span class="op">(</span><span class="st">"abc"</span>, <span class="st">"Iosevka SS08"</span>, font_weight <span class="op">=</span> <span class="st">"bold"</span>, font_style <span class="op">=</span> <span class="st">"italic"</span>, tolerance <span class="op">=</span> <span class="va">tolerance</span><span class="op">)</span></span>
@@ -207,23 +212,10 @@
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"tolerance: "</span>, <span class="va">tolerance</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="reference/figures/README-example3-.gif" width="75%"></p>
-<p>Note that <code>tolerance</code> parameter behaves a bit differently on <code><a href="reference/string2path.html">string2fill()</a></code> and <code><a href="reference/string2path.html">string2stroke()</a></code>. But, in either case, 1e-5 ~ 1e-6 should be enough.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">tolerance</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1e-1</span>, <span class="fl">1e-2</span>, <span class="fl">1e-3</span>, <span class="fl">1e-4</span>, <span class="fl">1e-5</span>, <span class="fl">1e-6</span>, <span class="fl">1e-7</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/string2path.html">string2path</a></span><span class="op">(</span><span class="st">"abc"</span>, <span class="st">"Iosevka SS08"</span>, font_weight <span class="op">=</span> <span class="st">"bold"</span>, font_style <span class="op">=</span> <span class="st">"italic"</span>, tolerance <span class="op">=</span> <span class="va">tolerance</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">geom_path</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, group <span class="op">=</span> <span class="va">path_id</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"black"</span>, linewidth <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, group <span class="op">=</span> <span class="va">path_id</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">coord_equal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"tolerance: "</span>, <span class="va">tolerance</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p><img src="reference/figures/README-example4-.gif" width="75%"></p>
+<p><img src="reference/figures/README-example3-.gif" style="width:75.0%"></p>
 </div>
 </div>
+
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
@@ -262,8 +254,8 @@
 <ul class="list-unstyled">
 <li><a href="https://github.com/yutannihilation/string2path/actions" class="external-link"><img src="https://github.com/yutannihilation/string2path/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://CRAN.R-project.org/package=string2path" class="external-link"><img src="https://www.r-pkg.org/badges/version/string2path" alt="CRAN status"></a></li>
-<li><a href="https://yutannihilation.r-universe.dev" class="external-link"><img src="https://yutannihilation.r-universe.dev/badges/string2path" alt="string2path status badge"></a></li>
+<li><a href="https://CRAN.R-project.org/package=string2path" class="external-link"><img src="https://www.r-pkg.org/badges/version/string2path.png" alt="CRAN status"></a></li>
+<li><a href="https://yutannihilation.r-universe.dev" class="external-link"><img src="https://yutannihilation.r-universe.dev/badges/string2path.png" alt="string2path status badge"></a></li>
 </ul>
 </div>
 
