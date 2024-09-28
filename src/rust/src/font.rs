@@ -1,4 +1,4 @@
-use crate::builder::{FlattenedPathBuilder, LyonPathBuilder, LyonPathBuilderForPaint};
+use crate::builder::{BuildPath, LyonPathBuilder, LyonPathBuilderForPaint};
 
 use once_cell::sync::Lazy;
 
@@ -43,7 +43,7 @@ impl From<FontLoadingError> for savvy::Error {
     }
 }
 
-impl LyonPathBuilder<FlattenedPathBuilder> {
+impl<T: BuildPath> LyonPathBuilder<T> {
     pub fn outline(
         &mut self,
         text: &str,

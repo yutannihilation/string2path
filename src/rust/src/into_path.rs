@@ -1,9 +1,9 @@
 use ttf_parser::RgbaColor;
 
-use crate::builder::{FlattenedPathBuilder, LyonPathBuilder};
+use crate::builder::LyonPathBuilderForPath;
 use crate::result::PathTibble;
 
-impl LyonPathBuilder<FlattenedPathBuilder> {
+impl LyonPathBuilderForPath {
     pub fn into_path(mut self) -> PathTibble {
         let paths = self.build();
         let color = if self.layer_color.is_empty() {

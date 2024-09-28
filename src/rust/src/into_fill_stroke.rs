@@ -1,7 +1,4 @@
-use crate::{
-    builder::{FlattenedPathBuilder, LyonPathBuilder},
-    result::PathTibble,
-};
+use crate::{builder::LyonPathBuilderForStrokeAndFill, result::PathTibble};
 
 use lyon::tessellation::*;
 use ttf_parser::RgbaColor;
@@ -41,7 +38,7 @@ impl StrokeVertexConstructor<Vertex> for VertexCtor {
     }
 }
 
-impl LyonPathBuilder<FlattenedPathBuilder> {
+impl LyonPathBuilderForStrokeAndFill {
     /// Convert the outline paths into fill as triangles.
     pub fn into_fill(mut self) -> PathTibble {
         let paths = self.build();
