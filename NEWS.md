@@ -16,6 +16,10 @@
 
 * `path_id` and `glyph_id` are now 1-origin.
 
+* The result of `string2fill()` and `string2stroke()` now don't contain a
+  `path_id` column. I found the calculation of `path_id` had never been
+  correct, and it's probably better to remove it to avoid confusion.
+
 # string2path 0.1.8
 
 * This is a maintenance release to comply with the CRAN repository policy.
