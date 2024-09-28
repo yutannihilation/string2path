@@ -19,7 +19,7 @@ pub struct LyonPathBuilder {
     // attribute is the only thing we can pass to tessellators.
     pub builders: Vec<
         lyon::path::builder::Transformed<
-            lyon::path::path::BuilderWithAttributes,
+            lyon::path::builder::Flattened<lyon::path::path::BuilderWithAttributes>,
             lyon::math::Transform,
         >,
     >,
@@ -51,6 +51,7 @@ impl LyonPathBuilder {
     pub fn new(tolerance: f32, line_width: f32) -> Self {
         Self {
             builders: vec![lyon::path::Path::builder_with_attributes(2)
+                .flattened(tolerance)
                 .transformed(lyon::geom::euclid::Transform2D::identity())],
             layer_color: HashMap::new(),
             cur_layer: 0,
@@ -69,36 +70,23 @@ impl LyonPathBuilder {
     pub fn cur_builder(
         &mut self,
     ) -> &mut lyon::path::builder::Transformed<
-        lyon::path::path::BuilderWithAttributes,
+        lyon::path::builder::Flattened<lyon::path::path::BuilderWithAttributes>,
         lyon::math::Transform,
     > {
         &mut self.builders[self.cur_layer]
     }
 
-    fn build_inner(&mut self, tolerance: Option<f32>) -> Vec<(Path, Option<RgbaColor>)> {
+    pub fn build(&mut self) -> Vec<(Path, Option<RgbaColor>)> {
         let builders = self.builders.drain(0..);
         builders
             .into_iter()
             .enumerate()
             .map(|(i, x)| {
-                let path = match tolerance {
-                    Some(tol) => x.flattened(tol).build(),
-                    None => x.build(),
-                };
+                let path = x.build();
                 let color = self.layer_color.get(&i).cloned();
                 (path, color)
             })
             .collect()
-    }
-
-    // for fill and stroke
-    pub fn build(&mut self) -> Vec<(Path, Option<RgbaColor>)> {
-        self.build_inner(None)
-    }
-
-    // for path
-    pub fn build_flattened(&mut self, tolerance: f32) -> Vec<(Path, Option<RgbaColor>)> {
-        self.build_inner(Some(tolerance))
     }
 
     // adds offsets to x and y
@@ -169,6 +157,7 @@ impl LyonPathBuilder {
         if self.builders.len() < self.cur_layer + 1 {
             self.builders.push(
                 lyon::path::Path::builder_with_attributes(2)
+                    .flattened(self.tolerance)
                     .transformed(lyon::geom::euclid::Transform2D::identity()),
             );
         }
