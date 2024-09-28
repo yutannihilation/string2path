@@ -168,7 +168,7 @@ pub type FlattenedPathBuilder = lyon::path::builder::NoAttributes<
 
 impl BuildPath for FlattenedPathBuilder {
     fn set_transform(&mut self, transform: lyon::math::Transform) {
-        lyon::path::builder::Transformed::set_transform(self, transform);
+        self.inner_mut().set_transform(transform);
     }
 
     fn new_builder(tolerance: f32) -> Self {
@@ -195,7 +195,7 @@ pub type NonFlattenedPathBuilder = lyon::path::builder::NoAttributes<
 
 impl BuildPath for NonFlattenedPathBuilder {
     fn set_transform(&mut self, transform: lyon::math::Transform) {
-        self.set_transform(transform);
+        self.inner_mut().set_transform(transform);
     }
 
     fn new_builder(_tolerance: f32) -> Self {
