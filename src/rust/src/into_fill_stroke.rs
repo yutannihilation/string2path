@@ -6,7 +6,6 @@ use ttf_parser::RgbaColor;
 #[derive(Copy, Clone, Debug)]
 struct Vertex {
     position: lyon::math::Point,
-    path_id: u32,
 }
 
 // This can have some members so that it can be used in new_vertex(), but I
@@ -14,24 +13,16 @@ struct Vertex {
 struct VertexCtor {}
 
 impl FillVertexConstructor<Vertex> for VertexCtor {
-    fn new_vertex(&mut self, mut vertex: FillVertex) -> Vertex {
+    fn new_vertex(&mut self, vertex: FillVertex) -> Vertex {
         let pos = vertex.position();
-        let attr = vertex.interpolated_attributes();
-        Vertex {
-            position: pos,
-            path_id: attr[1] as _,
-        }
+        Vertex { position: pos }
     }
 }
 
 impl StrokeVertexConstructor<Vertex> for VertexCtor {
-    fn new_vertex(&mut self, mut vertex: StrokeVertex) -> Vertex {
+    fn new_vertex(&mut self, vertex: StrokeVertex) -> Vertex {
         let pos = vertex.position();
-        let attr = vertex.interpolated_attributes();
-        Vertex {
-            position: pos,
-            path_id: attr[1] as _,
-        }
+        Vertex { position: pos }
     }
 }
 
@@ -48,7 +39,7 @@ impl LyonPathBuilderForStrokeAndFill {
             x: Vec::new(),
             y: Vec::new(),
             glyph_id: Vec::new(),
-            path_id: Vec::new(),
+            path_id: None,
             triangle_id: Some(Vec::new()),
             color,
         };
@@ -95,7 +86,7 @@ impl LyonPathBuilderForStrokeAndFill {
             x: Vec::new(),
             y: Vec::new(),
             glyph_id: Vec::new(),
-            path_id: Vec::new(),
+            path_id: None,
             triangle_id: Some(Vec::new()),
             color,
         };
@@ -146,7 +137,6 @@ fn extract_vertex_buffer(
             dst.x.push(v.position.x as _);
             dst.y.push(v.position.y as _);
             dst.glyph_id.push(glyph_id);
-            dst.path_id.push(v.path_id as _);
             if let Some(triangle_id) = &mut dst.triangle_id {
                 triangle_id.push(n as i32 / 3 + offset);
             }
