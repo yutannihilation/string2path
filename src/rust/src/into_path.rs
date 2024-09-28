@@ -19,6 +19,8 @@ impl LyonPathBuilderForPath {
             triangle_id: None,
             color,
         };
+
+        let mut cur_path_id: u32 = 0;
         for (path, paint_color) in paths {
             let paint_color = match paint_color {
                 Some(RgbaColor {
@@ -29,7 +31,6 @@ impl LyonPathBuilderForPath {
                 }) => format!("#{red:02x}{green:02x}{blue:02x}{alpha:02x}",),
                 None => "#00000000".to_string(),
             };
-            let mut cur_path_id: u32 = 0;
             for p in path.iter() {
                 let point = match p {
                     lyon::path::Event::Begin { at } => {
