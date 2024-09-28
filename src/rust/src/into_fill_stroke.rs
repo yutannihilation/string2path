@@ -6,7 +6,6 @@ use ttf_parser::RgbaColor;
 #[derive(Copy, Clone, Debug)]
 struct Vertex {
     position: lyon::math::Point,
-    glyph_id: u32,
     path_id: u32,
 }
 
@@ -20,7 +19,6 @@ impl FillVertexConstructor<Vertex> for VertexCtor {
         let attr = vertex.interpolated_attributes();
         Vertex {
             position: pos,
-            glyph_id: attr[0] as _,
             path_id: attr[1] as _,
         }
     }
@@ -32,7 +30,6 @@ impl StrokeVertexConstructor<Vertex> for VertexCtor {
         let attr = vertex.interpolated_attributes();
         Vertex {
             position: pos,
-            glyph_id: attr[0] as _,
             path_id: attr[1] as _,
         }
     }
@@ -60,7 +57,14 @@ impl LyonPathBuilderForStrokeAndFill {
         let mut tessellator = FillTessellator::new();
         let options = FillOptions::tolerance(self.tolerance);
 
+        let mut cur_path_id: u32 = 0;
         for (path, color) in paths {
+            let path_id_inc = path
+                .iter()
+                .filter(|x| matches!(x, path::Event::Begin { .. }))
+                .count();
+            cur_path_id += path_id_inc as u32;
+
             let mut geometry: VertexBuffers<Vertex, usize> = VertexBuffers::new();
             {
                 // Compute the tessellation.
@@ -72,7 +76,9 @@ impl LyonPathBuilderForStrokeAndFill {
                     )
                     .unwrap();
             }
-            extract_vertex_buffer(geometry, &mut result, color);
+
+            let cur_glyph_id = *self.glyph_id_map.get(&cur_path_id).unwrap_or(&0) as i32;
+            extract_vertex_buffer(geometry, &mut result, color, cur_glyph_id);
         }
         result
     }
@@ -94,10 +100,18 @@ impl LyonPathBuilderForStrokeAndFill {
             color,
         };
 
+        let mut cur_path_id: u32 = 0;
+
         // Will contain the result of the tessellation.
         let mut tessellator = StrokeTessellator::new();
         let options = StrokeOptions::tolerance(self.tolerance).with_line_width(self.line_width);
         for (path, color) in paths {
+            let path_id_inc = path
+                .iter()
+                .filter(|x| matches!(x, path::Event::Begin { .. }))
+                .count();
+            cur_path_id += path_id_inc as u32;
+
             let mut geometry: VertexBuffers<Vertex, usize> = VertexBuffers::new();
             {
                 // Compute the tessellation.
@@ -110,7 +124,8 @@ impl LyonPathBuilderForStrokeAndFill {
                     .unwrap();
             }
 
-            extract_vertex_buffer(geometry, &mut result, color);
+            let cur_glyph_id = *self.glyph_id_map.get(&cur_path_id).unwrap_or(&0) as i32;
+            extract_vertex_buffer(geometry, &mut result, color, cur_glyph_id);
         }
         result
     }
@@ -120,6 +135,7 @@ fn extract_vertex_buffer(
     geometry: VertexBuffers<Vertex, usize>,
     dst: &mut PathTibble,
     paint_color: Option<RgbaColor>,
+    glyph_id: i32,
 ) {
     let offset = dst.triangle_id.as_ref().map_or(0, |v| match v.last() {
         Some(last_triangle_id) => last_triangle_id + 1,
@@ -129,7 +145,7 @@ fn extract_vertex_buffer(
         if let Some(v) = geometry.vertices.get(i) {
             dst.x.push(v.position.x as _);
             dst.y.push(v.position.y as _);
-            dst.glyph_id.push(v.glyph_id as _);
+            dst.glyph_id.push(glyph_id);
             dst.path_id.push(v.path_id as _);
             if let Some(triangle_id) = &mut dst.triangle_id {
                 triangle_id.push(n as i32 / 3 + offset);
