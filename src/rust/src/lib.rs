@@ -23,7 +23,7 @@ fn string2any_family(
     line_width: f64,
     ct: ConversionType,
 ) -> savvy::Result<savvy::Sexp> {
-    let mut builder = builder::LyonPathBuilder::new(tolerance as _, line_width as _);
+    let mut builder = builder::LyonPathBuilderForPath::new(tolerance as _, line_width as _);
 
     builder.outline(text, font_family, font_weight, font_style)?;
 
@@ -43,7 +43,7 @@ fn string2any_file(
     line_width: f64,
     ct: ConversionType,
 ) -> savvy::Result<savvy::Sexp> {
-    let mut builder = builder::LyonPathBuilder::new(tolerance as _, line_width as _);
+    let mut builder = builder::LyonPathBuilderForPath::new(tolerance as _, line_width as _);
 
     builder.outline_from_file(text, font_file)?;
 

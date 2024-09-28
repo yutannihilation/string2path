@@ -13,28 +13,11 @@ use ttf_parser::{
     Face, NormalizedCoordinate, RgbaColor,
 };
 
-pub type FlattenedPathBuilder = lyon::path::builder::Transformed<
-    lyon::path::builder::Flattened<lyon::path::path::BuilderWithAttributes>,
-    lyon::math::Transform,
->;
-
 pub trait BuildPath: Build<PathType = Path> + PathBuilder {
     // TODO: lyon::path::builder::Transformed is a struct, not a trait. So, this
     // method is needed to forward the operation.
     fn set_transform(&mut self, transform: lyon::math::Transform);
     fn new_builder(tolerance: f32) -> Self;
-}
-
-impl BuildPath for FlattenedPathBuilder {
-    fn set_transform(&mut self, transform: lyon::math::Transform) {
-        self.set_transform(transform);
-    }
-
-    fn new_builder(tolerance: f32) -> Self {
-        lyon::path::Path::builder_with_attributes(2)
-            .flattened(tolerance)
-            .transformed(lyon::geom::euclid::Transform2D::identity())
-    }
 }
 
 pub struct LyonPathBuilder<T: BuildPath> {
@@ -64,25 +47,6 @@ pub struct LyonPathBuilder<T: BuildPath> {
 
     // line width of the stroke
     pub line_width: f32,
-}
-
-impl LyonPathBuilder<FlattenedPathBuilder> {
-    pub fn new(tolerance: f32, line_width: f32) -> Self {
-        let builder = FlattenedPathBuilder::new_builder(tolerance);
-        Self {
-            builders: vec![builder],
-            layer_color: HashMap::new(),
-            cur_layer: 0,
-            cur_glyph_id: 0,
-            cur_path_id: 0,
-            base_transform: lyon::geom::euclid::Transform2D::identity(),
-            scale_factor: 1.,
-            offset_x: 0.,
-            offset_y: 0.,
-            tolerance,
-            line_width,
-        }
-    }
 }
 
 impl<T: BuildPath> LyonPathBuilder<T> {
@@ -181,6 +145,87 @@ impl<T: BuildPath> LyonPathBuilder<T> {
     //     self.cur_layer -= 1;
     // }
 }
+
+// For path
+
+pub type FlattenedPathBuilder = lyon::path::builder::Transformed<
+    lyon::path::builder::Flattened<lyon::path::path::BuilderWithAttributes>,
+    lyon::math::Transform,
+>;
+
+impl BuildPath for FlattenedPathBuilder {
+    fn set_transform(&mut self, transform: lyon::math::Transform) {
+        self.set_transform(transform);
+    }
+
+    fn new_builder(tolerance: f32) -> Self {
+        lyon::path::Path::builder_with_attributes(2)
+            .flattened(tolerance)
+            .transformed(lyon::geom::euclid::Transform2D::identity())
+    }
+}
+
+pub type LyonPathBuilderForPath = LyonPathBuilder<FlattenedPathBuilder>;
+
+impl LyonPathBuilderForPath {
+    pub fn new(tolerance: f32, line_width: f32) -> Self {
+        let builder = FlattenedPathBuilder::new_builder(tolerance);
+        Self {
+            builders: vec![builder],
+            layer_color: HashMap::new(),
+            cur_layer: 0,
+            cur_glyph_id: 0,
+            cur_path_id: 0,
+            base_transform: lyon::geom::euclid::Transform2D::identity(),
+            scale_factor: 1.,
+            offset_x: 0.,
+            offset_y: 0.,
+            tolerance,
+            line_width,
+        }
+    }
+}
+
+// For stroke and fill
+
+pub type NonFlattenedPathBuilder = lyon::path::builder::Transformed<
+    lyon::path::path::BuilderWithAttributes,
+    lyon::math::Transform,
+>;
+
+impl BuildPath for NonFlattenedPathBuilder {
+    fn set_transform(&mut self, transform: lyon::math::Transform) {
+        self.set_transform(transform);
+    }
+
+    fn new_builder(_tolerance: f32) -> Self {
+        lyon::path::Path::builder_with_attributes(2)
+            .transformed(lyon::geom::euclid::Transform2D::identity())
+    }
+}
+
+pub type LyonPathBuilderForStrokeAndFill = LyonPathBuilder<NonFlattenedPathBuilder>;
+
+impl LyonPathBuilderForStrokeAndFill {
+    pub fn new(tolerance: f32, line_width: f32) -> Self {
+        let builder = NonFlattenedPathBuilder::new_builder(tolerance);
+        Self {
+            builders: vec![builder],
+            layer_color: HashMap::new(),
+            cur_layer: 0,
+            cur_glyph_id: 0,
+            cur_path_id: 0,
+            base_transform: lyon::geom::euclid::Transform2D::identity(),
+            scale_factor: 1.,
+            offset_x: 0.,
+            offset_y: 0.,
+            tolerance,
+            line_width,
+        }
+    }
+}
+
+// ttf-parser
 
 impl<T: BuildPath> ttf_parser::OutlineBuilder for LyonPathBuilder<T> {
     fn move_to(&mut self, x: f32, y: f32) {
