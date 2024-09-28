@@ -53,6 +53,23 @@ pub struct LyonPathBuilder<T: BuildPath> {
 }
 
 impl<T: BuildPath> LyonPathBuilder<T> {
+    fn new_inner(builder: T, tolerance: f32, line_width: f32) -> Self {
+        Self {
+            builders: vec![builder],
+            layer_color: HashMap::new(),
+            cur_layer: 0,
+            cur_glyph_id: 0,
+            cur_path_id: 0,
+            glyph_id_map: HashMap::new(),
+            base_transform: lyon::geom::euclid::Transform2D::identity(),
+            scale_factor: 1.,
+            offset_x: 0.,
+            offset_y: 0.,
+            tolerance,
+            line_width,
+        }
+    }
+
     #[inline]
     pub fn cur_builder(&mut self) -> &mut T {
         &mut self.builders[self.cur_layer]
@@ -168,20 +185,7 @@ pub type LyonPathBuilderForPath = LyonPathBuilder<FlattenedPathBuilder>;
 impl LyonPathBuilderForPath {
     pub fn new(tolerance: f32, line_width: f32) -> Self {
         let builder = FlattenedPathBuilder::new_builder(tolerance);
-        Self {
-            builders: vec![builder],
-            layer_color: HashMap::new(),
-            cur_layer: 0,
-            cur_glyph_id: 0,
-            cur_path_id: 0,
-            glyph_id_map: HashMap::new(),
-            base_transform: lyon::geom::euclid::Transform2D::identity(),
-            scale_factor: 1.,
-            offset_x: 0.,
-            offset_y: 0.,
-            tolerance,
-            line_width,
-        }
+        Self::new_inner(builder, tolerance, line_width)
     }
 }
 
@@ -208,20 +212,7 @@ pub type LyonPathBuilderForStrokeAndFill = LyonPathBuilder<NonFlattenedPathBuild
 impl LyonPathBuilderForStrokeAndFill {
     pub fn new(tolerance: f32, line_width: f32) -> Self {
         let builder = NonFlattenedPathBuilder::new_builder(tolerance);
-        Self {
-            builders: vec![builder],
-            layer_color: HashMap::new(),
-            cur_layer: 0,
-            cur_glyph_id: 0,
-            cur_path_id: 0,
-            glyph_id_map: HashMap::new(),
-            base_transform: lyon::geom::euclid::Transform2D::identity(),
-            scale_factor: 1.,
-            offset_x: 0.,
-            offset_y: 0.,
-            tolerance,
-            line_width,
-        }
+        Self::new_inner(builder, tolerance, line_width)
     }
 }
 
