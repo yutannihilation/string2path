@@ -4,9 +4,7 @@ use lyon::tessellation::*;
 use ttf_parser::RgbaColor;
 
 #[derive(Copy, Clone, Debug)]
-struct Vertex {
-    position: lyon::math::Point,
-}
+struct Vertex(lyon::math::Point);
 
 // This can have some members so that it can be used in new_vertex(), but I
 // don't find any useful usage yet.
@@ -14,15 +12,13 @@ struct VertexCtor {}
 
 impl FillVertexConstructor<Vertex> for VertexCtor {
     fn new_vertex(&mut self, vertex: FillVertex) -> Vertex {
-        let pos = vertex.position();
-        Vertex { position: pos }
+        Vertex(vertex.position())
     }
 }
 
 impl StrokeVertexConstructor<Vertex> for VertexCtor {
     fn new_vertex(&mut self, vertex: StrokeVertex) -> Vertex {
-        let pos = vertex.position();
-        Vertex { position: pos }
+        Vertex(vertex.position())
     }
 }
 
@@ -134,8 +130,8 @@ fn extract_vertex_buffer(
     });
     for (n, &i) in geometry.indices.iter().enumerate() {
         if let Some(v) = geometry.vertices.get(i) {
-            dst.x.push(v.position.x as _);
-            dst.y.push(v.position.y as _);
+            dst.x.push(v.0.x as _);
+            dst.y.push(v.0.y as _);
             dst.glyph_id.push(glyph_id);
             if let Some(triangle_id) = &mut dst.triangle_id {
                 triangle_id.push(n as i32 / 3 + offset);

@@ -88,10 +88,6 @@ impl<T: BuildPath> LyonPathBuilder<T> {
             .collect()
     }
 
-    pub fn ids(&self) -> [f32; 2] {
-        [self.cur_glyph_id as _, self.cur_path_id as _]
-    }
-
     pub fn update_transform(&mut self) {
         let transform = self
             .base_transform
@@ -163,18 +159,20 @@ impl<T: BuildPath> LyonPathBuilder<T> {
 
 // For path
 
-pub type FlattenedPathBuilder = lyon::path::builder::Transformed<
-    lyon::path::builder::Flattened<lyon::path::path::BuilderWithAttributes>,
-    lyon::math::Transform,
+pub type FlattenedPathBuilder = lyon::path::builder::NoAttributes<
+    lyon::path::builder::Transformed<
+        lyon::path::builder::Flattened<lyon::path::path::BuilderImpl>,
+        lyon::math::Transform,
+    >,
 >;
 
 impl BuildPath for FlattenedPathBuilder {
     fn set_transform(&mut self, transform: lyon::math::Transform) {
-        self.set_transform(transform);
+        lyon::path::builder::Transformed::set_transform(self, transform);
     }
 
     fn new_builder(tolerance: f32) -> Self {
-        lyon::path::Path::builder_with_attributes(2)
+        lyon::path::Path::builder()
             .flattened(tolerance)
             .transformed(lyon::geom::euclid::Transform2D::identity())
     }
@@ -191,9 +189,8 @@ impl LyonPathBuilderForPath {
 
 // For stroke and fill
 
-pub type NonFlattenedPathBuilder = lyon::path::builder::Transformed<
-    lyon::path::path::BuilderWithAttributes,
-    lyon::math::Transform,
+pub type NonFlattenedPathBuilder = lyon::path::builder::NoAttributes<
+    lyon::path::builder::Transformed<lyon::path::path::BuilderImpl, lyon::math::Transform>,
 >;
 
 impl BuildPath for NonFlattenedPathBuilder {
@@ -202,8 +199,7 @@ impl BuildPath for NonFlattenedPathBuilder {
     }
 
     fn new_builder(_tolerance: f32) -> Self {
-        lyon::path::Path::builder_with_attributes(2)
-            .transformed(lyon::geom::euclid::Transform2D::identity())
+        lyon::path::Path::builder().transformed(lyon::geom::euclid::Transform2D::identity())
     }
 }
 
@@ -229,31 +225,25 @@ impl<T: BuildPath> ttf_parser::OutlineBuilder for LyonPathBuilder<T> {
             .insert(self.cur_path_id, self.cur_glyph_id);
 
         let at = point(x, y);
-        let custom_attributes = &self.ids();
-        self.cur_builder().begin(at, custom_attributes);
+        self.cur_builder().begin(at, &[]);
     }
 
     fn line_to(&mut self, x: f32, y: f32) {
         let to = point(x, y);
-        let custom_attributes = &self.ids();
-        self.cur_builder().line_to(to, custom_attributes);
+        self.cur_builder().line_to(to, &[]);
     }
 
     fn quad_to(&mut self, x1: f32, y1: f32, x: f32, y: f32) {
         let ctrl = point(x1, y1);
         let to = point(x, y);
-        let custom_attributes = &self.ids();
-        self.cur_builder()
-            .quadratic_bezier_to(ctrl, to, custom_attributes);
+        self.cur_builder().quadratic_bezier_to(ctrl, to, &[]);
     }
 
     fn curve_to(&mut self, x1: f32, y1: f32, x2: f32, y2: f32, x: f32, y: f32) {
         let ctrl1 = point(x1, y1);
         let ctrl2 = point(x2, y2);
         let to = point(x, y);
-        let custom_attributes = &self.ids();
-        self.cur_builder()
-            .cubic_bezier_to(ctrl1, ctrl2, to, custom_attributes);
+        self.cur_builder().cubic_bezier_to(ctrl1, ctrl2, to, &[]);
     }
 
     fn close(&mut self) {
