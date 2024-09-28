@@ -30,9 +30,6 @@ impl LyonPathBuilderForPath {
                 None => "#00000000".to_string(),
             };
             let mut cur_path_id: u32 = 0;
-            for p in path.id_iter() {
-                savvy::r_eprintln!("{p:?}");
-            }
             for p in path.iter() {
                 let point = match p {
                     lyon::path::Event::Begin { at } => {
