@@ -55,7 +55,7 @@
     Code
       string2path("A", "Arial")
     Output
-      # A tibble: 25 x 4
+      # A tibble: 27 x 4
                 x     y glyph_id path_id
             <dbl> <dbl>    <int>   <int>
        1 -0.00131 0            0       0
@@ -68,7 +68,7 @@
        8  0.0887  0            0       0
        9 -0.00131 0            0       0
       10  0.184   0.263        0       1
-      # i 15 more rows
+      # i 17 more rows
 
 ---
 
