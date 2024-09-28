@@ -75,17 +75,30 @@ impl LyonPathBuilder {
         &mut self.builders[self.cur_layer]
     }
 
-    pub fn build(&mut self) -> Vec<(Path, Option<RgbaColor>)> {
+    fn build_inner(&mut self, tolerance: Option<f32>) -> Vec<(Path, Option<RgbaColor>)> {
         let builders = self.builders.drain(0..);
         builders
             .into_iter()
             .enumerate()
             .map(|(i, x)| {
-                let path = x.build();
+                let path = match tolerance {
+                    Some(tol) => x.flattened(tol).build(),
+                    None => x.build(),
+                };
                 let color = self.layer_color.get(&i).cloned();
                 (path, color)
             })
             .collect()
+    }
+
+    // for fill and stroke
+    pub fn build(&mut self) -> Vec<(Path, Option<RgbaColor>)> {
+        self.build_inner(None)
+    }
+
+    // for path
+    pub fn build_flattened(&mut self, tolerance: f32) -> Vec<(Path, Option<RgbaColor>)> {
+        self.build_inner(Some(tolerance))
     }
 
     // adds offsets to x and y

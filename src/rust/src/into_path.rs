@@ -4,6 +4,26 @@ use crate::builder::LyonPathBuilder;
 use crate::result::PathTibble;
 
 impl LyonPathBuilder {
+    pub fn into_path2(mut self) {
+        let paths = self.build_flattened(self.tolerance);
+        let color = if self.layer_color.is_empty() {
+            None
+        } else {
+            Some(Vec::new())
+        };
+        let mut result = PathTibble {
+            x: Vec::new(),
+            y: Vec::new(),
+            glyph_id: Vec::new(),
+            path_id: Vec::new(),
+            triangle_id: None,
+            color,
+        };
+        for (path, paint_color) in paths {
+            // TODO
+        }
+    }
+
     /// Extract the outline path to PathTibble.
     pub fn into_path(mut self) -> PathTibble {
         let paths = self.build();
