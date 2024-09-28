@@ -29,9 +29,13 @@ impl LyonPathBuilderForPath {
                 }) => format!("#{red:02x}{green:02x}{blue:02x}{alpha:02x}",),
                 None => "#00000000".to_string(),
             };
-            for p in path.iter_with_attributes() {
+            let mut cur_path_id: u32 = 0;
+            for p in path.iter() {
                 let point = match p {
-                    lyon::path::Event::Begin { at } => Some(at),
+                    lyon::path::Event::Begin { at } => {
+                        cur_path_id += 1;
+                        Some(at)
+                    }
                     lyon::path::Event::Line { to, .. } => Some(to),
                     lyon::path::Event::Quadratic { to, .. } => Some(to),
                     lyon::path::Event::Cubic { to, .. } => Some(to),
@@ -45,11 +49,14 @@ impl LyonPathBuilderForPath {
                     }
                 };
 
-                if let Some(point) = point {
-                    result.glyph_id.push(point.1[0] as _);
-                    result.path_id.push(point.1[1] as _);
-                    result.x.push(point.0.x as _);
-                    result.y.push(point.0.y as _);
+                if let Some(pos) = point {
+                    result.x.push(pos.x as _);
+                    result.y.push(pos.y as _);
+                    result
+                        .glyph_id
+                        .push(*self.glyph_id_map.get(&cur_path_id).unwrap_or(&0) as _);
+                    result.path_id.push(cur_path_id as _);
+
                     if let Some(v) = result.color.as_mut() {
                         v.push(paint_color.clone())
                     }

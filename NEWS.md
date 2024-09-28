@@ -14,6 +14,8 @@
 * `string2path()` now generates the same outline as `string2fill()` and 
   `string2stroke()` (#69).
 
+* `path_id` is now 1-origin.
+
 # string2path 0.1.8
 
 * This is a maintenance release to comply with the CRAN repository policy.

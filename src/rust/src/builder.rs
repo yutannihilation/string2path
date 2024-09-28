@@ -34,6 +34,9 @@ pub struct LyonPathBuilder<T: BuildPath> {
     pub cur_glyph_id: u32,
     pub cur_path_id: u32,
 
+    // path ID to glyph ID
+    pub glyph_id_map: HashMap<u32, u32>,
+
     // This transformation is of COLR format.
     base_transform: lyon::geom::euclid::Transform2D<f32, UnknownUnit, UnknownUnit>,
 
@@ -176,6 +179,7 @@ impl LyonPathBuilderForPath {
             cur_layer: 0,
             cur_glyph_id: 0,
             cur_path_id: 0,
+            glyph_id_map: HashMap::new(),
             base_transform: lyon::geom::euclid::Transform2D::identity(),
             scale_factor: 1.,
             offset_x: 0.,
@@ -215,6 +219,7 @@ impl LyonPathBuilderForStrokeAndFill {
             cur_layer: 0,
             cur_glyph_id: 0,
             cur_path_id: 0,
+            glyph_id_map: HashMap::new(),
             base_transform: lyon::geom::euclid::Transform2D::identity(),
             scale_factor: 1.,
             offset_x: 0.,
@@ -229,6 +234,14 @@ impl LyonPathBuilderForStrokeAndFill {
 
 impl<T: BuildPath> ttf_parser::OutlineBuilder for LyonPathBuilder<T> {
     fn move_to(&mut self, x: f32, y: f32) {
+        self.cur_path_id += 1;
+
+        // While it's not very cool, path ID can be re-calculated later. So, if
+        // the corresponding glyph ID is recorded here, it can be acquired when
+        // constructing a result data frame.
+        self.glyph_id_map
+            .insert(self.cur_path_id, self.cur_glyph_id);
+
         let at = self.point(x, y);
         let custom_attributes = &self.ids();
         self.cur_builder().begin(at, custom_attributes);
@@ -259,7 +272,6 @@ impl<T: BuildPath> ttf_parser::OutlineBuilder for LyonPathBuilder<T> {
 
     fn close(&mut self) {
         self.cur_builder().end(true);
-        self.cur_path_id += 1;
     }
 }
 
