@@ -1,8 +1,5 @@
 # string2path
 
-
-# string2path
-
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/yutannihilation/string2path/workflows/R-CMD-check/badge.svg)](https://github.com/yutannihilation/string2path/actions)
