@@ -44,6 +44,7 @@
 <li><p>Fix <code><a href="../reference/string2path.html">string2fill()</a></code> and <code><a href="../reference/string2path.html">string2stroke()</a></code>; when the second argument is a path to a file, these unintentionally worked as <code><a href="../reference/string2path.html">string2path()</a></code>.</p></li>
 <li><p><code><a href="../reference/string2path.html">string2path()</a></code> now generates the same outline as <code><a href="../reference/string2path.html">string2fill()</a></code> and <code><a href="../reference/string2path.html">string2stroke()</a></code> (<a href="https://github.com/yutannihilation/string2path/issues/69" class="external-link">#69</a>).</p></li>
 <li><p><code>path_id</code> and <code>glyph_id</code> are now 1-origin.</p></li>
+<li><p>The result of <code><a href="../reference/string2path.html">string2fill()</a></code> and <code><a href="../reference/string2path.html">string2stroke()</a></code> now don’t contain a <code>path_id</code> column. I found the calculation of <code>path_id</code> had never been correct, and it’s probably better to remove it to avoid confusion.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.8" id="string2path-018">string2path 0.1.8<a class="anchor" aria-label="anchor" href="#string2path-018"></a></h2><p class="text-muted">CRAN release: 2024-08-24</p>
