@@ -71,11 +71,6 @@ impl<T: BuildPath> LyonPathBuilder<T> {
             .collect()
     }
 
-    // adds offsets to x and y
-    pub fn point(&self, x: f32, y: f32) -> lyon::math::Point {
-        point(x, y)
-    }
-
     pub fn ids(&self) -> [f32; 2] {
         [self.cur_glyph_id as _, self.cur_path_id as _]
     }
@@ -242,29 +237,29 @@ impl<T: BuildPath> ttf_parser::OutlineBuilder for LyonPathBuilder<T> {
         self.glyph_id_map
             .insert(self.cur_path_id, self.cur_glyph_id);
 
-        let at = self.point(x, y);
+        let at = point(x, y);
         let custom_attributes = &self.ids();
         self.cur_builder().begin(at, custom_attributes);
     }
 
     fn line_to(&mut self, x: f32, y: f32) {
-        let to = self.point(x, y);
+        let to = point(x, y);
         let custom_attributes = &self.ids();
         self.cur_builder().line_to(to, custom_attributes);
     }
 
     fn quad_to(&mut self, x1: f32, y1: f32, x: f32, y: f32) {
-        let ctrl = self.point(x1, y1);
-        let to = self.point(x, y);
+        let ctrl = point(x1, y1);
+        let to = point(x, y);
         let custom_attributes = &self.ids();
         self.cur_builder()
             .quadratic_bezier_to(ctrl, to, custom_attributes);
     }
 
     fn curve_to(&mut self, x1: f32, y1: f32, x2: f32, y2: f32, x: f32, y: f32) {
-        let ctrl1 = self.point(x1, y1);
-        let ctrl2 = self.point(x2, y2);
-        let to = self.point(x, y);
+        let ctrl1 = point(x1, y1);
+        let ctrl2 = point(x2, y2);
+        let to = point(x, y);
         let custom_attributes = &self.ids();
         self.cur_builder()
             .cubic_bezier_to(ctrl1, ctrl2, to, custom_attributes);
