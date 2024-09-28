@@ -154,6 +154,10 @@ impl<T: BuildPath> LyonPathBuilder<T> {
                 prev_glyph = None;
                 continue;
             }
+
+            // increment glyph ID for consistency
+            self.cur_glyph_id += 1;
+
             // Even when we cannot find glyph_id, fill it with 0.
             let cur_glyph = font.glyph_index(c).unwrap_or(GlyphId(0));
 
@@ -176,7 +180,6 @@ impl<T: BuildPath> LyonPathBuilder<T> {
             }
 
             prev_glyph = Some(cur_glyph);
-            self.cur_glyph_id += 1;
         }
 
         Ok(())
