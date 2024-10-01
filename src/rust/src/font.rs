@@ -165,14 +165,29 @@ impl<T: BuildPath> LyonPathBuilder<T> {
                 self.add_offset_x(find_kerning(facetables, prev_glyph, cur_glyph) as f32);
             }
 
-            if font.is_color_glyph(cur_glyph) {
-                let mut painter = LyonPathBuilderForPaint::new(self, &font);
-                let fg_color = RgbaColor::new(0, 0, 0, 255);
-                let res = font.paint_color_glyph(cur_glyph, 0, fg_color, &mut painter);
-                res.ok_or_else(|| savvy::Error::new(&format!("Failed to outline char '{c}'")))?;
-            } else {
-                let res = font.outline_glyph(cur_glyph, self);
-                res.ok_or_else(|| savvy::Error::new(&format!("Failed to outline char '{c}'")))?;
+            // outline the glyph except when it's a whitespace
+            if !c.is_whitespace() {
+                if font.is_color_glyph(cur_glyph) {
+                    let mut painter = LyonPathBuilderForPaint::new(self, &font);
+                    let fg_color = RgbaColor::new(0, 0, 0, 255);
+                    let res = font.paint_color_glyph(cur_glyph, 0, fg_color, &mut painter);
+                    res.ok_or_else(|| {
+                        let nm = font.glyph_name(cur_glyph).unwrap_or("unknown");
+                        savvy::Error::new(&format!(
+                            "Failed to outline char '{c}' (Glyph ID {}: {})",
+                            cur_glyph.0, nm
+                        ))
+                    })?;
+                } else {
+                    let res = font.outline_glyph(cur_glyph, self);
+                    res.ok_or_else(|| {
+                        let nm = font.glyph_name(cur_glyph).unwrap_or("unknown");
+                        savvy::Error::new(&format!(
+                            "Failed to outline char '{c}' (Glyph ID {}: {})",
+                            cur_glyph.0, nm
+                        ))
+                    })?;
+                }
             }
 
             if let Some(ha) = font.glyph_hor_advance(cur_glyph) {

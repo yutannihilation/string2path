@@ -50,6 +50,23 @@
       2 0     0.800        1           0
       3 0.800 0.800        1           0
 
+# handle white spaces
+
+    Code
+      string2path("A A", "./font/test.ttf")
+    Output
+      # A tibble: 8 x 4
+            x     y glyph_id path_id
+        <dbl> <dbl>    <int>   <int>
+      1 0     0            1       1
+      2 0.800 0.800        1       1
+      3 0     0.800        1       1
+      4 0     0            1       1
+      5 1.60  0            3       2
+      6 2.40  0.800        3       2
+      7 1.60  0.800        3       2
+      8 1.60  0            3       2
+
 # the data extracted from installed font are as expected
 
     Code
