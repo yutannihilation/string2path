@@ -1,0 +1,9 @@
+version: 2
+updates:
+  - package-ecosystem: "cargo"
+    directory: "/src/rust"
+    schedule:
+      interval: "weekly"
+    # Allow both direct and indirect updates for all packages
+    allow:
+      - dependency-type: "all"
