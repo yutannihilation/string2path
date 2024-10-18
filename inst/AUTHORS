@@ -3,10 +3,10 @@ The authors of the dependency Rust crates:
 arrayvec (version 0.7.6):
   bluss
 
-autocfg (version 1.3.0):
+autocfg (version 1.4.0):
   Josh Stone
 
-cc (version 1.1.19):
+cc (version 1.1.30):
   Alex Crichton
 
 core_maths (version 0.1.0):
@@ -24,7 +24,7 @@ fontconfig-parser (version 0.5.7):
 fontdb (version 0.22.0):
   Yevhenii Reizner
 
-libc (version 0.2.158):
+libc (version 0.2.161):
   The Rust Project Developers
 
 libm (version 0.2.8):
@@ -55,10 +55,10 @@ memmap2 (version 0.9.5):
 num-traits (version 0.2.19):
   The Rust Project Developers
 
-once_cell (version 1.20.0):
+once_cell (version 1.20.2):
   Aleksey Kladov
 
-proc-macro2 (version 1.0.86):
+proc-macro2 (version 1.0.88):
   David Tolnay
   Alex Crichton
 
