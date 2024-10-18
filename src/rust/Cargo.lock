@@ -191,15 +191,15 @@ checksum = "6c20b6793b5c2fa6553b250154b78d6d0db37e72700ae35fad9387a46f487c97"
 
 [[package]]
 name = "rustversion"
-version = "1.0.17"
+version = "1.0.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "955d28af4278de8121b7ebeb796b6a45735dc01436d898801014aced2773a3d6"
+checksum = "0e819f2bc632f285be6d7cd36e25940d45b2391dd6d9b939e79de557f7014248"
 
 [[package]]
 name = "savvy"
-version = "0.6.7"
+version = "0.6.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d6fb4c906e990cfc55e41d84758519e7cde478f079cf4eec6474729f0469779f"
+checksum = "51fa0ef87b20c5f9263b9e9a81b6fd436f1e479b9dc6c552e7acb6fd4a3f4e18"
 dependencies = [
  "cc",
  "once_cell",
@@ -210,9 +210,9 @@ dependencies = [
 
 [[package]]
 name = "savvy-bindgen"
-version = "0.6.7"
+version = "0.6.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9b731cf6c2f082200565764f202cacac088eed387b8b23e1f4f5d01c55180d6e"
+checksum = "4d3108cb18465195596b00104f7246af751db0f83384dc8207d07c3f5e05ff1f"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -221,15 +221,15 @@ dependencies = [
 
 [[package]]
 name = "savvy-ffi"
-version = "0.6.7"
+version = "0.6.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "318d0908ab13d24792b0b9743ead999099c8ecffd68881aac94e12a59edf18ab"
+checksum = "5b4f38a8d08231b3e165192b9a6705c9ea211586808c99d2c0151e493c9515a8"
 
 [[package]]
 name = "savvy-macro"
-version = "0.6.7"
+version = "0.6.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d5df4f62f8ecfca7090e2680c74ad4ef1f0da43028778daac0965e14b34ee385"
+checksum = "809b4da1cbf89023d4da1d87633a5844c209e3e7e42c4c5c7bb014de0d7e4085"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -265,9 +265,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.77"
+version = "2.0.79"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9f35bcdf61fd8e7be6caf75f429fdca8beb3ed76584befb503b1569faee373ed"
+checksum = "89132cd0bf050864e1d38dc3bbc07a0eb8e7530af26344d3d2bbbef83499f590"
 dependencies = [
  "proc-macro2",
  "quote",

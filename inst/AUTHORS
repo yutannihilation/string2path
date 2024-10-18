@@ -68,19 +68,19 @@ quote (version 1.0.37):
 roxmltree (version 0.20.0):
   Yevhenii Reizner
 
-rustversion (version 1.0.17):
+rustversion (version 1.0.18):
   David Tolnay
 
-savvy-bindgen (version 0.6.7):
+savvy-bindgen (version 0.6.8):
   Hiroaki Yutani
 
-savvy-ffi (version 0.6.7):
+savvy-ffi (version 0.6.8):
   Hiroaki Yutani
 
-savvy-macro (version 0.6.7):
+savvy-macro (version 0.6.8):
   Hiroaki Yutani
 
-savvy (version 0.6.7):
+savvy (version 0.6.8):
   Hiroaki Yutani
 
 shlex (version 1.3.0):
@@ -94,7 +94,7 @@ shlex (version 1.3.0):
 slotmap (version 1.0.7):
   Orson Peters
 
-syn (version 2.0.77):
+syn (version 2.0.79):
   David Tolnay
 
 tinyvec_macros (version 0.1.1):
