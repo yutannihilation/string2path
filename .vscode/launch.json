@@ -1,0 +1,11 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "attach",
+            "name": "Debug",
+            "program": "ark", // Windows の場合は ark.exe
+        }
+    ]
+}
