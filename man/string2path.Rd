@@ -73,6 +73,12 @@ if (nrow(available_fonts) > 0) {
   weight <- available_fonts$weight[1]
   style  <- available_fonts$style[1]
 
+  # Not all fonts can handle "TEXT" glyph. Stop here if it's the case.
+  check <- try(string2path("TEXT", family, weight, style))
+  if (inherits(check, "try-error")) {
+     return()
+  }
+
   # string2path() converts a text to paths
   d_path <- string2path("TEXT", family, weight, style)
   if (nrow(d_path) > 0) {
