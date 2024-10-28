@@ -34,33 +34,33 @@ SEXP handle_result(SEXP res_) {
     return (SEXP)res;
 }
 
-SEXP savvy_string2path_family__impl(SEXP text, SEXP font_family, SEXP font_weight, SEXP font_style, SEXP tolerance) {
-    SEXP res = savvy_string2path_family__ffi(text, font_family, font_weight, font_style, tolerance);
+SEXP savvy_string2path_family__impl(SEXP c_arg__text, SEXP c_arg__font_family, SEXP c_arg__font_weight, SEXP c_arg__font_style, SEXP c_arg__tolerance) {
+    SEXP res = savvy_string2path_family__ffi(c_arg__text, c_arg__font_family, c_arg__font_weight, c_arg__font_style, c_arg__tolerance);
     return handle_result(res);
 }
 
-SEXP savvy_string2path_file__impl(SEXP text, SEXP font_file, SEXP tolerance) {
-    SEXP res = savvy_string2path_file__ffi(text, font_file, tolerance);
+SEXP savvy_string2path_file__impl(SEXP c_arg__text, SEXP c_arg__font_file, SEXP c_arg__tolerance) {
+    SEXP res = savvy_string2path_file__ffi(c_arg__text, c_arg__font_file, c_arg__tolerance);
     return handle_result(res);
 }
 
-SEXP savvy_string2stroke_family__impl(SEXP text, SEXP font_family, SEXP font_weight, SEXP font_style, SEXP tolerance, SEXP line_width) {
-    SEXP res = savvy_string2stroke_family__ffi(text, font_family, font_weight, font_style, tolerance, line_width);
+SEXP savvy_string2stroke_family__impl(SEXP c_arg__text, SEXP c_arg__font_family, SEXP c_arg__font_weight, SEXP c_arg__font_style, SEXP c_arg__tolerance, SEXP c_arg__line_width) {
+    SEXP res = savvy_string2stroke_family__ffi(c_arg__text, c_arg__font_family, c_arg__font_weight, c_arg__font_style, c_arg__tolerance, c_arg__line_width);
     return handle_result(res);
 }
 
-SEXP savvy_string2stroke_file__impl(SEXP text, SEXP font_file, SEXP tolerance, SEXP line_width) {
-    SEXP res = savvy_string2stroke_file__ffi(text, font_file, tolerance, line_width);
+SEXP savvy_string2stroke_file__impl(SEXP c_arg__text, SEXP c_arg__font_file, SEXP c_arg__tolerance, SEXP c_arg__line_width) {
+    SEXP res = savvy_string2stroke_file__ffi(c_arg__text, c_arg__font_file, c_arg__tolerance, c_arg__line_width);
     return handle_result(res);
 }
 
-SEXP savvy_string2fill_family__impl(SEXP text, SEXP font_family, SEXP font_weight, SEXP font_style, SEXP tolerance) {
-    SEXP res = savvy_string2fill_family__ffi(text, font_family, font_weight, font_style, tolerance);
+SEXP savvy_string2fill_family__impl(SEXP c_arg__text, SEXP c_arg__font_family, SEXP c_arg__font_weight, SEXP c_arg__font_style, SEXP c_arg__tolerance) {
+    SEXP res = savvy_string2fill_family__ffi(c_arg__text, c_arg__font_family, c_arg__font_weight, c_arg__font_style, c_arg__tolerance);
     return handle_result(res);
 }
 
-SEXP savvy_string2fill_file__impl(SEXP text, SEXP font_file, SEXP tolerance) {
-    SEXP res = savvy_string2fill_file__ffi(text, font_file, tolerance);
+SEXP savvy_string2fill_file__impl(SEXP c_arg__text, SEXP c_arg__font_file, SEXP c_arg__tolerance) {
+    SEXP res = savvy_string2fill_file__ffi(c_arg__text, c_arg__font_file, c_arg__tolerance);
     return handle_result(res);
 }
 

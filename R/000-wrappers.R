@@ -11,6 +11,10 @@ NULL
 
 # Check class and extract the external pointer embedded in the environment
 .savvy_extract_ptr <- function(e, class) {
+  if(is.null(e)) {
+    return(NULL)
+  }
+
   if(inherits(e, class)) {
     e$.ptr
   } else {
@@ -19,38 +23,52 @@ NULL
   }
 }
 
+# Prohibit modifying environments
 
-string2path_family <- function(text, font_family, font_weight, font_style, tolerance) {
-  .Call(savvy_string2path_family__impl, text, font_family, font_weight, font_style, tolerance)
+#' @export
+`$<-.savvy_string2path__sealed` <- function(x, name, value) {
+  class <- gsub("__bundle$", "", class(x)[1])
+  stop(class, " cannot be modified", call. = FALSE)
+}
+
+#' @export
+`[[<-.savvy_string2path__sealed` <- function(x, i, value) {
+  class <- gsub("__bundle$", "", class(x)[1])
+  stop(class, " cannot be modified", call. = FALSE)
 }
 
 
-string2path_file <- function(text, font_file, tolerance) {
-  .Call(savvy_string2path_file__impl, text, font_file, tolerance)
+`string2path_family` <- function(`text`, `font_family`, `font_weight`, `font_style`, `tolerance`) {
+  .Call(savvy_string2path_family__impl, `text`, `font_family`, `font_weight`, `font_style`, `tolerance`)
 }
 
 
-string2stroke_family <- function(text, font_family, font_weight, font_style, tolerance, line_width) {
-  .Call(savvy_string2stroke_family__impl, text, font_family, font_weight, font_style, tolerance, line_width)
+`string2path_file` <- function(`text`, `font_file`, `tolerance`) {
+  .Call(savvy_string2path_file__impl, `text`, `font_file`, `tolerance`)
 }
 
 
-string2stroke_file <- function(text, font_file, tolerance, line_width) {
-  .Call(savvy_string2stroke_file__impl, text, font_file, tolerance, line_width)
+`string2stroke_family` <- function(`text`, `font_family`, `font_weight`, `font_style`, `tolerance`, `line_width`) {
+  .Call(savvy_string2stroke_family__impl, `text`, `font_family`, `font_weight`, `font_style`, `tolerance`, `line_width`)
 }
 
 
-string2fill_family <- function(text, font_family, font_weight, font_style, tolerance) {
-  .Call(savvy_string2fill_family__impl, text, font_family, font_weight, font_style, tolerance)
+`string2stroke_file` <- function(`text`, `font_file`, `tolerance`, `line_width`) {
+  .Call(savvy_string2stroke_file__impl, `text`, `font_file`, `tolerance`, `line_width`)
 }
 
 
-string2fill_file <- function(text, font_file, tolerance) {
-  .Call(savvy_string2fill_file__impl, text, font_file, tolerance)
+`string2fill_family` <- function(`text`, `font_family`, `font_weight`, `font_style`, `tolerance`) {
+  .Call(savvy_string2fill_family__impl, `text`, `font_family`, `font_weight`, `font_style`, `tolerance`)
 }
 
 
-dump_fontdb_impl <- function() {
+`string2fill_file` <- function(`text`, `font_file`, `tolerance`) {
+  .Call(savvy_string2fill_file__impl, `text`, `font_file`, `tolerance`)
+}
+
+
+`dump_fontdb_impl` <- function() {
   .Call(savvy_dump_fontdb_impl__impl)
 }
 
