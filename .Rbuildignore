@@ -2,10 +2,12 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^README\.Rmd$
+^README\.qmd$
 ^README\.md$
 ^man/figures/.*$
 ^\.github$
 ^fonts$
+^.vscode$
 
 ^src/.cargo$
 ^src/rust/.cargo$
