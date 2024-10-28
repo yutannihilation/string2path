@@ -77,9 +77,6 @@ string2path <- function(
     font_style = c("normal", "italic", "oblique"),
     tolerance = 0.00005
 ) {
-  # TODO: remove when drop support for R < 4.1
-  text <- enc2utf8(text)
-
   if (is_font_file(font)) {
     if (!missing(font_weight) || !missing(font_style)) {
       cli::cli_warn("{.arg font_weight} and {.arg font_style} are ignored when extracting a font file.")
@@ -105,9 +102,6 @@ string2stroke <- function(
     tolerance = 0.00005,
     line_width = 0.03
 ) {
-  # TODO: remove when drop support for R < 4.1
-  text <- enc2utf8(text)
-
   if (is_font_file(font)) {
     if (!missing(font_weight) || !missing(font_style)) {
       cli::cli_warn("{.arg font_weight} and {.arg font_style} are ignored when extracting a font file.")
@@ -132,9 +126,6 @@ string2fill <- function(
     font_style = c("normal", "italic", "oblique"),
     tolerance = 0.00005
 ) {
-  # TODO: remove when drop support for R < 4.1
-  text <- enc2utf8(text)
-
   if (is_font_file(font)) {
     if (!missing(font_weight) || !missing(font_style)) {
       cli::cli_warn("{.arg font_weight} and {.arg font_style} are ignored when extracting a font file.")
