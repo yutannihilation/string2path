@@ -6,6 +6,7 @@
 ^man/figures/.*$
 ^\.github$
 ^fonts$
+^.vscode$
 
 ^src/.cargo$
 ^src/rust/.cargo$
