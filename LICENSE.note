@@ -246,6 +246,13 @@ License: MIT OR Apache-2.0
 
 ------------------------------
 
+Name:    ttf-parser
+Files:   vendor/ttf-parser/*
+Authors: Yevhenii Reizner
+License: MIT OR Apache-2.0
+
+------------------------------
+
 Name:    unicode-ident
 Files:   vendor/unicode-ident/*
 Authors: David Tolnay
