@@ -121,7 +121,7 @@
 <p>Note that <code>"Noto Sans JP"</code> above (and <code>"Iosevka SS08"</code> below) is the font installed on my local machine, so the same code might not run on your environment. You can use <code><a href="reference/dump_fontdb.html">dump_fontdb()</a></code> to see the available combination of font family (e.g. <code>"Arial"</code>), weight (e.g. <code>"bold"</code>), and style (e.g. <code>"italic"</code>).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/dump_fontdb.html">dump_fontdb</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 448 × 5</span></span>
+<span><span class="co">#&gt; # A tibble: 449 × 5</span></span>
 <span><span class="co">#&gt;    source                                  index family        weight style </span></span>
 <span><span class="co">#&gt;    &lt;chr&gt;                                   &lt;int&gt; &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt; </span></span>
 <span><span class="co">#&gt;  1 "C:\\WINDOWS\\Fonts\\arial.ttf"             0 Arial         normal normal</span></span>
@@ -134,7 +134,7 @@
 <span><span class="co">#&gt;  8 "C:\\WINDOWS\\Fonts\\BIZ-UDGothicB.ttc"     1 BIZ UDPGothic bold   normal</span></span>
 <span><span class="co">#&gt;  9 "C:\\WINDOWS\\Fonts\\BIZ-UDGothicR.ttc"     0 BIZ UDGothic  normal normal</span></span>
 <span><span class="co">#&gt; 10 "C:\\WINDOWS\\Fonts\\BIZ-UDGothicR.ttc"     1 BIZ UDPGothic normal normal</span></span>
-<span><span class="co">#&gt; # ℹ 438 more rows</span></span></code></pre></div>
+<span><span class="co">#&gt; # ℹ 439 more rows</span></span></code></pre></div>
 <p>You can also specify the font file directly. Pomicons is a font available on <a href="https://github.com/gabrielelana/pomicons" class="external-link">gabrielelana/pomicons</a>, licensed under SIL OFL 1.1.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pomicons_file</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu">here</span><span class="op">(</span><span class="st">"fonts"</span>, <span class="st">"Pomicons.ttf"</span><span class="op">)</span></span>
@@ -249,8 +249,8 @@
 <ul class="list-unstyled">
 <li><a href="https://github.com/yutannihilation/string2path/actions" class="external-link"><img src="https://github.com/yutannihilation/string2path/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://CRAN.R-project.org/package=string2path" class="external-link"><img src="https://www.r-pkg.org/badges/version/string2path.png" alt="CRAN status"></a></li>
-<li><a href="https://yutannihilation.r-universe.dev" class="external-link"><img src="https://yutannihilation.r-universe.dev/badges/string2path.png" alt="string2path status badge"></a></li>
+<li><a href="https://CRAN.R-project.org/package=string2path" class="external-link"><img src="https://www.r-pkg.org/badges/version/string2path" alt="CRAN status"></a></li>
+<li><a href="https://yutannihilation.r-universe.dev" class="external-link"><img src="https://yutannihilation.r-universe.dev/badges/string2path" alt="string2path status badge"></a></li>
 </ul>
 </div>
 
