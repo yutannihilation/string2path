@@ -1,14 +1,15 @@
 # string2path
 
+
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/yutannihilation/string2path/workflows/R-CMD-check/badge.svg)](https://github.com/yutannihilation/string2path/actions)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN
-status](https://www.r-pkg.org/badges/version/string2path.png)](https://CRAN.R-project.org/package=string2path)
+status](https://www.r-pkg.org/badges/version/string2path)](https://CRAN.R-project.org/package=string2path)
 [![string2path status
-badge](https://yutannihilation.r-universe.dev/badges/string2path.png)](https://yutannihilation.r-universe.dev)
+badge](https://yutannihilation.r-universe.dev/badges/string2path)](https://yutannihilation.r-universe.dev)
 
 <!-- badges: end -->
 
@@ -98,7 +99,7 @@ style (e.g. `"italic"`).
 
 ``` r
 dump_fontdb()
-#> # A tibble: 448 × 5
+#> # A tibble: 449 × 5
 #>    source                                  index family        weight style 
 #>    <chr>                                   <int> <chr>         <chr>  <chr> 
 #>  1 "C:\\WINDOWS\\Fonts\\arial.ttf"             0 Arial         normal normal
@@ -111,7 +112,7 @@ dump_fontdb()
 #>  8 "C:\\WINDOWS\\Fonts\\BIZ-UDGothicB.ttc"     1 BIZ UDPGothic bold   normal
 #>  9 "C:\\WINDOWS\\Fonts\\BIZ-UDGothicR.ttc"     0 BIZ UDGothic  normal normal
 #> 10 "C:\\WINDOWS\\Fonts\\BIZ-UDGothicR.ttc"     1 BIZ UDPGothic normal normal
-#> # ℹ 438 more rows
+#> # ℹ 439 more rows
 ```
 
 You can also specify the font file directly. Pomicons is a font
