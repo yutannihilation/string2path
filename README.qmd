@@ -2,6 +2,7 @@
 title: "string2path"
 format: gfm
 editor: visual
+default-image-extension: "" # quarto-dev/quarto-cli#6092
 ---
 
 ```{r}
