@@ -1,3 +1,5 @@
+# string2path (development version)
+
 # string2path 0.2.0
 
 * Partially support COLRv1 emoji fonts.
