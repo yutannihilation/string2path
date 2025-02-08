@@ -140,7 +140,7 @@
 <code class="sourceCode R"><span><span class="va">pomicons_file</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu">here</span><span class="op">(</span><span class="st">"fonts"</span>, <span class="st">"Pomicons.ttf"</span><span class="op">)</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">pomicons_file</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">pomicons_file</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu">curl</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/curl/man/curl_download.html" class="external-link">curl_download</a></span><span class="op">(</span></span>
+<span>  <span class="fu">curl</span><span class="fu">::</span><span class="fu"><a href="https://jeroen.r-universe.dev/curl/reference/curl_download.html" class="external-link">curl_download</a></span><span class="op">(</span></span>
 <span>    <span class="st">"https://github.com/gabrielelana/pomicons/blob/master/fonts/Pomicons.ttf?raw=true"</span>,</span>
 <span>    destfile <span class="op">=</span> <span class="va">pomicons_file</span></span>
 <span>  <span class="op">)</span></span>
