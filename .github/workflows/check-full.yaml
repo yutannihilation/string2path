@@ -17,7 +17,6 @@ jobs:
       matrix:
         config:
           - {os: windows-latest, r: 'release',  rust: 'stable-msvc'}
-          - {os: windows-latest, r: 'devel',    rust: 'stable-msvc'}
           - {os: macOS-latest,   r: 'release',  rust: 'stable'     }
           - {os: ubuntu-latest,  r: 'release',  rust: 'stable'     }
           - {os: ubuntu-latest,  r: 'devel',    rust: 'stable'     }
