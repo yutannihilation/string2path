@@ -3,6 +3,10 @@ name = "string2path"
 version = "0.2.0"
 edition = "2021"
 
+rust-version = "1.70"
+# TODO: without this, Cargo.lock's version is set to 4, which requires Rust 1.78.
+resolver = "3"
+
 [lib]
 crate-type = ["staticlib", "lib"]
 
