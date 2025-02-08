@@ -19,7 +19,7 @@ powered by [the savvy
 framework](https://yutannihilation.github.io/savvy/guide/) to use these
 two Rust crates:
 
-- [ttf-parser](https://github.com/RazrFalcon/ttf-parser) for parsing
+- [ttf-parser](https://github.com/harfbuzz/ttf-parser) for parsing
   font data. TrueType font (`.ttf`) and OpenType font (`.otf`) are
   supported.
 - [lyon](https://github.com/nical/lyon/) for tessellation of polygons
