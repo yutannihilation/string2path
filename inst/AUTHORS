@@ -6,10 +6,10 @@ arrayvec (version 0.7.6):
 autocfg (version 1.4.0):
   Josh Stone
 
-cc (version 1.2.1):
+cc (version 1.2.12):
   Alex Crichton
 
-core_maths (version 0.1.0):
+core_maths (version 0.1.1):
   Robert Bastian <me@robertbastian.dev
 
 euclid (version 0.22.11):
@@ -24,16 +24,16 @@ fontconfig-parser (version 0.5.7):
 fontdb (version 0.22.0):
   Yevhenii Reizner
 
-libc (version 0.2.164):
+libc (version 0.2.169):
   The Rust Project Developers
 
 libm (version 0.2.11):
   Jorge Aparicio
 
-log (version 0.4.22):
+log (version 0.4.25):
   The Rust Project Developers
 
-lyon_algorithms (version 1.0.4):
+lyon_algorithms (version 1.0.5):
   Nicolas Silva
 
 lyon_geom (version 1.0.6):
@@ -55,32 +55,32 @@ memmap2 (version 0.9.5):
 num-traits (version 0.2.19):
   The Rust Project Developers
 
-once_cell (version 1.20.2):
+once_cell (version 1.20.3):
   Aleksey Kladov
 
-proc-macro2 (version 1.0.92):
+proc-macro2 (version 1.0.93):
   David Tolnay
   Alex Crichton
 
-quote (version 1.0.37):
+quote (version 1.0.38):
   David Tolnay
 
 roxmltree (version 0.20.0):
   Yevhenii Reizner
 
-rustversion (version 1.0.18):
+rustversion (version 1.0.19):
   David Tolnay
 
-savvy-bindgen (version 0.8.1):
+savvy-bindgen (version 0.8.6):
   Hiroaki Yutani
 
-savvy-ffi (version 0.8.1):
+savvy-ffi (version 0.8.6):
   Hiroaki Yutani
 
-savvy-macro (version 0.8.1):
+savvy-macro (version 0.8.6):
   Hiroaki Yutani
 
-savvy (version 0.8.1):
+savvy (version 0.8.6):
   Hiroaki Yutani
 
 shlex (version 1.3.0):
@@ -94,22 +94,25 @@ shlex (version 1.3.0):
 slotmap (version 1.0.7):
   Orson Peters
 
-syn (version 2.0.89):
+syn (version 2.0.98):
   David Tolnay
 
 tinyvec_macros (version 0.1.1):
   Soveu
 
-tinyvec (version 1.8.0):
+tinyvec (version 1.8.1):
   Lokathor
 
 ttf-parser (version 0.24.1):
   Yevhenii Reizner
 
-ttf-parser (version 0.25.0):
+ttf-parser (version 0.25.1):
+  Caleb Maclennan
+  Laurenz Stampfl
   Yevhenii Reizner
+  خالد حسني (Khaled Hosny)
 
-unicode-ident (version 1.0.14):
+unicode-ident (version 1.0.16):
   David Tolnay
 
 version_check (version 0.9.5):

@@ -248,7 +248,7 @@ License: MIT OR Apache-2.0
 
 Name:    ttf-parser
 Files:   vendor/ttf-parser/*
-Authors: Yevhenii Reizner
+Authors: Caleb Maclennan, Laurenz Stampfl, Yevhenii Reizner, خالد حسني (Khaled Hosny)
 License: MIT OR Apache-2.0
 
 ------------------------------
