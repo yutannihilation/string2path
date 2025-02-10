@@ -42,7 +42,7 @@ impl LyonPathBuilderForStrokeAndFill {
 
         // Will contain the result of the tessellation.
         let mut tessellator = FillTessellator::new();
-        let options = FillOptions::tolerance(self.tolerance);
+        let options = FillOptions::tolerance(self.tolerance).with_fill_rule(FillRule::NonZero);
 
         let mut cur_path_id: u32 = 0;
         for (path, color) in paths {
