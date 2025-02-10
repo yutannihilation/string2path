@@ -1,5 +1,7 @@
 # string2path (development version)
 
+* Fix a regression about fill rule (#131).
+
 # string2path 0.2.0
 
 * Partially support COLRv1 emoji fonts.
