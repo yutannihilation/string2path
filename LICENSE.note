@@ -92,6 +92,13 @@ License: MIT OR Apache-2.0
 
 ------------------------------
 
+Name:    lyon
+Files:   vendor/lyon/*
+Authors: Nicolas Silva
+License: MIT OR Apache-2.0
+
+------------------------------
+
 Name:    lyon_algorithms
 Files:   vendor/lyon_algorithms/*
 Authors: Nicolas Silva
@@ -115,13 +122,6 @@ License: MIT OR Apache-2.0
 
 Name:    lyon_tessellation
 Files:   vendor/lyon_tessellation/*
-Authors: Nicolas Silva
-License: MIT OR Apache-2.0
-
-------------------------------
-
-Name:    lyon
-Files:   vendor/lyon/*
 Authors: Nicolas Silva
 License: MIT OR Apache-2.0
 
@@ -225,17 +225,17 @@ License: MIT OR Apache-2.0
 
 ------------------------------
 
-Name:    tinyvec_macros
-Files:   vendor/tinyvec_macros/*
-Authors: Soveu
-License: MIT OR Apache-2.0 OR Zlib
-
-------------------------------
-
 Name:    tinyvec
 Files:   vendor/tinyvec/*
 Authors: Lokathor
 License: Zlib OR Apache-2.0 OR MIT
+
+------------------------------
+
+Name:    tinyvec_macros
+Files:   vendor/tinyvec_macros/*
+Authors: Soveu
+License: MIT OR Apache-2.0 OR Zlib
 
 ------------------------------
 
