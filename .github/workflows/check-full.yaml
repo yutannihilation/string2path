@@ -50,3 +50,4 @@ jobs:
 
       - name: debug
         run: cat ./check/*.Rcheck/00install.out
+        if: ${{ always() }}
