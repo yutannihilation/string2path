@@ -30,9 +30,9 @@ $(STATLIB):
 	@AFTER_CARGO_BUILD@
 
 C_cleanup:
-	rm -Rf $(SHLIB) $(OBJECTS) $(STATLIB) ./rust/.cargo
+	rm -Rf $(STATLIB) ./rust/.cargo
 
 cleanup:
-	rm -Rf $(SHLIB) $(OBJECTS) $(STATLIB) ./rust/.cargo ./rust/vendor ./rust/target
+	rm -Rf $(STATLIB) ./rust/.cargo ./rust/vendor ./rust/target
 
 .PHONY: all C_cleanup cleanup
