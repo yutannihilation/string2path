@@ -16,7 +16,7 @@ lto = true
 panic = "abort"
 
 [dependencies]
-savvy = "0.8.6"
+savvy = "0.8.7"
 fontdb = "0.22"
 lyon = "1.0"
 once_cell = "1"

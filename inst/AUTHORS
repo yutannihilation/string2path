@@ -6,7 +6,7 @@ arrayvec (version 0.7.6):
 autocfg (version 1.4.0):
   Josh Stone
 
-cc (version 1.2.12):
+cc (version 1.2.16):
   Alex Crichton
 
 core_maths (version 0.1.1):
@@ -24,14 +24,17 @@ fontconfig-parser (version 0.5.7):
 fontdb (version 0.22.0):
   Yevhenii Reizner
 
-libc (version 0.2.169):
+libc (version 0.2.171):
   The Rust Project Developers
 
 libm (version 0.2.11):
   Jorge Aparicio
 
-log (version 0.4.25):
+log (version 0.4.26):
   The Rust Project Developers
+
+lyon (version 1.0.1):
+  Nicolas Silva
 
 lyon_algorithms (version 1.0.5):
   Nicolas Silva
@@ -43,9 +46,6 @@ lyon_path (version 1.0.6):
   Nicolas Silva
 
 lyon_tessellation (version 1.0.15):
-  Nicolas Silva
-
-lyon (version 1.0.1):
   Nicolas Silva
 
 memmap2 (version 0.9.5):
@@ -71,16 +71,16 @@ roxmltree (version 0.20.0):
 rustversion (version 1.0.19):
   David Tolnay
 
-savvy-bindgen (version 0.8.6):
+savvy-bindgen (version 0.8.7):
   Hiroaki Yutani
 
-savvy-ffi (version 0.8.6):
+savvy-ffi (version 0.8.7):
   Hiroaki Yutani
 
-savvy-macro (version 0.8.6):
+savvy-macro (version 0.8.7):
   Hiroaki Yutani
 
-savvy (version 0.8.6):
+savvy (version 0.8.7):
   Hiroaki Yutani
 
 shlex (version 1.3.0):
@@ -97,11 +97,11 @@ slotmap (version 1.0.7):
 syn (version 2.0.98):
   David Tolnay
 
-tinyvec_macros (version 0.1.1):
-  Soveu
-
 tinyvec (version 1.8.1):
   Lokathor
+
+tinyvec_macros (version 0.1.1):
+  Soveu
 
 ttf-parser (version 0.24.1):
   Yevhenii Reizner
@@ -112,7 +112,7 @@ ttf-parser (version 0.25.1):
   Yevhenii Reizner
   خالد حسني (Khaled Hosny)
 
-unicode-ident (version 1.0.16):
+unicode-ident (version 1.0.18):
   David Tolnay
 
 version_check (version 0.9.5):
