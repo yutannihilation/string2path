@@ -7,7 +7,7 @@ LIBDIR = ./rust/target/$(TARGET)/release
 PKG_LIBS = -L$(LIBDIR) -lstring2path
 STATLIB = $(LIBDIR)/libstring2path.a
 
-all: $(SHLIB) @CLEANUP@
+all: $(SHLIB) clean_intermediate
 
 $(SHLIB): $(STATLIB)
 
@@ -30,10 +30,10 @@ $(STATLIB):
 	fi
 	@AFTER_CARGO_BUILD@
 
-C_cleanup:
+clean_intermediate:
 	rm -Rf $(STATLIB) ./rust/.cargo
 
-cleanup:
-	rm -Rf $(STATLIB) ./rust/.cargo ./rust/vendor ./rust/target
+clean:
+	rm -Rf $(SHLIB) $(OBJECTS) $(STATLIB) ./rust/.cargo ./rust/vendor ./rust/target
 
-.PHONY: all C_cleanup cleanup
+.PHONY: all clean_intermediate clean
