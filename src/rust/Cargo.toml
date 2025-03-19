@@ -13,7 +13,7 @@ savvy_test = [] # to avoid warnings
 
 [profile.release]
 lto = true
-# panic = "abort"
+panic = "abort"
 
 [dependencies]
 savvy = "0.8.7"
