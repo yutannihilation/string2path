@@ -3,14 +3,7 @@ name = "string2path"
 version = "0.2.0"
 edition = "2021"
 
-rust-version = "1.70"
-
-# TODO:
-# Without specifying this, Cargo.lock's version is set to 4, which requires 
-# Rust 1.78. But, resolve = "3" cannot be understood by Cargo with Rust 1.70.
-# So, uncomment this when executing `cargo update`...
-#
-# resolver = "3"
+rust-version = "1.78"
 
 [lib]
 crate-type = ["staticlib", "lib"]
