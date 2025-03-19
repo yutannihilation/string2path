@@ -36,7 +36,9 @@ elif [ "${NOT_CRAN}" != "true" ]; then
   AFTER_CARGO_BUILD="${AFTER_CARGO_BUILD}"'rm -Rf $(PWD)/.cargo $(LIBDIR)/build'
   VENDORING="yes"
   OFFLINE_OPTION="--offline"
+  CLEANUP="C_cleanup"
 else
+  CLEANUP="cleanup"
   echo "*** Detected NOT_CRAN=true, do not override CARGO_HOME"
 fi
 
@@ -46,6 +48,7 @@ sed \
   -e "s|@VENDORING@|${VENDORING}|" \
   -e "s|@OFFLINE_OPTION@|${OFFLINE_OPTION}|" \
   -e "s|@TARGET@|${TARGET}|" \
+  -e "s|@CLEANUP@|${CLEANUP}|" \
   src/Makevars.in > src/Makevars
 
 # Uncomment this to debug
