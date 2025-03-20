@@ -1,3 +1,5 @@
+# string2path (development version)
+
 # string2path 0.2.1
 
 * Fix a regression about fill rule (#131).
