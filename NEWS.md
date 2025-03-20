@@ -2,6 +2,8 @@
 
 * Fix a regression about fill rule (#131).
 
+* Address new CRAN check on the compiled code in sub-directories (#144, #146).
+
 # string2path 0.2.0
 
 * Partially support COLRv1 emoji fonts.
