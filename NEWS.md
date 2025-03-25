@@ -1,3 +1,5 @@
+# string2path (development version)
+
 # string2path 0.2.2
 
 * Fix a CRAN warning (#149).
