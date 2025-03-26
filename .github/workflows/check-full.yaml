@@ -47,6 +47,8 @@ jobs:
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
+        env:
+          MAKEFLAGS: -j2   # cf. https://github.com/yutannihilation/string2path/pull/149
 
       - name: debug
         run: cat ./check/*.Rcheck/00install.out
