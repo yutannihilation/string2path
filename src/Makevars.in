@@ -30,7 +30,7 @@ $(STATLIB):
 	fi
 	@AFTER_CARGO_BUILD@
 
-clean_intermediate: $(SHLIB)
+clean_intermediate:
 	rm -Rf $(STATLIB) ./rust/.cargo
 
 clean:
