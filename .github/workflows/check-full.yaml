@@ -21,6 +21,8 @@ jobs:
           - {os: ubuntu-latest,  r: 'release',  rust: 'stable'     }
           - {os: ubuntu-latest,  r: 'devel',    rust: 'stable'     }
           - {os: ubuntu-latest,  r: 'release',  rust: 'nightly'    }
+        env:
+          MAKEFLAGS: -j2
 
     steps:
       - uses: actions/checkout@v4
