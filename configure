@@ -31,13 +31,13 @@ if [ "$(uname)" = "Emscripten" ]; then
 # If it's on CRAN, a package is not allowed to write in any other place than the
 # temporary directory on installation. So, we need to tweak Makevars to make the
 # compilation happen only within the package directory (i.e. `$(PWD)`).
-elif [ "${NOT_CRAN}" != "true" ]; then
+elif [ "${DEBUG}" != "true" ]; then
   BEFORE_CARGO_BUILD="${BEFORE_CARGO_BUILD}"' export CARGO_HOME="$(PWD)/.cargo" \&\&'
   AFTER_CARGO_BUILD="${AFTER_CARGO_BUILD}"'rm -Rf $(PWD)/.cargo $(LIBDIR)/build'
   VENDORING="yes"
   OFFLINE_OPTION="--offline"
 else
-  echo "*** Detected NOT_CRAN=true, do not override CARGO_HOME"
+  echo "*** Detected DEBUG=true, do not override CARGO_HOME"
 fi
 
 sed \
