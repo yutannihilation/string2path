@@ -28,7 +28,6 @@ $(STATLIB):
 	  export CARGO_PROFILE_RELEASE_PANIC="abort" && \
 	  @BEFORE_CARGO_BUILD@ cd ./rust && cargo +nightly build --lib --release --target $(TARGET) -Zbuild-std=panic_abort,std $(OFFLINE_OPTION); \
 	fi
-	@AFTER_CARGO_BUILD@
 
 clean_intermediate: $(SHLIB)
 	rm -Rf $(STATLIB) ./rust/.cargo
