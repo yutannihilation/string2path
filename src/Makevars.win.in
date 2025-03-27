@@ -27,7 +27,6 @@ $(STATLIB):
 	fi
 
 	@BEFORE_CARGO_BUILD@ cd ./rust && cargo build --jobs 1 --target $(TARGET) --lib --release $(OFFLINE_OPTION)
-	@AFTER_CARGO_BUILD@
 
 clean_intermediate: $(SHLIB)
 	rm -Rf $(STATLIB) ./rust/.cargo
