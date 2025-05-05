@@ -3,7 +3,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/yutannihilation/string2path/workflows/R-CMD-check/badge.svg)](https://github.com/yutannihilation/string2path/actions)
+[![R-CMD-check](https://github.com/yutannihilation/string2path/workflows/check-full/badge.svg)](https://github.com/yutannihilation/string2path/actions)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN
