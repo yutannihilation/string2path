@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/yutannihilation/string2path/workflows/check-full/badge.svg)](https://github.com/yutannihilation/string2path/actions) [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental) [![CRAN status](https://www.r-pkg.org/badges/version/string2path)](https://CRAN.R-project.org/package=string2path) [![string2path status badge](https://yutannihilation.r-universe.dev/badges/string2path)](https://yutannihilation.r-universe.dev)
+[![R-CMD-check](https://github.com/yutannihilation/string2path/actions/workflows/check-full.yaml/badge.svg)](https://github.com/yutannihilation/string2path/actions/workflows/check-full.yaml)[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental) [![CRAN status](https://www.r-pkg.org/badges/version/string2path)](https://CRAN.R-project.org/package=string2path) [![string2path status badge](https://yutannihilation.r-universe.dev/badges/string2path)](https://yutannihilation.r-universe.dev)
 
 <!-- badges: end -->
 
