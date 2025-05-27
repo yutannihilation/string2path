@@ -26,6 +26,7 @@ $(STATLIB):
 	  export CC="$(CC)" && \
 	  export CFLAGS="$(CFLAGS)" && \
 	  export CARGO_PROFILE_RELEASE_PANIC="abort" && \
+	  export RUSTFLAGS="$(RUSTFLAGS) -Zdefault-visibility=hidden" && \
 	  @BEFORE_CARGO_BUILD@ cd ./rust && cargo +nightly build --lib --release --target $(TARGET) -Zbuild-std=panic_abort,std $(OFFLINE_OPTION); \
 	fi
 
