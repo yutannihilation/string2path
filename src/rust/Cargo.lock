@@ -220,9 +220,9 @@ dependencies = [
 
 [[package]]
 name = "savvy-ffi"
-version = "0.8.10"
+version = "0.8.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "03c32b3e7d6ef893fd9b105f6a916a2afd4654b8a41322263db4bf508e252554"
+checksum = "3f1b0aeb4e546325c4c207d736d95952f8c589b85d2bf80dfc429a1975a17c74"
 
 [[package]]
 name = "savvy-macro"
