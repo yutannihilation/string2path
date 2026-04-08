@@ -1,7 +1,12 @@
 
+// clang-format sorts includes unless SortIncludes: Never. However, the ordering
+// does matter here. So, we need to disable clang-format for safety.
+
+// clang-format off
 #include <stdint.h>
 #include <Rinternals.h>
 #include <R_ext/Parse.h>
+// clang-format on
 
 #include "rust/api.h"
 
@@ -34,6 +39,21 @@ SEXP handle_result(SEXP res_) {
     return (SEXP)res;
 }
 
+SEXP savvy_dump_fontdb_impl__impl(void) {
+    SEXP res = savvy_dump_fontdb_impl__ffi();
+    return handle_result(res);
+}
+
+SEXP savvy_string2fill_family__impl(SEXP c_arg__text, SEXP c_arg__font_family, SEXP c_arg__font_weight, SEXP c_arg__font_style, SEXP c_arg__tolerance) {
+    SEXP res = savvy_string2fill_family__ffi(c_arg__text, c_arg__font_family, c_arg__font_weight, c_arg__font_style, c_arg__tolerance);
+    return handle_result(res);
+}
+
+SEXP savvy_string2fill_file__impl(SEXP c_arg__text, SEXP c_arg__font_file, SEXP c_arg__tolerance) {
+    SEXP res = savvy_string2fill_file__ffi(c_arg__text, c_arg__font_file, c_arg__tolerance);
+    return handle_result(res);
+}
+
 SEXP savvy_string2path_family__impl(SEXP c_arg__text, SEXP c_arg__font_family, SEXP c_arg__font_weight, SEXP c_arg__font_style, SEXP c_arg__tolerance) {
     SEXP res = savvy_string2path_family__ffi(c_arg__text, c_arg__font_family, c_arg__font_weight, c_arg__font_style, c_arg__tolerance);
     return handle_result(res);
@@ -54,30 +74,15 @@ SEXP savvy_string2stroke_file__impl(SEXP c_arg__text, SEXP c_arg__font_file, SEX
     return handle_result(res);
 }
 
-SEXP savvy_string2fill_family__impl(SEXP c_arg__text, SEXP c_arg__font_family, SEXP c_arg__font_weight, SEXP c_arg__font_style, SEXP c_arg__tolerance) {
-    SEXP res = savvy_string2fill_family__ffi(c_arg__text, c_arg__font_family, c_arg__font_weight, c_arg__font_style, c_arg__tolerance);
-    return handle_result(res);
-}
-
-SEXP savvy_string2fill_file__impl(SEXP c_arg__text, SEXP c_arg__font_file, SEXP c_arg__tolerance) {
-    SEXP res = savvy_string2fill_file__ffi(c_arg__text, c_arg__font_file, c_arg__tolerance);
-    return handle_result(res);
-}
-
-SEXP savvy_dump_fontdb_impl__impl(void) {
-    SEXP res = savvy_dump_fontdb_impl__ffi();
-    return handle_result(res);
-}
-
 
 static const R_CallMethodDef CallEntries[] = {
+    {"savvy_dump_fontdb_impl__impl", (DL_FUNC) &savvy_dump_fontdb_impl__impl, 0},
+    {"savvy_string2fill_family__impl", (DL_FUNC) &savvy_string2fill_family__impl, 5},
+    {"savvy_string2fill_file__impl", (DL_FUNC) &savvy_string2fill_file__impl, 3},
     {"savvy_string2path_family__impl", (DL_FUNC) &savvy_string2path_family__impl, 5},
     {"savvy_string2path_file__impl", (DL_FUNC) &savvy_string2path_file__impl, 3},
     {"savvy_string2stroke_family__impl", (DL_FUNC) &savvy_string2stroke_family__impl, 6},
     {"savvy_string2stroke_file__impl", (DL_FUNC) &savvy_string2stroke_file__impl, 4},
-    {"savvy_string2fill_family__impl", (DL_FUNC) &savvy_string2fill_family__impl, 5},
-    {"savvy_string2fill_file__impl", (DL_FUNC) &savvy_string2fill_file__impl, 3},
-    {"savvy_dump_fontdb_impl__impl", (DL_FUNC) &savvy_dump_fontdb_impl__impl, 0},
     {NULL, NULL, 0}
 };
 
@@ -85,6 +90,6 @@ void R_init_string2path(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 
-    // Functions for initialzation, if any.
+    // Functions for initialization, if any.
 
 }
