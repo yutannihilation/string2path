@@ -38,6 +38,21 @@ NULL
 }
 
 
+`dump_fontdb_impl` <- function() {
+  .Call(savvy_dump_fontdb_impl__impl)
+}
+
+
+`string2fill_family` <- function(`text`, `font_family`, `font_weight`, `font_style`, `tolerance`) {
+  .Call(savvy_string2fill_family__impl, `text`, `font_family`, `font_weight`, `font_style`, `tolerance`)
+}
+
+
+`string2fill_file` <- function(`text`, `font_file`, `tolerance`) {
+  .Call(savvy_string2fill_file__impl, `text`, `font_file`, `tolerance`)
+}
+
+
 `string2path_family` <- function(`text`, `font_family`, `font_weight`, `font_style`, `tolerance`) {
   .Call(savvy_string2path_family__impl, `text`, `font_family`, `font_weight`, `font_style`, `tolerance`)
 }
@@ -55,21 +70,6 @@ NULL
 
 `string2stroke_file` <- function(`text`, `font_file`, `tolerance`, `line_width`) {
   .Call(savvy_string2stroke_file__impl, `text`, `font_file`, `tolerance`, `line_width`)
-}
-
-
-`string2fill_family` <- function(`text`, `font_family`, `font_weight`, `font_style`, `tolerance`) {
-  .Call(savvy_string2fill_family__impl, `text`, `font_family`, `font_weight`, `font_style`, `tolerance`)
-}
-
-
-`string2fill_file` <- function(`text`, `font_file`, `tolerance`) {
-  .Call(savvy_string2fill_file__impl, `text`, `font_file`, `tolerance`)
-}
-
-
-`dump_fontdb_impl` <- function() {
-  .Call(savvy_dump_fontdb_impl__impl)
 }
 
 
