@@ -1,0 +1,148 @@
+# Authors and Citation
+
+## Authors
+
+- **Hiroaki Yutani**. Author, maintainer.
+  [](https://orcid.org/0000-0002-3385-7233)
+
+- **The authors of the dependency Rust crates**. Contributor.  
+  see inst/AUTHORS file for details
+
+## Citation
+
+Source:
+[`DESCRIPTION`](https://github.com/yutannihilation/string2path/blob/main/DESCRIPTION)
+
+Yutani H (2026). *string2path: Rendering Font into 'data.frame'*. R
+package version 0.2.2.9000,
+<https://yutannihilation.github.io/string2path/>.
+
+    @Manual{,
+      title = {string2path: Rendering Font into 'data.frame'},
+      author = {Hiroaki Yutani},
+      year = {2026},
+      note = {R package version 0.2.2.9000},
+      url = {https://yutannihilation.github.io/string2path/},
+    }
+
+## Additional details
+
+    The authors of the dependency Rust crates:
+
+    arrayvec (version 0.7.6):
+      bluss
+
+    autocfg (version 1.4.0):
+      Josh Stone
+
+    cc (version 1.2.16):
+      Alex Crichton
+
+    core_maths (version 0.1.1):
+      Robert Bastian <me@robertbastian.dev
+
+    euclid (version 0.22.11):
+      The Servo Project Developers
+
+    float_next_after (version 1.0.0):
+      Bronson Brown-deVost
+
+    fontconfig-parser (version 0.5.7):
+
+
+    fontdb (version 0.22.0):
+      Yevhenii Reizner
+
+    libc (version 0.2.171):
+      The Rust Project Developers
+
+    libm (version 0.2.11):
+      Jorge Aparicio
+
+    log (version 0.4.26):
+      The Rust Project Developers
+
+    lyon (version 1.0.1):
+      Nicolas Silva
+
+    lyon_algorithms (version 1.0.5):
+      Nicolas Silva
+
+    lyon_geom (version 1.0.6):
+      Nicolas Silva
+
+    lyon_path (version 1.0.6):
+      Nicolas Silva
+
+    lyon_tessellation (version 1.0.15):
+      Nicolas Silva
+
+    memmap2 (version 0.9.5):
+      Dan Burkert
+      Yevhenii Reizner
+
+    num-traits (version 0.2.19):
+      The Rust Project Developers
+
+    once_cell (version 1.20.3):
+      Aleksey Kladov
+
+    proc-macro2 (version 1.0.93):
+      David Tolnay
+      Alex Crichton
+
+    quote (version 1.0.38):
+      David Tolnay
+
+    roxmltree (version 0.20.0):
+      Yevhenii Reizner
+
+    rustversion (version 1.0.19):
+      David Tolnay
+
+    savvy-bindgen (version 0.8.7):
+      Hiroaki Yutani
+
+    savvy-ffi (version 0.8.7):
+      Hiroaki Yutani
+
+    savvy-macro (version 0.8.7):
+      Hiroaki Yutani
+
+    savvy (version 0.8.7):
+      Hiroaki Yutani
+
+    shlex (version 1.3.0):
+      comex
+      Fenhl
+      Adrian Taylor
+      Alex Touchet
+      Daniel Parks
+      Garrett Berg
+
+    slotmap (version 1.0.7):
+      Orson Peters
+
+    syn (version 2.0.98):
+      David Tolnay
+
+    tinyvec (version 1.8.1):
+      Lokathor
+
+    tinyvec_macros (version 0.1.1):
+      Soveu
+
+    ttf-parser (version 0.24.1):
+      Yevhenii Reizner
+
+    ttf-parser (version 0.25.1):
+      Caleb Maclennan
+      Laurenz Stampfl
+      Yevhenii Reizner
+      خالد حسني (Khaled Hosny)
+
+    unicode-ident (version 1.0.18):
+      David Tolnay
+
+    version_check (version 0.9.5):
+      Sergio Benitez
