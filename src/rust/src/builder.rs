@@ -4,13 +4,13 @@ use lyon::{
     geom::euclid::UnknownUnit,
     math::point,
     path::{
-        traits::{Build, PathBuilder},
         Path,
+        traits::{Build, PathBuilder},
     },
 };
 use ttf_parser::{
-    colr::{Paint, Painter},
     Face, NormalizedCoordinate, RgbaColor,
+    colr::{Paint, Painter},
 };
 
 pub trait BuildPath: Build<PathType = Path> + PathBuilder {

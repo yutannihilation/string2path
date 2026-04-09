@@ -233,16 +233,20 @@ mod tests {
             .unwrap();
         let result = builder.into_path();
 
-        assert!(result
-            .x
-            .iter()
-            .zip(vec![0., 100. / 125., 0., 0.])
-            .all(|(actual, expect)| (expect - actual).abs() < f64::EPSILON.sqrt()));
-        assert!(result
-            .y
-            .iter()
-            .zip(vec![0., 100. / 125., 100. / 125., 0.])
-            .all(|(actual, expect)| (expect - actual).abs() < 0.0001));
+        assert!(
+            result
+                .x
+                .iter()
+                .zip(vec![0., 100. / 125., 0., 0.])
+                .all(|(actual, expect)| (expect - actual).abs() < f64::EPSILON.sqrt())
+        );
+        assert!(
+            result
+                .y
+                .iter()
+                .zip(vec![0., 100. / 125., 100. / 125., 0.])
+                .all(|(actual, expect)| (expect - actual).abs() < 0.0001)
+        );
     }
 
     #[test]
@@ -253,14 +257,18 @@ mod tests {
             .unwrap();
         let result = builder.into_stroke();
 
-        assert!(result
-            .x
-            .iter()
-            .any(|&i| (0. - 0.1..=100. / 125. + 0.1).contains(&i)));
-        assert!(result
-            .y
-            .iter()
-            .any(|&i| (0. - 0.1..=100. / 125. + 0.1).contains(&i)));
+        assert!(
+            result
+                .x
+                .iter()
+                .any(|&i| (0. - 0.1..=100. / 125. + 0.1).contains(&i))
+        );
+        assert!(
+            result
+                .y
+                .iter()
+                .any(|&i| (0. - 0.1..=100. / 125. + 0.1).contains(&i))
+        );
     }
 
     #[test]
@@ -272,15 +280,19 @@ mod tests {
         let result = builder.into_fill();
 
         // TODO: Is this correct...?
-        assert!(result
-            .x
-            .iter()
-            .zip(vec![0., 0., 100. / 125.])
-            .all(|(actual, expect)| (expect - actual).abs() < f64::EPSILON.sqrt()));
-        assert!(result
-            .y
-            .iter()
-            .zip(vec![0., 100. / 125., 100. / 125.])
-            .all(|(actual, expect)| (expect - actual).abs() < f64::EPSILON.sqrt()));
+        assert!(
+            result
+                .x
+                .iter()
+                .zip(vec![0., 0., 100. / 125.])
+                .all(|(actual, expect)| (expect - actual).abs() < f64::EPSILON.sqrt())
+        );
+        assert!(
+            result
+                .y
+                .iter()
+                .zip(vec![0., 100. / 125., 100. / 125.])
+                .all(|(actual, expect)| (expect - actual).abs() < f64::EPSILON.sqrt())
+        );
     }
 }

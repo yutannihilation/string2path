@@ -90,7 +90,9 @@ impl<T: BuildPath> LyonPathBuilder<T> {
             return result.unwrap_or(Ok(()));
         }
 
-        savvy::r_eprint!("No font face matched with the specified conditions. Falling back to the default font...");
+        savvy::r_eprint!(
+            "No font face matched with the specified conditions. Falling back to the default font..."
+        );
 
         // 2. If not found, try the fallback query which should hit at least one font
 
@@ -121,7 +123,7 @@ impl<T: BuildPath> LyonPathBuilder<T> {
         //       information in the file. So, having another implimentation is
         //       probably reasonable for now.
         let font_data_raw =
-            std::fs::read(font_file).map_err(|e| savvy::Error::new(&e.to_string()))?;
+            std::fs::read(font_file).map_err(|e| savvy::Error::new(e.to_string()))?;
         self.outline_inner(text, font_data_raw.as_slice(), 0)?;
 
         Ok(())
@@ -135,7 +137,7 @@ impl<T: BuildPath> LyonPathBuilder<T> {
     ) -> savvy::Result<()> {
         // TODO: handle error
         let font = ttf_parser::Face::parse(font_data, face_index)
-            .map_err(|e| savvy::Error::new(&e.to_string()))?;
+            .map_err(|e| savvy::Error::new(e.to_string()))?;
         let facetables = font.tables();
 
         let height = font.height() as f32;
@@ -173,7 +175,7 @@ impl<T: BuildPath> LyonPathBuilder<T> {
                     let res = font.paint_color_glyph(cur_glyph, 0, fg_color, &mut painter);
                     res.ok_or_else(|| {
                         let nm = font.glyph_name(cur_glyph).unwrap_or("unknown");
-                        savvy::Error::new(&format!(
+                        savvy::Error::new(format!(
                             "Failed to outline char '{c}' (Glyph ID {}: {})",
                             cur_glyph.0, nm
                         ))
@@ -182,7 +184,7 @@ impl<T: BuildPath> LyonPathBuilder<T> {
                     let res = font.outline_glyph(cur_glyph, self);
                     res.ok_or_else(|| {
                         let nm = font.glyph_name(cur_glyph).unwrap_or("unknown");
-                        savvy::Error::new(&format!(
+                        savvy::Error::new(format!(
                             "Failed to outline char '{c}' (Glyph ID {}: {})",
                             cur_glyph.0, nm
                         ))
