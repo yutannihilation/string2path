@@ -23,7 +23,7 @@ jobs:
           - {os: ubuntu-latest,  r: 'release',  rust: 'nightly'    }
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@master
