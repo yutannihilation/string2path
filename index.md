@@ -80,9 +80,9 @@ ggplot(d) +
 Note that `"Noto Sans JP"` above (and `"Iosevka SS08"` below) is the
 font installed on my local machine, so the same code might not run on
 your environment. You can use
-[`dump_fontdb()`](reference/dump_fontdb.md) to see the available
-combination of font family (e.g. `"Arial"`), weight (e.g. `"bold"`), and
-style (e.g. `"italic"`).
+[`dump_fontdb()`](https://yutannihilation.github.io/string2path/reference/dump_fontdb.md)
+to see the available combination of font family (e.g. `"Arial"`), weight
+(e.g. `"bold"`), and style (e.g. `"italic"`).
 
 ``` r
 dump_fontdb()

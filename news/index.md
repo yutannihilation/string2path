@@ -34,22 +34,30 @@ CRAN release: 2025-02-08
       While this can be useful, it’s not very easy to use these
       information in R.
 
-- Fix [`string2fill()`](../reference/string2path.md) and
-  [`string2stroke()`](../reference/string2path.md); when the second
-  argument is a path to a file, these unintentionally worked as
-  [`string2path()`](../reference/string2path.md).
+- Fix
+  [`string2fill()`](https://yutannihilation.github.io/string2path/reference/string2path.md)
+  and
+  [`string2stroke()`](https://yutannihilation.github.io/string2path/reference/string2path.md);
+  when the second argument is a path to a file, these unintentionally
+  worked as
+  [`string2path()`](https://yutannihilation.github.io/string2path/reference/string2path.md).
 
-- [`string2path()`](../reference/string2path.md) now generates the same
-  outline as [`string2fill()`](../reference/string2path.md) and
-  [`string2stroke()`](../reference/string2path.md)
+- [`string2path()`](https://yutannihilation.github.io/string2path/reference/string2path.md)
+  now generates the same outline as
+  [`string2fill()`](https://yutannihilation.github.io/string2path/reference/string2path.md)
+  and
+  [`string2stroke()`](https://yutannihilation.github.io/string2path/reference/string2path.md)
   ([\#69](https://github.com/yutannihilation/string2path/issues/69)).
 
 - `path_id` and `glyph_id` are now 1-origin.
 
-- The result of [`string2fill()`](../reference/string2path.md) and
-  [`string2stroke()`](../reference/string2path.md) now don’t contain a
-  `path_id` column. I found the calculation of `path_id` had never been
-  correct, and it’s probably better to remove it to avoid confusion.
+- The result of
+  [`string2fill()`](https://yutannihilation.github.io/string2path/reference/string2path.md)
+  and
+  [`string2stroke()`](https://yutannihilation.github.io/string2path/reference/string2path.md)
+  now don’t contain a `path_id` column. I found the calculation of
+  `path_id` had never been correct, and it’s probably better to remove
+  it to avoid confusion.
 
 ## string2path 0.1.8
 
@@ -118,10 +126,11 @@ CRAN release: 2022-07-17
 
 - Now all functions accept **font family name**. This is to support TTC
   file properly, which contains more than one fonts. A new function
-  [`dump_fontdb()`](../reference/dump_fontdb.md) is useful to check the
-  actual family name (and the weight and the style) to specify. They
-  also accept a file path, so the existing code should work, except when
-  specifying `tolerance` without the named argument.
+  [`dump_fontdb()`](https://yutannihilation.github.io/string2path/reference/dump_fontdb.md)
+  is useful to check the actual family name (and the weight and the
+  style) to specify. They also accept a file path, so the existing code
+  should work, except when specifying `tolerance` without the named
+  argument.
 
 - The minimum supported Rust version is bumped to 1.56.0 for the 2021
   edition.
