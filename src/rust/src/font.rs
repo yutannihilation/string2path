@@ -2,7 +2,6 @@ use std::sync::Mutex;
 
 use crate::builder::{BuildPath, LyonPathBuilder, RgbaColor};
 
-use once_cell::sync::Lazy;
 use skrifa::color::{Brush, ColorPainter, CompositeMode};
 use skrifa::instance::Location;
 use skrifa::outline::DrawSettings;
@@ -11,8 +10,9 @@ use skrifa::raw::TableProvider;
 use skrifa::raw::tables::kern::SubtableKind;
 use skrifa::raw::types::BoundingBox;
 use skrifa::{FontRef, GlyphId, MetadataProvider};
+use std::sync::LazyLock;
 
-pub(crate) static FONT_COLLECTION: Lazy<Mutex<fontique::Collection>> = Lazy::new(|| {
+pub(crate) static FONT_COLLECTION: LazyLock<Mutex<fontique::Collection>> = LazyLock::new(|| {
     Mutex::new(fontique::Collection::new(
         fontique::CollectionOptions::default(),
     ))

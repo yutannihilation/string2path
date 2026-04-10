@@ -453,7 +453,6 @@ dependencies = [
  "fontique",
  "i_overlay",
  "lyon",
- "once_cell",
  "savvy",
  "skrifa",
 ]
