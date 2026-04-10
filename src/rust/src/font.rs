@@ -1,13 +1,15 @@
 use std::sync::Mutex;
 
-use crate::builder::{BuildPath, LyonPathBuilder};
+use crate::builder::{BuildPath, LyonPathBuilder, RgbaColor};
 
 use once_cell::sync::Lazy;
+use skrifa::color::{Brush, ColorPainter, CompositeMode};
 use skrifa::instance::Location;
 use skrifa::outline::DrawSettings;
 use skrifa::prelude::{LocationRef, Size, Tag};
 use skrifa::raw::TableProvider;
 use skrifa::raw::tables::kern::SubtableKind;
+use skrifa::raw::types::BoundingBox;
 use skrifa::{FontRef, GlyphId, MetadataProvider};
 
 pub(crate) static FONT_COLLECTION: Lazy<Mutex<fontique::Collection>> = Lazy::new(|| {
@@ -216,8 +218,26 @@ impl<T: BuildPath> LyonPathBuilder<T> {
         let line_height = height + metrics.leading as f32;
 
         let outlines = font.outline_glyphs();
+        let color_glyphs = font.color_glyphs();
         let charmap = font.charmap();
         let glyph_metrics = font.glyph_metrics(Size::unscaled(), location);
+
+        // Extract the default CPAL palette for COLR color glyphs.
+        let palette: Vec<RgbaColor> = font
+            .color_palettes()
+            .get(0)
+            .map(|p| {
+                p.colors()
+                    .iter()
+                    .map(|c| RgbaColor {
+                        red: c.red,
+                        green: c.green,
+                        blue: c.blue,
+                        alpha: c.alpha,
+                    })
+                    .collect()
+            })
+            .unwrap_or_default();
 
         let mut prev_glyph: Option<GlyphId> = None;
         for c in text.chars() {
@@ -242,9 +262,19 @@ impl<T: BuildPath> LyonPathBuilder<T> {
             }
 
             if !c.is_whitespace() {
-                // TODO: Implement COLR color glyph support via skrifa::color::ColorPainter.
-                // Currently falling back to regular outline rendering only.
-                if let Some(glyph) = outlines.get(cur_glyph) {
+                if let Some(color_glyph) = color_glyphs.get(cur_glyph) {
+                    // COLR color glyph: paint produces one finish_glyph_with_color
+                    // call per layer via the ColrPainter callbacks.
+                    let mut painter = ColrPainter {
+                        builder: self,
+                        outlines: &outlines,
+                        location,
+                        palette: &palette,
+                    };
+                    color_glyph
+                        .paint(location, &mut painter)
+                        .map_err(|e| savvy::Error::new(format!("{e:?}")))?;
+                } else if let Some(glyph) = outlines.get(cur_glyph) {
                     glyph
                         .draw(DrawSettings::unhinted(Size::unscaled(), location), self)
                         .map_err(|e| savvy::Error::new(e.to_string()))?;
@@ -285,4 +315,75 @@ fn find_kerning(font: &FontRef<'_>, left: GlyphId, right: GlyphId) -> f32 {
         }
     }
     0.0
+}
+
+/// Implements skrifa's [`ColorPainter`] to render COLR color glyphs.
+///
+/// For each layer the COLR traversal visits, the outline is drawn into the
+/// builder and finalized with the layer's palette color.  This supports both
+/// COLRv0 (via the `fill_glyph` fast-path) and basic COLRv1 (via the
+/// `push_clip_glyph` + `fill` sequence).
+struct ColrPainter<'a, 'f, T: BuildPath> {
+    builder: &'a mut LyonPathBuilder<T>,
+    outlines: &'a skrifa::outline::OutlineGlyphCollection<'f>,
+    location: LocationRef<'a>,
+    palette: &'a [RgbaColor],
+}
+
+impl<T: BuildPath> ColrPainter<'_, '_, T> {
+    fn resolve_color(&self, brush: &Brush<'_>) -> Option<RgbaColor> {
+        match brush {
+            Brush::Solid {
+                palette_index,
+                alpha,
+            } => self
+                .palette
+                .get(*palette_index as usize)
+                .map(|&c| RgbaColor {
+                    alpha: (c.alpha as f32 * alpha) as u8,
+                    ..c
+                }),
+            _ => None,
+        }
+    }
+
+    fn draw_outline(&mut self, glyph_id: GlyphId) {
+        if let Some(glyph) = self.outlines.get(glyph_id) {
+            let _ = glyph.draw(
+                DrawSettings::unhinted(Size::unscaled(), self.location),
+                self.builder,
+            );
+        }
+    }
+}
+
+impl<T: BuildPath> ColorPainter for ColrPainter<'_, '_, T> {
+    fn push_transform(&mut self, _transform: skrifa::color::Transform) {}
+    fn pop_transform(&mut self) {}
+
+    fn push_clip_glyph(&mut self, glyph_id: GlyphId) {
+        self.draw_outline(glyph_id);
+    }
+
+    fn push_clip_box(&mut self, _clip_box: BoundingBox<f32>) {}
+    fn pop_clip(&mut self) {}
+
+    fn fill(&mut self, brush: Brush<'_>) {
+        let color = self.resolve_color(&brush);
+        self.builder.finish_glyph_with_color(color);
+    }
+
+    fn push_layer(&mut self, _composite_mode: CompositeMode) {}
+
+    /// Fast-path for COLRv0: each layer is a single glyph with a solid color.
+    fn fill_glyph(
+        &mut self,
+        glyph_id: GlyphId,
+        _brush_transform: Option<skrifa::color::Transform>,
+        brush: Brush<'_>,
+    ) {
+        let color = self.resolve_color(&brush);
+        self.draw_outline(glyph_id);
+        self.builder.finish_glyph_with_color(color);
+    }
 }
