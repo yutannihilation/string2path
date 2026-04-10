@@ -18,6 +18,27 @@ pub struct RgbaColor {
     pub alpha: u8,
 }
 
+impl std::fmt::Display for RgbaColor {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let Self {
+            red,
+            green,
+            blue,
+            alpha,
+        } = self;
+        write!(f, "#{red:02x}{green:02x}{blue:02x}{alpha:02x}")
+    }
+}
+
+/// Formats an optional COLR color as a hex string.
+/// Non-COLR glyphs in mixed text default to opaque black.
+pub fn color_to_hex(color: Option<RgbaColor>) -> String {
+    match color {
+        Some(c) => c.to_string(),
+        None => "#000000ff".to_string(),
+    }
+}
+
 pub trait BuildPath: Build<PathType = Path> + PathBuilder {
     // TODO: lyon::path::builder::Transformed is a struct, not a trait. So, this
     // method is needed to forward the operation.
@@ -27,13 +48,13 @@ pub trait BuildPath: Build<PathType = Path> + PathBuilder {
 
 pub struct LyonPathBuilder<T: BuildPath> {
     pub builders: Vec<T>,
-    pub layer_color: Vec<Option<RgbaColor>>,
     pub cur_layer: usize,
 
     pub cur_glyph_id: u32,
 
     // Completed per-glyph paths produced by `finish_glyph()`.
-    pub glyph_paths: Vec<(u32, Path)>,
+    // Each entry holds (glyph_id, path, optional COLR color).
+    pub glyph_paths: Vec<(u32, Path, Option<RgbaColor>)>,
 
     // This transformation is of COLR format.
     base_transform: lyon::geom::euclid::Transform2D<f32, UnknownUnit, UnknownUnit>,
@@ -54,7 +75,6 @@ impl<T: BuildPath> LyonPathBuilder<T> {
     fn new_inner(builder: T, tolerance: f32, line_width: f32) -> Self {
         Self {
             builders: vec![builder],
-            layer_color: Vec::new(),
             cur_layer: 0,
             cur_glyph_id: 0,
             glyph_paths: Vec::new(),
@@ -75,14 +95,18 @@ impl<T: BuildPath> LyonPathBuilder<T> {
     /// Finalize the current builder's path and store it with the current
     /// glyph ID. Called after each `glyph.draw()` in `draw_glyphs`.
     pub fn finish_glyph(&mut self) {
+        self.finish_glyph_with_color(None);
+    }
+
+    /// Finalize the current builder's path and store it with a COLR color.
+    pub fn finish_glyph_with_color(&mut self, color: Option<RgbaColor>) {
         let old = std::mem::replace(
             &mut self.builders[self.cur_layer],
             T::new_builder(self.tolerance),
         );
         let path = old.build();
-        // Only store non-empty paths (whitespace glyphs produce nothing).
         if path.iter().next().is_some() {
-            self.glyph_paths.push((self.cur_glyph_id, path));
+            self.glyph_paths.push((self.cur_glyph_id, path, color));
         }
         self.update_transform();
     }
