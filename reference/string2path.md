@@ -11,7 +11,7 @@ converts a text to the paths of the filled polygon of each glyph.
 string2path(
   text,
   font,
-  font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold", "bold",
+  font_weight = c("thin", "extra_thin", "light", "normal", "medium", "semibold", "bold",
     "extra_bold", "black"),
   font_style = c("normal", "italic", "oblique"),
   tolerance = 5e-05
@@ -20,7 +20,7 @@ string2path(
 string2stroke(
   text,
   font,
-  font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold", "bold",
+  font_weight = c("thin", "extra_thin", "light", "normal", "medium", "semibold", "bold",
     "extra_bold", "black"),
   font_style = c("normal", "italic", "oblique"),
   tolerance = 5e-05,
@@ -30,7 +30,7 @@ string2stroke(
 string2fill(
   text,
   font,
-  font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold", "bold",
+  font_weight = c("thin", "extra_thin", "light", "normal", "medium", "semibold", "bold",
     "extra_bold", "black"),
   font_style = c("normal", "italic", "oblique"),
   tolerance = 5e-05
@@ -50,7 +50,7 @@ string2fill(
 
 - font_weight:
 
-  A font weight.
+  A font weight (e.g. `"normal"`, `400`).
 
 - font_style:
 

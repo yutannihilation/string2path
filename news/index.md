@@ -6,6 +6,8 @@
   ([\#99](https://github.com/yutannihilation/string2path/issues/99)).
   - Support variable fonts.
   - Drop support for WASM for now.
+- `font_weight` now accepts numeric values (e.g. `400`) in addition to
+  character strings (e.g. `"normal"`).
 
 ## string2path 0.2.2
 

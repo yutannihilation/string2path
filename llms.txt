@@ -92,18 +92,18 @@ to see the available combination of font family (e.g. `"Arial"`), weight
 ``` r
 dump_fontdb()
 #> # A tibble: 479 × 4
-#>    index family                weight  style 
-#>    <int> <chr>                 <chr>   <chr> 
-#>  1     1 Microsoft JhengHei UI unknown normal
-#>  2     1 Microsoft JhengHei UI normal  normal
-#>  3     1 Microsoft JhengHei UI bold    normal
-#>  4     0 Gabriola              normal  normal
-#>  5     0 Iosevka               thin    normal
-#>  6     3 Iosevka               thin    normal
-#>  7     6 Iosevka               thin    italic
-#>  8    12 Iosevka               thin    italic
-#>  9     7 Iosevka               thin    italic
-#> 10    13 Iosevka               thin    italic
+#>    index family           weight style 
+#>    <int> <chr>             <dbl> <chr> 
+#>  1     0 Arial               400 normal
+#>  2     0 Arial               400 italic
+#>  3     0 Arial               700 normal
+#>  4     0 Arial               700 italic
+#>  5     0 Arial               900 normal
+#>  6     0 Sitka Subheading    400 normal
+#>  7     0 Sitka Subheading    400 italic
+#>  8     0 等线                300 normal
+#>  9     0 等线                400 normal
+#> 10     0 等线                700 normal
 #> # ℹ 469 more rows
 ```
 

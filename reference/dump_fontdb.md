@@ -23,7 +23,7 @@ A `tibble()` containing these columns:
 
 - weight:
 
-  The weight of the face.
+  The numeric weight of the face (e.g. 400 for normal, 700 for bold).
 
 - style:
 
