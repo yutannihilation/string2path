@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use i_overlay::core::fill_rule::FillRule;
 use i_overlay::float::simplify::SimplifyShape;
 
@@ -7,32 +5,21 @@ use crate::builder::LyonPathBuilderForPath;
 use crate::result::PathTibble;
 
 impl LyonPathBuilderForPath {
-    pub fn into_path(mut self) -> PathTibble {
-        let paths = self.build();
+    pub fn into_path(self) -> PathTibble {
+        let mut x = Vec::new();
+        let mut y = Vec::new();
+        let mut glyph_id = Vec::new();
+        let mut path_id = Vec::new();
+        let mut out_path_id: u32 = 0;
 
-        // color support is deferred until COLR is implemented
-        let color = if self.layer_color.is_empty() {
-            None
-        } else {
-            Some(Vec::new())
-        };
+        for (gid, glyph_path) in &self.glyph_paths {
+            // Collect contours from the flattened path for this glyph.
+            let mut contours: Vec<Vec<[f32; 2]>> = Vec::new();
+            let mut cur_contour: Vec<[f32; 2]> = Vec::new();
 
-        // --- Step 1: collect contours from the flattened path, grouped by glyph_id ---
-        //
-        // FlattenedPathBuilder converts all curves to line segments, so only
-        // Begin / Line / End events appear here (no Quadratic or Cubic).
-
-        let mut contours_by_glyph: HashMap<u32, Vec<Vec<[f32; 2]>>> = HashMap::new();
-        // glyph_order preserves the left-to-right drawing order.
-        let mut glyph_order: Vec<u32> = Vec::new();
-        let mut cur_path_id: u32 = 0;
-        let mut cur_contour: Vec<[f32; 2]> = Vec::new();
-
-        for (path, _paint_color) in &paths {
-            for event in path.iter() {
+            for event in glyph_path.iter() {
                 match event {
                     lyon::path::Event::Begin { at } => {
-                        cur_path_id += 1;
                         cur_contour = vec![[at.x, at.y]];
                     }
                     lyon::path::Event::Line { to, .. } => {
@@ -44,14 +31,7 @@ impl LyonPathBuilderForPath {
                         }
                         // i_overlay needs at least 3 distinct points to form a polygon.
                         if cur_contour.len() >= 3 {
-                            let gid = *self.glyph_id_map.get(&cur_path_id).unwrap_or(&0);
-                            if !glyph_order.contains(&gid) {
-                                glyph_order.push(gid);
-                            }
-                            contours_by_glyph
-                                .entry(gid)
-                                .or_default()
-                                .push(std::mem::take(&mut cur_contour));
+                            contours.push(std::mem::take(&mut cur_contour));
                         } else {
                             cur_contour.clear();
                         }
@@ -60,28 +40,13 @@ impl LyonPathBuilderForPath {
                     _ => {}
                 }
             }
-        }
 
-        // --- Step 2 & 3: union each glyph's contours and rebuild output ---
-        //
-        // simplify_shape(NonZero) merges overlapping contours (e.g. components of
-        // a variable-font composite glyph) while preserving counter-shapes (holes).
-        // The result is Vec<Shape> = Vec<Vec<Vec<[f32;2]>>>.
-        //   outer Vec  – independent shapes (usually 1 per glyph)
-        //   middle Vec – contours within a shape (outer boundary + holes)
-        //   inner Vec  – points of one contour
-
-        let mut x = Vec::new();
-        let mut y = Vec::new();
-        let mut glyph_id = Vec::new();
-        let mut path_id = Vec::new();
-        let mut out_path_id: u32 = 0;
-
-        for gid in &glyph_order {
-            let Some(contours) = contours_by_glyph.remove(gid) else {
+            if contours.is_empty() {
                 continue;
-            };
+            }
 
+            // simplify_shape(NonZero) merges overlapping contours (e.g. components
+            // of a composite glyph) while preserving counter-shapes (holes).
             let merged = contours.simplify_shape(FillRule::NonZero);
 
             for shape in merged {
@@ -114,7 +79,7 @@ impl LyonPathBuilderForPath {
             glyph_id,
             path_id: Some(path_id),
             triangle_id: None,
-            color,
+            color: None,
         }
     }
 }
