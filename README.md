@@ -94,28 +94,28 @@ ggplot(d) +
 
 #### `dump_fontdb()`
 
-Note that `"Noto Sans JP"` above (and `"Iosevka SS09"` below) is the
-font installed on my local machine, so the same code might not run on
-your environment. You can use `dump_fontdb()` to see the available
+Note that `"Noto Sans JP"` above (and `"Iosevka"` below) is the font
+installed on my local machine, so the same code might not run on your
+environment. You can use `dump_fontdb()` to see the available
 combination of font family (e.g. `"Arial"`), weight (e.g. `"bold"`), and
 style (e.g. `"italic"`).
 
 ``` r
 dump_fontdb()
-#> # A tibble: 2,420 × 5
-#>    source        index family                  weight   style 
-#>    <chr>         <int> <chr>                   <chr>    <chr> 
-#>  1 (system font)     0 Kohinoor Bangla         normal   normal
-#>  2 (system font)     1 Kohinoor Bangla         semibold normal
-#>  3 (system font)     2 Kohinoor Bangla         medium   normal
-#>  4 (system font)     3 Kohinoor Bangla         bold     normal
-#>  5 (system font)     4 Kohinoor Bangla         light    normal
-#>  6 (system font)     7 .PingFang UI Display MO medium   normal
-#>  7 (system font)    17 蘋方-繁                 medium   normal
-#>  8 (system font)     2 蘋方-繁                 normal   normal
-#>  9 (system font)     6 蘋方-繁                 medium   normal
-#> 10 (system font)    10 蘋方-繁                 semibold normal
-#> # ℹ 2,410 more rows
+#> # A tibble: 479 × 4
+#>    index family                weight  style 
+#>    <int> <chr>                 <chr>   <chr> 
+#>  1     1 Microsoft JhengHei UI unknown normal
+#>  2     1 Microsoft JhengHei UI normal  normal
+#>  3     1 Microsoft JhengHei UI bold    normal
+#>  4     0 Gabriola              normal  normal
+#>  5     0 Iosevka               thin    normal
+#>  6     3 Iosevka               thin    normal
+#>  7     6 Iosevka               thin    italic
+#>  8    12 Iosevka               thin    italic
+#>  9     7 Iosevka               thin    italic
+#> 10    13 Iosevka               thin    italic
+#> # ℹ 469 more rows
 ```
 
 You can also specify the font file directly. Pomicons is a font
@@ -148,7 +148,7 @@ ggplot(d_tmp) +
 ``` r
 d <- string2fill(
   "abc",
-  "Iosevka SS09",
+  "Iosevka",
   font_weight = "bold",
   font_style = "italic"
 )
@@ -173,7 +173,7 @@ ggplot(d) +
 for (w in 1:9 * 0.01) {
   d <- string2stroke(
     "abc",
-    "Iosevka SS09",
+    "Iosevka",
     font_weight = "bold",
     font_style = "italic",
     line_width = w
@@ -207,7 +207,7 @@ document](https://docs.rs/lyon_geom/latest/lyon_geom/#flattening).
 for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
   d <- string2fill(
     "abc",
-    "Iosevka SS09",
+    "Iosevka",
     font_weight = "bold",
     font_style = "italic",
     tolerance = tolerance

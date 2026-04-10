@@ -71,7 +71,6 @@ impl TryFrom<PathTibble> for savvy::Sexp {
 
 /// An intermediate form of the content of the fontdb to convert to a tibble.
 pub struct FontDBTibble {
-    pub source: Vec<String>,
     pub index: Vec<i32>,
     pub family: Vec<String>,
     pub weight: Vec<String>,
@@ -81,30 +80,25 @@ pub struct FontDBTibble {
 impl TryFrom<FontDBTibble> for savvy::Sexp {
     type Error = savvy::Error;
     fn try_from(value: FontDBTibble) -> savvy::Result<Self> {
-        let mut out = savvy::OwnedListSexp::new(5, true)?;
+        let mut out = savvy::OwnedListSexp::new(4, true)?;
 
         out.set_name_and_value(
             0,
-            "source",
-            <OwnedStringSexp>::try_from(value.source.as_slice())?,
-        )?;
-        out.set_name_and_value(
-            1,
             "index",
             <OwnedIntegerSexp>::try_from(value.index.as_slice())?,
         )?;
         out.set_name_and_value(
-            2,
+            1,
             "family",
             <OwnedStringSexp>::try_from(value.family.as_slice())?,
         )?;
         out.set_name_and_value(
-            3,
+            2,
             "weight",
             <OwnedStringSexp>::try_from(value.weight.as_slice())?,
         )?;
         out.set_name_and_value(
-            4,
+            3,
             "style",
             <OwnedStringSexp>::try_from(value.style.as_slice())?,
         )?;

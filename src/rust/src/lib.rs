@@ -158,7 +158,6 @@ fn string2fill_file(text: &str, font_file: &str, tolerance: f64) -> savvy::Resul
 
 #[savvy]
 fn dump_fontdb_impl() -> savvy::Result<savvy::Sexp> {
-    let mut source: Vec<String> = Vec::new();
     let mut index: Vec<i32> = Vec::new();
     let mut family: Vec<String> = Vec::new();
     let mut weight: Vec<String> = Vec::new();
@@ -175,9 +174,6 @@ fn dump_fontdb_impl() -> savvy::Result<savvy::Sexp> {
         };
 
         for font_info in fam.fonts() {
-            // TODO: fontique::FontInfo does not expose the source file path in the
-            // same way fontdb did. Using a placeholder for now.
-            source.push("(system font)".to_string());
             index.push(font_info.index() as i32);
             family.push(name.clone());
 
@@ -207,7 +203,6 @@ fn dump_fontdb_impl() -> savvy::Result<savvy::Sexp> {
     }
 
     let result = FontDBTibble {
-        source,
         index,
         family,
         weight,
