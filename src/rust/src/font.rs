@@ -248,6 +248,7 @@ impl<T: BuildPath> LyonPathBuilder<T> {
                     glyph
                         .draw(DrawSettings::unhinted(Size::unscaled(), location), self)
                         .map_err(|e| savvy::Error::new(e.to_string()))?;
+                    self.finish_glyph();
                 }
             }
 

@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use lyon::{
     geom::euclid::UnknownUnit,
     math::point,
@@ -28,21 +26,14 @@ pub trait BuildPath: Build<PathType = Path> + PathBuilder {
 }
 
 pub struct LyonPathBuilder<T: BuildPath> {
-    // It's not very elegant to store the glyph ID (not the `glyphId` ttf-parser
-    // uses, but the glyph count) and path ID in attributes, but it seems the
-    // attribute is the only thing we can pass to tessellators.
     pub builders: Vec<T>,
-    // one layer has only one color
-    pub layer_color: HashMap<usize, RgbaColor>,
-
-    // index of builder
+    pub layer_color: Vec<Option<RgbaColor>>,
     pub cur_layer: usize,
 
     pub cur_glyph_id: u32,
-    pub cur_path_id: u32,
 
-    // path ID to glyph ID
-    pub glyph_id_map: HashMap<u32, u32>,
+    // Completed per-glyph paths produced by `finish_glyph()`.
+    pub glyph_paths: Vec<(u32, Path)>,
 
     // This transformation is of COLR format.
     base_transform: lyon::geom::euclid::Transform2D<f32, UnknownUnit, UnknownUnit>,
@@ -63,11 +54,10 @@ impl<T: BuildPath> LyonPathBuilder<T> {
     fn new_inner(builder: T, tolerance: f32, line_width: f32) -> Self {
         Self {
             builders: vec![builder],
-            layer_color: HashMap::new(),
+            layer_color: Vec::new(),
             cur_layer: 0,
             cur_glyph_id: 0,
-            cur_path_id: 0,
-            glyph_id_map: HashMap::new(),
+            glyph_paths: Vec::new(),
             base_transform: lyon::geom::euclid::Transform2D::identity(),
             scale_factor: 1.,
             offset_x: 0.,
@@ -82,17 +72,19 @@ impl<T: BuildPath> LyonPathBuilder<T> {
         &mut self.builders[self.cur_layer]
     }
 
-    pub fn build(&mut self) -> Vec<(Path, Option<RgbaColor>)> {
-        let builders = self.builders.drain(0..);
-        builders
-            .into_iter()
-            .enumerate()
-            .map(|(i, x)| {
-                let path = x.build();
-                let color = self.layer_color.get(&i).cloned();
-                (path, color)
-            })
-            .collect()
+    /// Finalize the current builder's path and store it with the current
+    /// glyph ID. Called after each `glyph.draw()` in `draw_glyphs`.
+    pub fn finish_glyph(&mut self) {
+        let old = std::mem::replace(
+            &mut self.builders[self.cur_layer],
+            T::new_builder(self.tolerance),
+        );
+        let path = old.build();
+        // Only store non-empty paths (whitespace glyphs produce nothing).
+        if path.iter().next().is_some() {
+            self.glyph_paths.push((self.cur_glyph_id, path));
+        }
+        self.update_transform();
     }
 
     pub fn update_transform(&mut self) {
@@ -209,14 +201,6 @@ impl LyonPathBuilderForStrokeAndFill {
 
 impl<T: BuildPath> OutlinePen for LyonPathBuilder<T> {
     fn move_to(&mut self, x: f32, y: f32) {
-        self.cur_path_id += 1;
-
-        // While it's not very cool, path ID can be re-calculated later. So, if
-        // the corresponding glyph ID is recorded here, it can be acquired when
-        // constructing a result data frame.
-        self.glyph_id_map
-            .insert(self.cur_path_id, self.cur_glyph_id);
-
         let at = point(x, y);
         self.cur_builder().begin(at, &[]);
     }
