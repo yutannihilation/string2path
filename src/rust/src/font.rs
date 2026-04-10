@@ -3,8 +3,9 @@ use std::sync::Mutex;
 use crate::builder::{BuildPath, LyonPathBuilder};
 
 use once_cell::sync::Lazy;
+use skrifa::instance::Location;
 use skrifa::outline::DrawSettings;
-use skrifa::prelude::{LocationRef, Size};
+use skrifa::prelude::{LocationRef, Size, Tag};
 use skrifa::raw::TableProvider;
 use skrifa::raw::tables::kern::SubtableKind;
 use skrifa::{FontRef, GlyphId, MetadataProvider};
@@ -52,7 +53,7 @@ impl<T: BuildPath> LyonPathBuilder<T> {
         font_style: &str,
     ) -> savvy::Result<()> {
         #[rustfmt::skip]
-        let weight = fontique::FontWeight::new(match font_weight {
+        let weight_value: f32 = match font_weight {
             "thin"       => 100.0,
             "extra_thin" => 200.0,
             "light"      => 300.0,
@@ -63,7 +64,7 @@ impl<T: BuildPath> LyonPathBuilder<T> {
             "extra_bold" => 800.0,
             "black"      => 900.0,
             _            => 400.0,
-        });
+        };
 
         #[rustfmt::skip]
         let style = match font_style {
@@ -77,9 +78,12 @@ impl<T: BuildPath> LyonPathBuilder<T> {
             let mut collection = FONT_COLLECTION.lock().unwrap();
             let mut result = None;
             if let Some(family) = collection.family_by_name(font_family) {
-                if let Some(font_info) =
-                    family.match_font(fontique::FontWidth::from_ratio(1.0), style, weight, false)
-                {
+                if let Some(font_info) = family.match_font(
+                    fontique::FontWidth::from_ratio(1.0),
+                    style,
+                    fontique::FontWeight::new(weight_value),
+                    false,
+                ) {
                     if let Some(data) = font_info.load(None) {
                         result = Some((data, font_info.index()));
                     }
@@ -89,7 +93,7 @@ impl<T: BuildPath> LyonPathBuilder<T> {
         };
 
         if let Some((font_data, index)) = named_result {
-            return self.outline_inner(text, font_data.as_ref(), index);
+            return self.outline_inner(text, font_data.as_ref(), index, weight_value, font_style);
         }
 
         savvy::r_eprint!(
@@ -116,7 +120,7 @@ impl<T: BuildPath> LyonPathBuilder<T> {
         };
 
         if let Some((font_data, index)) = fallback_result {
-            return self.outline_inner(text, font_data.as_ref(), index);
+            return self.outline_inner(text, font_data.as_ref(), index, weight_value, font_style);
         }
 
         // 3. When no fonts are available, return an error.
@@ -128,20 +132,81 @@ impl<T: BuildPath> LyonPathBuilder<T> {
     pub fn outline_from_file(&mut self, text: &str, font_file: &str) -> savvy::Result<()> {
         let font_data_raw =
             std::fs::read(font_file).map_err(|e| savvy::Error::new(e.to_string()))?;
-        self.outline_inner(text, font_data_raw.as_slice(), 0)?;
+        // Weight/style are unknown for file-loaded fonts; use defaults so variable
+        // fonts render at their default design position.
+        self.outline_inner(text, font_data_raw.as_slice(), 0, 400.0, "normal")?;
         Ok(())
     }
 
+    /// Detects whether `font_data` is a static or variable font and dispatches
+    /// to the appropriate rendering path.
     fn outline_inner(
         &mut self,
         text: &str,
         font_data: &[u8],
         face_index: u32,
+        weight: f32,
+        style: &str,
     ) -> savvy::Result<()> {
         let font = FontRef::from_index(font_data, face_index)
             .map_err(|e| savvy::Error::new(e.to_string()))?;
 
-        let metrics = font.metrics(Size::unscaled(), LocationRef::default());
+        if font.axes().is_empty() {
+            self.outline_static(&font, text)
+        } else {
+            self.outline_variable(&font, text, weight, style)
+        }
+    }
+
+    /// Renders `text` using a static (non-variable) font.
+    ///
+    /// The font face was already selected by fontique, so no variation axes
+    /// need to be set; we render at the default location.
+    fn outline_static(&mut self, font: &FontRef<'_>, text: &str) -> savvy::Result<()> {
+        self.draw_glyphs(font, text, LocationRef::default())
+    }
+
+    /// Renders `text` using a variable font.
+    ///
+    /// Builds a [`Location`] from the requested `weight` (`wght` axis) and
+    /// `style` (`ital` or `slnt` axis), then draws each glyph at that location.
+    fn outline_variable(
+        &mut self,
+        font: &FontRef<'_>,
+        text: &str,
+        weight: f32,
+        style: &str,
+    ) -> savvy::Result<()> {
+        let axes = font.axes();
+
+        // Collect user-space axis settings. Tags that don't exist in the font
+        // are silently ignored by axes.location().
+        let mut settings: Vec<(&str, f32)> = vec![("wght", weight)];
+        match style {
+            "italic" => settings.push(("ital", 1.0)),
+            "oblique" => {
+                // Prefer a continuous slant axis; fall back to binary italic.
+                if axes.get_by_tag(Tag::new(b"slnt")).is_some() {
+                    settings.push(("slnt", -12.0));
+                } else {
+                    settings.push(("ital", 1.0));
+                }
+            }
+            _ => {}
+        }
+
+        let location: Location = axes.location(settings);
+        self.draw_glyphs(font, text, LocationRef::from(&location))
+    }
+
+    /// Core glyph rendering loop shared by both static and variable paths.
+    fn draw_glyphs(
+        &mut self,
+        font: &FontRef<'_>,
+        text: &str,
+        location: LocationRef<'_>,
+    ) -> savvy::Result<()> {
+        let metrics = font.metrics(Size::unscaled(), location);
         // In TrueType, descent is negative, so height = ascent - descent gives total cell height.
         let height = (metrics.ascent - metrics.descent) as f32;
         self.set_scale_factor(1. / height);
@@ -149,7 +214,7 @@ impl<T: BuildPath> LyonPathBuilder<T> {
 
         let outlines = font.outline_glyphs();
         let charmap = font.charmap();
-        let glyph_metrics = font.glyph_metrics(Size::unscaled(), LocationRef::default());
+        let glyph_metrics = font.glyph_metrics(Size::unscaled(), location);
 
         let mut prev_glyph: Option<GlyphId> = None;
         for c in text.chars() {
@@ -170,7 +235,7 @@ impl<T: BuildPath> LyonPathBuilder<T> {
             let cur_glyph = charmap.map(c).unwrap_or(GlyphId::new(0));
 
             if let Some(prev) = prev_glyph {
-                self.add_offset_x(find_kerning(&font, prev, cur_glyph));
+                self.add_offset_x(find_kerning(font, prev, cur_glyph));
             }
 
             if !c.is_whitespace() {
@@ -179,7 +244,7 @@ impl<T: BuildPath> LyonPathBuilder<T> {
                 if let Some(glyph) = outlines.get(cur_glyph) {
                     glyph
                         .draw(
-                            DrawSettings::unhinted(Size::unscaled(), LocationRef::default()),
+                            DrawSettings::unhinted(Size::unscaled(), location),
                             self,
                         )
                         .map_err(|e| savvy::Error::new(e.to_string()))?;
