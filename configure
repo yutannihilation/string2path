@@ -24,6 +24,18 @@ fi
 echo "using Rust package manager: '$(cargo --version)'"
 echo "using Rust compiler: '$(rustc --version)'"
 
+# Detect fontconfig on non-Windows, non-webR platforms
+ADDITIONAL_PKG_LIBS=''
+if [ "$(uname)" != "Emscripten" ]; then
+  if command -v pkg-config > /dev/null 2>&1 && pkg-config --exists fontconfig; then
+    ADDITIONAL_PKG_LIBS="$(pkg-config --libs fontconfig)"
+    echo "using fontconfig: ${ADDITIONAL_PKG_LIBS}"
+  else
+    echo "*** pkg-config or fontconfig not found, trying -lfontconfig"
+    ADDITIONAL_PKG_LIBS="-lfontconfig"
+  fi
+fi
+
 # Handle webR
 if [ "$(uname)" = "Emscripten" ]; then
   TARGET="wasm32-unknown-emscripten"
@@ -43,6 +55,7 @@ sed \
   -e "s|@VENDORING@|${VENDORING}|" \
   -e "s|@OFFLINE_OPTION@|${OFFLINE_OPTION}|" \
   -e "s|@TARGET@|${TARGET}|" \
+  -e "s|@ADDITIONAL_PKG_LIBS@|${ADDITIONAL_PKG_LIBS}|" \
   src/Makevars.in > src/Makevars
 
 # Uncomment this to debug

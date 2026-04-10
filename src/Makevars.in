@@ -4,7 +4,7 @@ VENDORING = @VENDORING@
 OFFLINE_OPTION = @OFFLINE_OPTION@
 
 LIBDIR = ./rust/target/$(TARGET)/release
-PKG_LIBS = -L$(LIBDIR) -lstring2path
+PKG_LIBS = -L$(LIBDIR) -lstring2path @ADDITIONAL_PKG_LIBS@
 STATLIB = $(LIBDIR)/libstring2path.a
 
 all: $(SHLIB) clean_intermediate
