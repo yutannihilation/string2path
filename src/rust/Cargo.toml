@@ -17,7 +17,7 @@ panic = "abort"
 
 [dependencies]
 savvy = "0.9.4"
-fontdb = "0.22"
+fontique = "0.8"
+skrifa = "0.42"
 lyon = "1.0"
 once_cell = "1"
-ttf-parser = "0.25"

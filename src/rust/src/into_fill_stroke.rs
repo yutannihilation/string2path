@@ -1,7 +1,9 @@
-use crate::{builder::LyonPathBuilderForStrokeAndFill, result::PathTibble};
+use crate::{
+    builder::{LyonPathBuilderForStrokeAndFill, RgbaColor},
+    result::PathTibble,
+};
 
 use lyon::tessellation::*;
-use ttf_parser::RgbaColor;
 
 #[derive(Copy, Clone, Debug)]
 struct Vertex(lyon::math::Point);

@@ -1,4 +1,4 @@
-use ttf_parser::RgbaColor;
+use crate::builder::RgbaColor;
 
 use crate::builder::LyonPathBuilderForPath;
 use crate::result::PathTibble;

@@ -1,26 +1,24 @@
-use crate::builder::{BuildPath, LyonPathBuilder, LyonPathBuilderForPaint};
+use std::sync::Mutex;
+
+use crate::builder::{BuildPath, LyonPathBuilder};
 
 use once_cell::sync::Lazy;
+use skrifa::outline::DrawSettings;
+use skrifa::prelude::{LocationRef, Size};
+use skrifa::{FontRef, GlyphId, MetadataProvider};
 
-use ttf_parser::{GlyphId, RgbaColor};
-
-pub(crate) static FONTDB: Lazy<fontdb::Database> = Lazy::new(|| {
-    let mut db = fontdb::Database::new();
-    db.load_system_fonts();
-    db
+pub(crate) static FONT_COLLECTION: Lazy<Mutex<fontique::Collection>> = Lazy::new(|| {
+    Mutex::new(fontique::Collection::new(
+        fontique::CollectionOptions::default(),
+    ))
 });
 
 #[derive(Debug)]
 pub enum FontLoadingError {
-    FaceParsingError(ttf_parser::FaceParsingError),
+    ParseError(String),
+    LoadError(String),
     IOError(std::io::Error),
     NoAvailableFonts,
-}
-
-impl From<ttf_parser::FaceParsingError> for FontLoadingError {
-    fn from(err: ttf_parser::FaceParsingError) -> Self {
-        Self::FaceParsingError(err)
-    }
 }
 
 impl From<std::io::Error> for FontLoadingError {
@@ -32,13 +30,13 @@ impl From<std::io::Error> for FontLoadingError {
 impl From<FontLoadingError> for savvy::Error {
     fn from(value: FontLoadingError) -> Self {
         let msg = match value {
-            FontLoadingError::FaceParsingError(err) => err.to_string(),
+            FontLoadingError::ParseError(s) => s,
+            FontLoadingError::LoadError(s) => s,
             FontLoadingError::IOError(err) => err.to_string(),
             FontLoadingError::NoAvailableFonts => {
                 "No available fonts is found on the machine".to_string()
             }
         };
-
         savvy::Error::new(&msg)
     }
 }
@@ -52,80 +50,83 @@ impl<T: BuildPath> LyonPathBuilder<T> {
         font_style: &str,
     ) -> savvy::Result<()> {
         #[rustfmt::skip]
-        let weight = match font_weight {
-            "thin"       => fontdb::Weight::THIN,
-            "extra_thin" => fontdb::Weight::EXTRA_LIGHT,
-            "light"      => fontdb::Weight::LIGHT,
-            "normal"     => fontdb::Weight::NORMAL,
-            "medium"     => fontdb::Weight::MEDIUM,
-            "semibold"   => fontdb::Weight::SEMIBOLD,
-            "bold"       => fontdb::Weight::BOLD,
-            "extra_bold" => fontdb::Weight::EXTRA_BOLD,
-            "black"      => fontdb::Weight::BLACK,
-            _            => fontdb::Weight::NORMAL,
-        };
+        let weight = fontique::FontWeight::new(match font_weight {
+            "thin"       => 100.0,
+            "extra_thin" => 200.0,
+            "light"      => 300.0,
+            "normal"     => 400.0,
+            "medium"     => 500.0,
+            "semibold"   => 600.0,
+            "bold"       => 700.0,
+            "extra_bold" => 800.0,
+            "black"      => 900.0,
+            _            => 400.0,
+        });
 
         #[rustfmt::skip]
         let style = match font_style {
-            "normal"  => fontdb::Style::Normal,
-            "italic"  => fontdb::Style::Italic,
-            "oblique" => fontdb::Style::Oblique,
-            _         => fontdb::Style::Normal,
+            "italic"  => fontique::FontStyle::Italic,
+            "oblique" => fontique::FontStyle::Oblique(None),
+            _         => fontique::FontStyle::Normal,
         };
 
-        // 1. Try the user-supplied query first
-
-        let query = fontdb::Query {
-            families: &[fontdb::Family::Name(font_family)],
-            weight,
-            style,
-            ..Default::default()
+        // 1. Try the user-supplied family name first.
+        let named_result = {
+            let mut collection = FONT_COLLECTION.lock().unwrap();
+            let mut result = None;
+            if let Some(family) = collection.family_by_name(font_family) {
+                if let Some(font_info) =
+                    family.match_font(fontique::FontWidth::from_ratio(1.0), style, weight, false)
+                {
+                    if let Some(data) = font_info.load(None) {
+                        result = Some((data, font_info.index()));
+                    }
+                }
+            }
+            result
         };
 
-        if let Some(id) = FONTDB.query(&query) {
-            let result = FONTDB.with_face_data(id, |font_data, face_index| {
-                self.outline_inner(text, font_data, face_index)
-            });
-
-            return result.unwrap_or(Ok(()));
+        if let Some((font_data, index)) = named_result {
+            return self.outline_inner(text, font_data.as_ref(), index);
         }
 
         savvy::r_eprint!(
             "No font face matched with the specified conditions. Falling back to the default font..."
         );
 
-        // 2. If not found, try the fallback query which should hit at least one font
-
-        let fallback_query = fontdb::Query {
-            families: &[fontdb::Family::SansSerif, fontdb::Family::Serif],
-            ..Default::default()
+        // 2. Fallback: use any available system font.
+        // fontique does not expose generic family names (SansSerif/Serif), so we
+        // use the first family found in the collection.
+        let fallback_result = {
+            let mut collection = FONT_COLLECTION.lock().unwrap();
+            let first_name = collection.family_names().next().map(|s| s.to_string());
+            let mut result = None;
+            if let Some(name) = first_name {
+                if let Some(family) = collection.family_by_name(&name) {
+                    if let Some(font_info) = family.fonts().first() {
+                        if let Some(data) = font_info.load(None) {
+                            result = Some((data, font_info.index()));
+                        }
+                    }
+                }
+            }
+            result
         };
 
-        if let Some(id) = FONTDB.query(&fallback_query) {
-            let result = FONTDB.with_face_data(id, |font_data, face_index| {
-                self.outline_inner(text, font_data, face_index)
-            });
-
-            return result.unwrap_or(Ok(()));
+        if let Some((font_data, index)) = fallback_result {
+            return self.outline_inner(text, font_data.as_ref(), index);
         }
 
         // 3. When no fonts are available, return an error.
-
         savvy::r_eprint!("No font is available!");
 
         Err(FontLoadingError::NoAvailableFonts.into())
     }
 
     pub fn outline_from_file(&mut self, text: &str, font_file: &str) -> savvy::Result<()> {
-        // NOTE: Technically, fontdb can load file data with .load_font_file().
-        //       It might simplify the implimentation, but it would require us
-        //       to specify a query, but we don't know how to query the exact
-        //       information in the file. So, having another implimentation is
-        //       probably reasonable for now.
         let font_data_raw =
             std::fs::read(font_file).map_err(|e| savvy::Error::new(e.to_string()))?;
         self.outline_inner(text, font_data_raw.as_slice(), 0)?;
-
         Ok(())
     }
 
@@ -135,20 +136,23 @@ impl<T: BuildPath> LyonPathBuilder<T> {
         font_data: &[u8],
         face_index: u32,
     ) -> savvy::Result<()> {
-        // TODO: handle error
-        let font = ttf_parser::Face::parse(font_data, face_index)
+        let font = FontRef::from_index(font_data, face_index)
             .map_err(|e| savvy::Error::new(e.to_string()))?;
-        let facetables = font.tables();
 
-        let height = font.height() as f32;
+        let metrics = font.metrics(Size::unscaled(), LocationRef::default());
+        // In TrueType, descent is negative, so height = ascent - descent gives total cell height.
+        let height = (metrics.ascent - metrics.descent) as f32;
         self.set_scale_factor(1. / height);
-        let line_height = height + font.line_gap() as f32;
+        let line_height = height + metrics.leading as f32;
+
+        let outlines = font.outline_glyphs();
+        let charmap = font.charmap();
+        let glyph_metrics = font.glyph_metrics(Size::unscaled(), LocationRef::default());
 
         let mut prev_glyph: Option<GlyphId> = None;
         for c in text.chars() {
-            // Skip control characters
+            // Skip control characters.
             if c.is_control() {
-                // If the character is a line break, move to the next line
                 if c == '\n' {
                     self.sub_offset_y(line_height);
                     self.reset_offset_x();
@@ -157,43 +161,31 @@ impl<T: BuildPath> LyonPathBuilder<T> {
                 continue;
             }
 
-            // increment glyph ID for consistency
+            // Increment glyph ID for consistency.
             self.cur_glyph_id += 1;
 
-            // Even when we cannot find glyph_id, fill it with 0.
-            let cur_glyph = font.glyph_index(c).unwrap_or(GlyphId(0));
+            // Even when we cannot find a glyph, fall back to .notdef (GlyphId 0).
+            let cur_glyph = charmap.map(c).unwrap_or(GlyphId::new(0));
 
-            if let Some(prev_glyph) = prev_glyph {
-                self.add_offset_x(find_kerning(facetables, prev_glyph, cur_glyph) as f32);
-            }
+            // TODO: Implement kerning using skrifa's kern table access.
+            // Currently returning 0 for all kerning pairs.
+            let _ = prev_glyph;
 
-            // outline the glyph except when it's a whitespace
             if !c.is_whitespace() {
-                if font.is_color_glyph(cur_glyph) {
-                    let mut painter = LyonPathBuilderForPaint::new(self, &font);
-                    let fg_color = RgbaColor::new(0, 0, 0, 255);
-                    let res = font.paint_color_glyph(cur_glyph, 0, fg_color, &mut painter);
-                    res.ok_or_else(|| {
-                        let nm = font.glyph_name(cur_glyph).unwrap_or("unknown");
-                        savvy::Error::new(format!(
-                            "Failed to outline char '{c}' (Glyph ID {}: {})",
-                            cur_glyph.0, nm
-                        ))
-                    })?;
-                } else {
-                    let res = font.outline_glyph(cur_glyph, self);
-                    res.ok_or_else(|| {
-                        let nm = font.glyph_name(cur_glyph).unwrap_or("unknown");
-                        savvy::Error::new(format!(
-                            "Failed to outline char '{c}' (Glyph ID {}: {})",
-                            cur_glyph.0, nm
-                        ))
-                    })?;
+                // TODO: Implement COLR color glyph support via skrifa::color::ColorPainter.
+                // Currently falling back to regular outline rendering only.
+                if let Some(glyph) = outlines.get(cur_glyph) {
+                    glyph
+                        .draw(
+                            DrawSettings::unhinted(Size::unscaled(), LocationRef::default()),
+                            self,
+                        )
+                        .map_err(|e| savvy::Error::new(e.to_string()))?;
                 }
             }
 
-            if let Some(ha) = font.glyph_hor_advance(cur_glyph) {
-                self.add_offset_x(ha as f32);
+            if let Some(advance) = glyph_metrics.advance_width(cur_glyph) {
+                self.add_offset_x(advance);
             }
 
             prev_glyph = Some(cur_glyph);
@@ -201,30 +193,4 @@ impl<T: BuildPath> LyonPathBuilder<T> {
 
         Ok(())
     }
-}
-
-// Return kerning between two glyphs. When no kerning information is available,
-// return 0.
-fn find_kerning(
-    facetables: &ttf_parser::FaceTables,
-    left: ttf_parser::GlyphId,
-    right: ttf_parser::GlyphId,
-) -> i16 {
-    let kern_table = if let Some(kern_table) = facetables.kern {
-        kern_table
-    } else {
-        return 0;
-    };
-
-    for st in kern_table.subtables {
-        if !st.horizontal {
-            continue;
-        }
-
-        if let Some(kern) = st.glyphs_kerning(left, right) {
-            return kern;
-        }
-    }
-
-    0
 }
