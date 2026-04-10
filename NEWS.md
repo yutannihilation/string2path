@@ -1,4 +1,4 @@
-# string2path (development version)
+# string2path 0.3.0
 
 * Migrate to fontique and skrifa (#99).
   * Support variable fonts.
