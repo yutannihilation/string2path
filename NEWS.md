@@ -1,5 +1,9 @@
 # string2path (development version)
 
+* Migrate to fontique and skrifa (#99).
+  * Support variable fonts.
+  * Drop support for WASM for now.
+
 # string2path 0.2.2
 
 * Fix a CRAN warning (#149).

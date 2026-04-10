@@ -29,6 +29,27 @@ License: Apache-2.0 OR MIT
 
 ------------------------------
 
+Name:    bitflags
+Files:   vendor/bitflags/*
+Authors: The Rust Project Developers
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    bytemuck_derive
+Files:   vendor/bytemuck_derive/*
+Authors: Lokathor
+License: Zlib OR Apache-2.0 OR MIT
+
+------------------------------
+
+Name:    bytemuck
+Files:   vendor/bytemuck/*
+Authors: Lokathor
+License: Zlib OR Apache-2.0 OR MIT
+
+------------------------------
+
 Name:    cc
 Files:   vendor/cc/*
 Authors: Alex Crichton
@@ -36,9 +57,16 @@ License: MIT OR Apache-2.0
 
 ------------------------------
 
-Name:    core_maths
-Files:   vendor/core_maths/*
-Authors: Robert Bastian <me@robertbastian.dev
+Name:    cfg-if
+Files:   vendor/cfg-if/*
+Authors: Alex Crichton
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    dlib
+Files:   vendor/dlib/*
+Authors: Elinor Berger
 License: MIT
 
 ------------------------------
@@ -57,16 +85,65 @@ License: MIT
 
 ------------------------------
 
-Name:    fontconfig-parser
-Files:   vendor/fontconfig-parser/*
+Name:    foldhash
+Files:   vendor/foldhash/*
+Authors: Orson Peters
+License: Zlib
+
+------------------------------
+
+Name:    font-types
+Files:   vendor/font-types/*
 Authors: 
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    fontique
+Files:   vendor/fontique/*
+Authors: 
+License: Apache-2.0 OR MIT
+
+------------------------------
+
+Name:    hashbrown
+Files:   vendor/hashbrown/*
+Authors: Amanieu d'Antras
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    i_float
+Files:   vendor/i_float/*
+Authors: Nail Sharipov
 License: MIT
 
 ------------------------------
 
-Name:    fontdb
-Files:   vendor/fontdb/*
-Authors: Yevhenii Reizner
+Name:    i_key_sort
+Files:   vendor/i_key_sort/*
+Authors: Nail Sharipov
+License: MIT
+
+------------------------------
+
+Name:    i_overlay
+Files:   vendor/i_overlay/*
+Authors: Nail Sharipov
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    i_shape
+Files:   vendor/i_shape/*
+Authors: Nail Sharipov
+License: MIT
+
+------------------------------
+
+Name:    i_tree
+Files:   vendor/i_tree/*
+Authors: Nail Sharipov
 License: MIT
 
 ------------------------------
@@ -78,24 +155,24 @@ License: MIT OR Apache-2.0
 
 ------------------------------
 
+Name:    libloading
+Files:   vendor/libloading/*
+Authors: Simonas Kazlauskas
+License: ISC
+
+------------------------------
+
 Name:    libm
 Files:   vendor/libm/*
 Authors: Jorge Aparicio
-License: MIT AND (MIT OR Apache-2.0)
+License: MIT
 
 ------------------------------
 
-Name:    log
-Files:   vendor/log/*
-Authors: The Rust Project Developers
-License: MIT OR Apache-2.0
-
-------------------------------
-
-Name:    lyon
-Files:   vendor/lyon/*
-Authors: Nicolas Silva
-License: MIT OR Apache-2.0
+Name:    linebender_resource_handle
+Files:   vendor/linebender_resource_handle/*
+Authors: 
+License: Apache-2.0 OR MIT
 
 ------------------------------
 
@@ -127,9 +204,23 @@ License: MIT OR Apache-2.0
 
 ------------------------------
 
+Name:    lyon
+Files:   vendor/lyon/*
+Authors: Nicolas Silva
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    memchr
+Files:   vendor/memchr/*
+Authors: Andrew Gallant, bluss
+License: Unlicense OR MIT
+
+------------------------------
+
 Name:    memmap2
 Files:   vendor/memmap2/*
-Authors: Dan Burkert, Yevhenii Reizner
+Authors: Dan Burkert, Yevhenii Reizner, The Contributors
 License: MIT OR Apache-2.0
 
 ------------------------------
@@ -141,9 +232,58 @@ License: MIT OR Apache-2.0
 
 ------------------------------
 
+Name:    objc2-core-foundation
+Files:   vendor/objc2-core-foundation/*
+Authors: 
+License: Zlib OR Apache-2.0 OR MIT
+
+------------------------------
+
+Name:    objc2-core-text
+Files:   vendor/objc2-core-text/*
+Authors: 
+License: Zlib OR Apache-2.0 OR MIT
+
+------------------------------
+
+Name:    objc2-encode
+Files:   vendor/objc2-encode/*
+Authors: Mads Marquart
+License: MIT
+
+------------------------------
+
+Name:    objc2-foundation
+Files:   vendor/objc2-foundation/*
+Authors: 
+License: MIT
+
+------------------------------
+
+Name:    objc2
+Files:   vendor/objc2/*
+Authors: Mads Marquart
+License: MIT
+
+------------------------------
+
 Name:    once_cell
 Files:   vendor/once_cell/*
 Authors: Aleksey Kladov
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    parlance
+Files:   vendor/parlance/*
+Authors: 
+License: Apache-2.0 OR MIT
+
+------------------------------
+
+Name:    pkg-config
+Files:   vendor/pkg-config/*
+Authors: Alex Crichton
 License: MIT OR Apache-2.0
 
 ------------------------------
@@ -162,16 +302,23 @@ License: MIT OR Apache-2.0
 
 ------------------------------
 
-Name:    roxmltree
-Files:   vendor/roxmltree/*
-Authors: Yevhenii Reizner
+Name:    read-fonts
+Files:   vendor/read-fonts/*
+Authors: 
 License: MIT OR Apache-2.0
 
 ------------------------------
 
-Name:    rustversion
-Files:   vendor/rustversion/*
-Authors: David Tolnay
+Name:    read-fonts
+Files:   vendor/read-fonts/*
+Authors: 
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    roxmltree
+Files:   vendor/roxmltree/*
+Authors: Yevhenii Reizner
 License: MIT OR Apache-2.0
 
 ------------------------------
@@ -211,44 +358,23 @@ License: MIT OR Apache-2.0
 
 ------------------------------
 
-Name:    slotmap
-Files:   vendor/slotmap/*
-Authors: Orson Peters
-License: Zlib
+Name:    skrifa
+Files:   vendor/skrifa/*
+Authors: 
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    smallvec
+Files:   vendor/smallvec/*
+Authors: The Servo Project Developers
+License: MIT OR Apache-2.0
 
 ------------------------------
 
 Name:    syn
 Files:   vendor/syn/*
 Authors: David Tolnay
-License: MIT OR Apache-2.0
-
-------------------------------
-
-Name:    tinyvec
-Files:   vendor/tinyvec/*
-Authors: Lokathor
-License: Zlib OR Apache-2.0 OR MIT
-
-------------------------------
-
-Name:    tinyvec_macros
-Files:   vendor/tinyvec_macros/*
-Authors: Soveu
-License: MIT OR Apache-2.0 OR Zlib
-
-------------------------------
-
-Name:    ttf-parser
-Files:   vendor/ttf-parser/*
-Authors: Yevhenii Reizner
-License: MIT OR Apache-2.0
-
-------------------------------
-
-Name:    ttf-parser
-Files:   vendor/ttf-parser/*
-Authors: Caleb Maclennan, Laurenz Stampfl, Yevhenii Reizner, خالد حسني (Khaled Hosny)
 License: MIT OR Apache-2.0
 
 ------------------------------
@@ -260,7 +386,84 @@ License: (MIT OR Apache-2.0) AND Unicode-3.0
 
 ------------------------------
 
-Name:    version_check
-Files:   vendor/version_check/*
-Authors: Sergio Benitez
-License: MIT/Apache-2.0
+Name:    windows-collections
+Files:   vendor/windows-collections/*
+Authors: 
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    windows-core
+Files:   vendor/windows-core/*
+Authors: 
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    windows-future
+Files:   vendor/windows-future/*
+Authors: 
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    windows-implement
+Files:   vendor/windows-implement/*
+Authors: 
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    windows-interface
+Files:   vendor/windows-interface/*
+Authors: 
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    windows-link
+Files:   vendor/windows-link/*
+Authors: 
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    windows-numerics
+Files:   vendor/windows-numerics/*
+Authors: 
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    windows-result
+Files:   vendor/windows-result/*
+Authors: 
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    windows-strings
+Files:   vendor/windows-strings/*
+Authors: 
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    windows-threading
+Files:   vendor/windows-threading/*
+Authors: 
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    windows
+Files:   vendor/windows/*
+Authors: 
+License: MIT OR Apache-2.0
+
+------------------------------
+
+Name:    yeslogic-fontconfig-sys
+Files:   vendor/yeslogic-fontconfig-sys/*
+Authors: Austin Bonander, The Servo Project Developers, YesLogic Pty. Ltd.
+License: MIT

@@ -9,9 +9,9 @@ name: check MSRV
 jobs:
   # check at least it can build
   check-msrv:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
   
       - uses: dtolnay/rust-toolchain@1.88.0
       

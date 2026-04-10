@@ -1,4 +1,4 @@
-use font::FONTDB;
+use font::FONT_COLLECTION;
 use result::FontDBTibble;
 use savvy::savvy;
 
@@ -158,60 +158,51 @@ fn string2fill_file(text: &str, font_file: &str, tolerance: f64) -> savvy::Resul
 
 #[savvy]
 fn dump_fontdb_impl() -> savvy::Result<savvy::Sexp> {
-    let mut source: Vec<String> = Vec::new();
     let mut index: Vec<i32> = Vec::new();
     let mut family: Vec<String> = Vec::new();
     let mut weight: Vec<String> = Vec::new();
     let mut style: Vec<String> = Vec::new();
 
-    for f in FONTDB.faces() {
-        source.push(match f.source {
-            fontdb::Source::Binary(_) => "(binary)".to_string(),
-            fontdb::Source::File(ref path) => path.to_string_lossy().to_string(),
-            fontdb::Source::SharedFile(ref path, _) => path.to_string_lossy().to_string(),
-        });
+    let mut collection = FONT_COLLECTION.lock().unwrap();
 
-        index.push(f.index as _);
+    // Collect all family names first to avoid borrow conflicts during lookup.
+    let family_names: Vec<String> = collection.family_names().map(|s| s.to_string()).collect();
 
-        // TODO: Now fontdb returns multiple family names (localized one?),
-        //       but the current code can accept only one.
-        let family_name = if f.families.is_empty() {
-            "".to_string()
-        } else {
-            f.families[0].0.clone()
+    for name in &family_names {
+        let Some(fam) = collection.family_by_name(name) else {
+            continue;
         };
-        family.push(family_name);
 
-        #[rustfmt::skip]
-        weight.push(
-            match f.weight {
-                fontdb::Weight::THIN        => "thin",
-                fontdb::Weight::EXTRA_LIGHT => "extra_light",
-                fontdb::Weight::LIGHT       => "light",
-                fontdb::Weight::NORMAL      => "normal",
-                fontdb::Weight::MEDIUM      => "medium",
-                fontdb::Weight::SEMIBOLD    => "semibold",
-                fontdb::Weight::BOLD        => "bold",
-                fontdb::Weight::EXTRA_BOLD  => "extra_bold",
-                fontdb::Weight::BLACK       => "black",
-                _                           => "unknown",
-            }
-            .to_string(),
-        );
+        for font_info in fam.fonts() {
+            index.push(font_info.index() as i32);
+            family.push(name.clone());
 
-        #[rustfmt::skip]
-        style.push(
-            match f.style {
-                fontdb::Style::Normal  => "normal",
-                fontdb::Style::Italic  => "italic",
-                fontdb::Style::Oblique => "oblique",
-            }
-            .to_string(),
-        );
+            #[rustfmt::skip]
+            weight.push(match font_info.weight().value() as u32 {
+                100 => "thin",
+                200 => "extra_light",
+                300 => "light",
+                400 => "normal",
+                500 => "medium",
+                600 => "semibold",
+                700 => "bold",
+                800 => "extra_bold",
+                900 => "black",
+                _   => "unknown",
+            }.to_string());
+
+            style.push(
+                match font_info.style() {
+                    fontique::FontStyle::Normal => "normal",
+                    fontique::FontStyle::Italic => "italic",
+                    fontique::FontStyle::Oblique(_) => "oblique",
+                }
+                .to_string(),
+            );
+        }
     }
 
     let result = FontDBTibble {
-        source,
         index,
         family,
         weight,

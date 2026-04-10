@@ -8,10 +8,17 @@ use lyon::{
         traits::{Build, PathBuilder},
     },
 };
-use ttf_parser::{
-    Face, NormalizedCoordinate, RgbaColor,
-    colr::{Paint, Painter},
-};
+use skrifa::outline::OutlinePen;
+
+// Minimal color type used for COLR glyph layers.
+// Replaces ttf_parser::RgbaColor.
+#[derive(Copy, Clone, Debug)]
+pub struct RgbaColor {
+    pub red: u8,
+    pub green: u8,
+    pub blue: u8,
+    pub alpha: u8,
+}
 
 pub trait BuildPath: Build<PathType = Path> + PathBuilder {
     // TODO: lyon::path::builder::Transformed is a struct, not a trait. So, this
@@ -141,20 +148,6 @@ impl<T: BuildPath> LyonPathBuilder<T> {
         self.base_transform = transform;
         self.update_transform();
     }
-
-    fn push_layer(&mut self) {
-        self.cur_layer += 1;
-        if self.builders.len() < self.cur_layer + 1 {
-            self.builders.push(T::new_builder(self.tolerance));
-        }
-        self.update_transform();
-    }
-
-    // is this needed?
-    //
-    // fn pop_layer(&mut self) {
-    //     self.cur_layer -= 1;
-    // }
 }
 
 // For path
@@ -212,9 +205,9 @@ impl LyonPathBuilderForStrokeAndFill {
     }
 }
 
-// ttf-parser
+// skrifa OutlinePen
 
-impl<T: BuildPath> ttf_parser::OutlineBuilder for LyonPathBuilder<T> {
+impl<T: BuildPath> OutlinePen for LyonPathBuilder<T> {
     fn move_to(&mut self, x: f32, y: f32) {
         self.cur_path_id += 1;
 
@@ -233,103 +226,20 @@ impl<T: BuildPath> ttf_parser::OutlineBuilder for LyonPathBuilder<T> {
         self.cur_builder().line_to(to, &[]);
     }
 
-    fn quad_to(&mut self, x1: f32, y1: f32, x: f32, y: f32) {
-        let ctrl = point(x1, y1);
+    fn quad_to(&mut self, cx0: f32, cy0: f32, x: f32, y: f32) {
+        let ctrl = point(cx0, cy0);
         let to = point(x, y);
         self.cur_builder().quadratic_bezier_to(ctrl, to, &[]);
     }
 
-    fn curve_to(&mut self, x1: f32, y1: f32, x2: f32, y2: f32, x: f32, y: f32) {
-        let ctrl1 = point(x1, y1);
-        let ctrl2 = point(x2, y2);
+    fn curve_to(&mut self, cx0: f32, cy0: f32, cx1: f32, cy1: f32, x: f32, y: f32) {
+        let ctrl1 = point(cx0, cy0);
+        let ctrl2 = point(cx1, cy1);
         let to = point(x, y);
         self.cur_builder().cubic_bezier_to(ctrl1, ctrl2, to, &[]);
     }
 
     fn close(&mut self) {
         self.cur_builder().end(true);
-    }
-}
-
-pub struct LyonPathBuilderForPaint<'a, T: BuildPath> {
-    builder: &'a mut LyonPathBuilder<T>,
-    face: &'a Face<'a>,
-}
-
-impl<'a, T: BuildPath> LyonPathBuilderForPaint<'a, T> {
-    pub fn new(builder: &'a mut LyonPathBuilder<T>, face: &'a Face<'a>) -> Self {
-        Self { builder, face }
-    }
-}
-
-impl<'a, T: BuildPath> Painter<'a> for LyonPathBuilderForPaint<'a, T> {
-    fn outline_glyph(&mut self, glyph_id: ttf_parser::GlyphId) {
-        self.face.outline_glyph(glyph_id, self.builder);
-    }
-
-    fn paint(&mut self, paint: Paint<'a>) {
-        let color = match paint {
-            Paint::Solid(rgba_color) => rgba_color,
-            Paint::LinearGradient(linear_gradient) => {
-                let stop = linear_gradient
-                    .stops(0, &[NormalizedCoordinate::default()])
-                    .next();
-                stop.map_or(RgbaColor::new(0, 0, 0, 255), |cs| cs.color)
-            }
-            Paint::RadialGradient(radial_gradient) => {
-                let stop = radial_gradient
-                    .stops(0, &[NormalizedCoordinate::default()])
-                    .next();
-                stop.map_or(RgbaColor::new(0, 0, 0, 255), |cs| cs.color)
-            }
-            Paint::SweepGradient(sweep_gradient) => {
-                let stop = sweep_gradient
-                    .stops(0, &[NormalizedCoordinate::default()])
-                    .next();
-                stop.map_or(RgbaColor::new(0, 0, 0, 255), |cs| cs.color)
-            }
-        };
-        self.builder
-            .layer_color
-            .insert(self.builder.cur_layer, color);
-        self.builder.push_layer();
-    }
-
-    fn push_clip(&mut self) {
-        // ignore
-    }
-
-    fn push_clip_box(&mut self, _clipbox: ttf_parser::colr::ClipBox) {
-        // ignore
-    }
-
-    fn pop_clip(&mut self) {
-        // ignore
-    }
-
-    fn push_layer(&mut self, _mode: ttf_parser::colr::CompositeMode) {
-        // ignore. Only paint can push layer
-    }
-
-    fn pop_layer(&mut self) {
-        // ignore
-    }
-
-    fn push_transform(&mut self, transform: ttf_parser::Transform) {
-        let transform = lyon::geom::euclid::Transform2D::new(
-            // cf. https://learn.microsoft.com/en-us/typography/opentype/spec/colr#formats-12-and-13-painttransform-paintvartransform
-            transform.a, // xx
-            transform.b, // yx
-            transform.c, // xy
-            transform.d, // yy
-            transform.e, // dx
-            transform.f, // dy
-        );
-        self.builder.set_transform(transform);
-    }
-
-    fn pop_transform(&mut self) {
-        self.builder
-            .set_transform(lyon::geom::euclid::Transform2D::identity());
     }
 }
