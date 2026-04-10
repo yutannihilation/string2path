@@ -66,14 +66,29 @@ impl<T: BuildPath> LyonPathBuilder<T> {
             let mut collection = FONT_COLLECTION.lock().unwrap();
             let mut result = None;
             if let Some(family) = collection.family_by_name(font_family) {
-                if let Some(font_info) = family.match_font(
+                let font_info = family.match_font(
                     fontique::FontWidth::from_ratio(1.0),
                     style,
                     fontique::FontWeight::new(weight_value),
                     false,
-                ) {
-                    if let Some(data) = font_info.load(None) {
-                        result = Some((data, font_info.index()));
+                );
+
+                // fontique's match_font() compares only the OS/2 default weight
+                // and may pick a static face over a variable one. When the matched
+                // font is static, prefer a variable font from the same family so
+                // that weight/style can be applied via variation axes.
+                let font_info = match font_info {
+                    Some(fi) if !fi.has_weight_axis() => family
+                        .fonts()
+                        .iter()
+                        .find(|f| f.has_weight_axis())
+                        .or(Some(fi)),
+                    other => other,
+                };
+
+                if let Some(fi) = font_info {
+                    if let Some(data) = fi.load(None) {
+                        result = Some((data, fi.index()));
                     }
                 }
             }
