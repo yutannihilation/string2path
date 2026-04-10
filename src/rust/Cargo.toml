@@ -16,7 +16,7 @@ lto = true
 panic = "abort"
 
 [dependencies]
-savvy = "0.9.5-rc.1"
+savvy = "0.10.0"
 fontique = "0.8"
 skrifa = "0.42"
 lyon = "1.0"
