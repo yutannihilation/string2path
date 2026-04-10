@@ -24,6 +24,62 @@ impl StrokeVertexConstructor<Vertex> for VertexCtor {
     }
 }
 
+/// Split a lyon `Path` (which may contain contours for multiple glyphs) into
+/// per-glyph sub-paths using the `glyph_id_map` that maps path-id → glyph-id.
+///
+/// Returns `(glyph_id, sub_path)` pairs in drawing order, with all contours of
+/// the same glyph merged into one `Path` so that the tessellator can correctly
+/// handle holes (e.g. the counter of the letter "O").
+fn split_path_by_glyph(
+    path: &lyon::path::Path,
+    glyph_id_map: &std::collections::HashMap<u32, u32>,
+    cur_path_id: &mut u32,
+) -> Vec<(i32, lyon::path::Path)> {
+    let mut glyph_builders: Vec<(i32, lyon::path::path::Builder)> = Vec::new();
+
+    for event in path.iter() {
+        match event {
+            path::Event::Begin { at } => {
+                *cur_path_id += 1;
+                let gid = *glyph_id_map.get(cur_path_id).unwrap_or(&0) as i32;
+
+                // Start a new builder when the glyph changes.
+                if glyph_builders.last().map_or(true, |(id, _)| *id != gid) {
+                    glyph_builders.push((gid, lyon::path::Path::builder()));
+                }
+                glyph_builders.last_mut().unwrap().1.begin(at);
+            }
+            path::Event::Line { to, .. } => {
+                if let Some((_, b)) = glyph_builders.last_mut() {
+                    b.line_to(to);
+                }
+            }
+            path::Event::Quadratic { ctrl, to, .. } => {
+                if let Some((_, b)) = glyph_builders.last_mut() {
+                    b.quadratic_bezier_to(ctrl, to);
+                }
+            }
+            path::Event::Cubic {
+                ctrl1, ctrl2, to, ..
+            } => {
+                if let Some((_, b)) = glyph_builders.last_mut() {
+                    b.cubic_bezier_to(ctrl1, ctrl2, to);
+                }
+            }
+            path::Event::End { close, .. } => {
+                if let Some((_, b)) = glyph_builders.last_mut() {
+                    b.end(close);
+                }
+            }
+        }
+    }
+
+    glyph_builders
+        .into_iter()
+        .map(|(gid, b)| (gid, b.build()))
+        .collect()
+}
+
 impl LyonPathBuilderForStrokeAndFill {
     /// Convert the outline paths into fill as triangles.
     pub fn into_fill(mut self) -> PathTibble {
@@ -42,32 +98,24 @@ impl LyonPathBuilderForStrokeAndFill {
             color,
         };
 
-        // Will contain the result of the tessellation.
         let mut tessellator = FillTessellator::new();
         let options = FillOptions::tolerance(self.tolerance).with_fill_rule(FillRule::NonZero);
 
         let mut cur_path_id: u32 = 0;
         for (path, color) in paths {
-            let path_id_inc = path
-                .iter()
-                .filter(|x| matches!(x, path::Event::Begin { .. }))
-                .count();
-            cur_path_id += path_id_inc as u32;
+            let glyph_paths = split_path_by_glyph(&path, &self.glyph_id_map, &mut cur_path_id);
 
-            let mut geometry: VertexBuffers<Vertex, usize> = VertexBuffers::new();
-            {
-                // Compute the tessellation.
+            for (cur_glyph_id, glyph_path) in glyph_paths {
+                let mut geometry: VertexBuffers<Vertex, usize> = VertexBuffers::new();
                 tessellator
                     .tessellate_path(
-                        &path,
+                        &glyph_path,
                         &options,
                         &mut BuffersBuilder::new(&mut geometry, VertexCtor {}),
                     )
                     .unwrap();
+                extract_vertex_buffer(geometry, &mut result, color, cur_glyph_id);
             }
-
-            let cur_glyph_id = *self.glyph_id_map.get(&cur_path_id).unwrap_or(&0) as i32;
-            extract_vertex_buffer(geometry, &mut result, color, cur_glyph_id);
         }
         result
     }
@@ -89,32 +137,24 @@ impl LyonPathBuilderForStrokeAndFill {
             color,
         };
 
-        let mut cur_path_id: u32 = 0;
-
-        // Will contain the result of the tessellation.
         let mut tessellator = StrokeTessellator::new();
         let options = StrokeOptions::tolerance(self.tolerance).with_line_width(self.line_width);
-        for (path, color) in paths {
-            let path_id_inc = path
-                .iter()
-                .filter(|x| matches!(x, path::Event::Begin { .. }))
-                .count();
-            cur_path_id += path_id_inc as u32;
 
-            let mut geometry: VertexBuffers<Vertex, usize> = VertexBuffers::new();
-            {
-                // Compute the tessellation.
+        let mut cur_path_id: u32 = 0;
+        for (path, color) in paths {
+            let glyph_paths = split_path_by_glyph(&path, &self.glyph_id_map, &mut cur_path_id);
+
+            for (cur_glyph_id, glyph_path) in glyph_paths {
+                let mut geometry: VertexBuffers<Vertex, usize> = VertexBuffers::new();
                 tessellator
                     .tessellate_path(
-                        &path,
+                        &glyph_path,
                         &options,
                         &mut BuffersBuilder::new(&mut geometry, VertexCtor {}),
                     )
                     .unwrap();
+                extract_vertex_buffer(geometry, &mut result, color, cur_glyph_id);
             }
-
-            let cur_glyph_id = *self.glyph_id_map.get(&cur_path_id).unwrap_or(&0) as i32;
-            extract_vertex_buffer(geometry, &mut result, color, cur_glyph_id);
         }
         result
     }
