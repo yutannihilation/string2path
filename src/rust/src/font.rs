@@ -49,22 +49,10 @@ impl<T: BuildPath> LyonPathBuilder<T> {
         &mut self,
         text: &str,
         font_family: &str,
-        font_weight: &str,
+        font_weight: f64,
         font_style: &str,
     ) -> savvy::Result<()> {
-        #[rustfmt::skip]
-        let weight_value: f32 = match font_weight {
-            "thin"       => 100.0,
-            "extra_thin" => 200.0,
-            "light"      => 300.0,
-            "normal"     => 400.0,
-            "medium"     => 500.0,
-            "semibold"   => 600.0,
-            "bold"       => 700.0,
-            "extra_bold" => 800.0,
-            "black"      => 900.0,
-            _            => 400.0,
-        };
+        let weight_value = font_weight as f32;
 
         #[rustfmt::skip]
         let style = match font_style {
@@ -243,10 +231,7 @@ impl<T: BuildPath> LyonPathBuilder<T> {
                 // Currently falling back to regular outline rendering only.
                 if let Some(glyph) = outlines.get(cur_glyph) {
                     glyph
-                        .draw(
-                            DrawSettings::unhinted(Size::unscaled(), location),
-                            self,
-                        )
+                        .draw(DrawSettings::unhinted(Size::unscaled(), location), self)
                         .map_err(|e| savvy::Error::new(e.to_string()))?;
                 }
             }

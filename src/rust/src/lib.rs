@@ -17,7 +17,7 @@ enum ConversionType {
 fn string2any_family(
     text: &str,
     font_family: &str,
-    font_weight: &str,
+    font_weight: f64,
     font_style: &str,
     tolerance: f64,
     line_width: f64,
@@ -76,7 +76,7 @@ fn string2any_file(
 fn string2path_family(
     text: &str,
     font_family: &str,
-    font_weight: &str,
+    font_weight: f64,
     font_style: &str,
     tolerance: f64,
 ) -> savvy::Result<savvy::Sexp> {
@@ -100,7 +100,7 @@ fn string2path_file(text: &str, font_file: &str, tolerance: f64) -> savvy::Resul
 fn string2stroke_family(
     text: &str,
     font_family: &str,
-    font_weight: &str,
+    font_weight: f64,
     font_style: &str,
     tolerance: f64,
     line_width: f64,
@@ -136,7 +136,7 @@ fn string2stroke_file(
 fn string2fill_family(
     text: &str,
     font_family: &str,
-    font_weight: &str,
+    font_weight: f64,
     font_style: &str,
     tolerance: f64,
 ) -> savvy::Result<savvy::Sexp> {
@@ -160,7 +160,7 @@ fn string2fill_file(text: &str, font_file: &str, tolerance: f64) -> savvy::Resul
 fn dump_fontdb_impl() -> savvy::Result<savvy::Sexp> {
     let mut index: Vec<i32> = Vec::new();
     let mut family: Vec<String> = Vec::new();
-    let mut weight: Vec<String> = Vec::new();
+    let mut weight: Vec<f64> = Vec::new();
     let mut style: Vec<String> = Vec::new();
 
     let mut collection = FONT_COLLECTION.lock().unwrap();
@@ -177,19 +177,7 @@ fn dump_fontdb_impl() -> savvy::Result<savvy::Sexp> {
             index.push(font_info.index() as i32);
             family.push(name.clone());
 
-            #[rustfmt::skip]
-            weight.push(match font_info.weight().value() as u32 {
-                100 => "thin",
-                200 => "extra_light",
-                300 => "light",
-                400 => "normal",
-                500 => "medium",
-                600 => "semibold",
-                700 => "bold",
-                800 => "extra_bold",
-                900 => "black",
-                _   => "unknown",
-            }.to_string());
+            weight.push(font_info.weight().value() as f64);
 
             style.push(
                 match font_info.style() {
