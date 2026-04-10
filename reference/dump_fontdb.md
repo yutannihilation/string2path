@@ -13,10 +13,6 @@ dump_fontdb()
 
 A `tibble()` containing these columns:
 
-- source:
-
-  The source file of the font face.
-
 - index:
 
   The index of the font face within the source.

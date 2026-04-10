@@ -140,5 +140,7 @@ if (nrow(available_fonts) > 0) {
     }
   }
 }
-#> Error : Failed to outline char 'T' (Glyph ID 0: unknown)
+
+
+
 ```

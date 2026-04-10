@@ -35,11 +35,23 @@ package version 0.2.2.9000,
     autocfg (version 1.4.0):
       Josh Stone
 
-    cc (version 1.2.16):
+    bitflags (version 2.11.0):
+      The Rust Project Developers
+
+    bytemuck_derive (version 1.10.2):
+      Lokathor
+
+    bytemuck (version 1.25.0):
+      Lokathor
+
+    cc (version 1.2.27):
       Alex Crichton
 
-    core_maths (version 0.1.1):
-      Robert Bastian <me@robertbastian.dev
+    cfg-if (version 1.0.4):
+      Alex Crichton
+
+    dlib (version 0.5.3):
+      Elinor Berger
 
     euclid (version 0.22.11):
       The Servo Project Developers
@@ -47,23 +59,44 @@ package version 0.2.2.9000,
     float_next_after (version 1.0.0):
       Bronson Brown-deVost
 
-    fontconfig-parser (version 0.5.7):
+    foldhash (version 0.2.0):
+      Orson Peters
+
+    font-types (version 0.11.2):
 
 
-    fontdb (version 0.22.0):
-      Yevhenii Reizner
+    fontique (version 0.8.0):
 
-    libc (version 0.2.171):
+
+    hashbrown (version 0.16.1):
+      Amanieu d'Antras
+
+    i_float (version 1.16.0):
+      Nail Sharipov
+
+    i_key_sort (version 0.10.1):
+      Nail Sharipov
+
+    i_overlay (version 4.5.1):
+      Nail Sharipov
+
+    i_shape (version 1.18.0):
+      Nail Sharipov
+
+    i_tree (version 0.18.0):
+      Nail Sharipov
+
+    libc (version 0.2.174):
       The Rust Project Developers
 
-    libm (version 0.2.11):
+    libloading (version 0.8.9):
+      Simonas Kazlauskas
+
+    libm (version 0.2.15):
       Jorge Aparicio
 
-    log (version 0.4.26):
-      The Rust Project Developers
+    linebender_resource_handle (version 0.1.1):
 
-    lyon (version 1.0.1):
-      Nicolas Silva
 
     lyon_algorithms (version 1.0.5):
       Nicolas Silva
@@ -71,45 +104,77 @@ package version 0.2.2.9000,
     lyon_geom (version 1.0.6):
       Nicolas Silva
 
-    lyon_path (version 1.0.6):
+    lyon_path (version 1.0.7):
       Nicolas Silva
 
     lyon_tessellation (version 1.0.15):
       Nicolas Silva
 
-    memmap2 (version 0.9.5):
+    lyon (version 1.0.1):
+      Nicolas Silva
+
+    memchr (version 2.8.0):
+      Andrew Gallant
+      bluss
+
+    memmap2 (version 0.9.10):
       Dan Burkert
       Yevhenii Reizner
+      The Contributors
 
     num-traits (version 0.2.19):
       The Rust Project Developers
 
-    once_cell (version 1.20.3):
+    objc2-core-foundation (version 0.3.2):
+
+
+    objc2-core-text (version 0.3.2):
+
+
+    objc2-encode (version 4.1.0):
+      Mads Marquart
+
+    objc2-foundation (version 0.3.2):
+
+
+    objc2 (version 0.6.4):
+      Mads Marquart
+
+    once_cell (version 1.21.3):
       Aleksey Kladov
 
-    proc-macro2 (version 1.0.93):
+    parlance (version 0.1.0):
+
+
+    pkg-config (version 0.3.32):
+      Alex Crichton
+
+    proc-macro2 (version 1.0.95):
       David Tolnay
       Alex Crichton
 
-    quote (version 1.0.38):
+    quote (version 1.0.40):
       David Tolnay
 
-    roxmltree (version 0.20.0):
+    read-fonts (version 0.37.0):
+
+
+    read-fonts (version 0.39.1):
+
+
+    roxmltree (version 0.21.1):
       Yevhenii Reizner
 
-    rustversion (version 1.0.19):
-      David Tolnay
-
-    savvy-bindgen (version 0.8.7):
+    savvy-bindgen (version 0.9.4):
       Hiroaki Yutani
 
-    savvy-ffi (version 0.8.7):
+    savvy-ffi (version 0.9.4):
       Hiroaki Yutani
 
-    savvy-macro (version 0.8.7):
+    savvy-macro (version 0.9.4):
       Hiroaki Yutani
 
-    savvy (version 0.8.7):
+    savvy (version 0.9.4):
       Hiroaki Yutani
 
     shlex (version 1.3.0):
@@ -120,29 +185,52 @@ package version 0.2.2.9000,
       Daniel Parks
       Garrett Berg
 
-    slotmap (version 1.0.7):
-      Orson Peters
+    skrifa (version 0.42.0):
 
-    syn (version 2.0.98):
+
+    smallvec (version 1.15.1):
+      The Servo Project Developers
+
+    syn (version 2.0.103):
       David Tolnay
-
-    tinyvec (version 1.8.1):
-      Lokathor
-
-    tinyvec_macros (version 0.1.1):
-      Soveu
-
-    ttf-parser (version 0.24.1):
-      Yevhenii Reizner
-
-    ttf-parser (version 0.25.1):
-      Caleb Maclennan
-      Laurenz Stampfl
-      Yevhenii Reizner
-      خالد حسني (Khaled Hosny)
 
     unicode-ident (version 1.0.18):
       David Tolnay
 
-    version_check (version 0.9.5):
-      Sergio Benitez
+    windows-collections (version 0.3.2):
+
+
+    windows-core (version 0.62.2):
+
+
+    windows-future (version 0.3.2):
+
+
+    windows-implement (version 0.60.2):
+
+
+    windows-interface (version 0.59.3):
+
+
+    windows-link (version 0.2.1):
+
+
+    windows-numerics (version 0.3.1):
+
+
+    windows-result (version 0.4.1):
+
+
+    windows-strings (version 0.5.1):
+
+
+    windows-threading (version 0.2.1):
+
+
+    windows (version 0.62.2):
+
+
+    yeslogic-fontconfig-sys (version 6.0.0):
+      Austin Bonander
+      The Servo Project Developers
+      YesLogic Pty. Ltd.

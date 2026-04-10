@@ -2,6 +2,11 @@
 
 ## string2path (development version)
 
+- Migrate to fontique and skrifa
+  ([\#99](https://github.com/yutannihilation/string2path/issues/99)).
+  - Support variable fonts.
+  - Drop support for WASM for now.
+
 ## string2path 0.2.2
 
 CRAN release: 2025-03-25
