@@ -38,10 +38,10 @@ package version 0.2.2.9000,
     bitflags (version 2.11.0):
       The Rust Project Developers
 
-    bytemuck_derive (version 1.10.2):
+    bytemuck (version 1.25.0):
       Lokathor
 
-    bytemuck (version 1.25.0):
+    bytemuck_derive (version 1.10.2):
       Lokathor
 
     cc (version 1.2.27):
@@ -98,6 +98,9 @@ package version 0.2.2.9000,
     linebender_resource_handle (version 0.1.1):
 
 
+    lyon (version 1.0.1):
+      Nicolas Silva
+
     lyon_algorithms (version 1.0.5):
       Nicolas Silva
 
@@ -108,9 +111,6 @@ package version 0.2.2.9000,
       Nicolas Silva
 
     lyon_tessellation (version 1.0.15):
-      Nicolas Silva
-
-    lyon (version 1.0.1):
       Nicolas Silva
 
     memchr (version 2.8.0):
@@ -165,16 +165,16 @@ package version 0.2.2.9000,
     roxmltree (version 0.21.1):
       Yevhenii Reizner
 
-    savvy-bindgen (version 0.9.4):
+    savvy-bindgen (version 0.10.0):
       Hiroaki Yutani
 
-    savvy-ffi (version 0.9.4):
+    savvy-ffi (version 0.10.0):
       Hiroaki Yutani
 
-    savvy-macro (version 0.9.4):
+    savvy-macro (version 0.10.0):
       Hiroaki Yutani
 
-    savvy (version 0.9.4):
+    savvy (version 0.10.0):
       Hiroaki Yutani
 
     shlex (version 1.3.0):
