@@ -5,6 +5,8 @@ use crate::builder::{BuildPath, LyonPathBuilder};
 use once_cell::sync::Lazy;
 use skrifa::outline::DrawSettings;
 use skrifa::prelude::{LocationRef, Size};
+use skrifa::raw::TableProvider;
+use skrifa::raw::tables::kern::SubtableKind;
 use skrifa::{FontRef, GlyphId, MetadataProvider};
 
 pub(crate) static FONT_COLLECTION: Lazy<Mutex<fontique::Collection>> = Lazy::new(|| {
@@ -167,9 +169,9 @@ impl<T: BuildPath> LyonPathBuilder<T> {
             // Even when we cannot find a glyph, fall back to .notdef (GlyphId 0).
             let cur_glyph = charmap.map(c).unwrap_or(GlyphId::new(0));
 
-            // TODO: Implement kerning using skrifa's kern table access.
-            // Currently returning 0 for all kerning pairs.
-            let _ = prev_glyph;
+            if let Some(prev) = prev_glyph {
+                self.add_offset_x(find_kerning(&font, prev, cur_glyph));
+            }
 
             if !c.is_whitespace() {
                 // TODO: Implement COLR color glyph support via skrifa::color::ColorPainter.
@@ -193,4 +195,28 @@ impl<T: BuildPath> LyonPathBuilder<T> {
 
         Ok(())
     }
+}
+
+/// Returns the kerning adjustment (in font design units) for the given glyph pair.
+/// Iterates `kern` table subtables and returns the first matching horizontal kern value.
+/// Returns 0.0 if no kerning information is available.
+fn find_kerning(font: &FontRef<'_>, left: GlyphId, right: GlyphId) -> f32 {
+    let Ok(kern) = font.kern() else { return 0.0 };
+    for subtable in kern.subtables() {
+        let Ok(subtable) = subtable else { continue };
+        if !subtable.is_horizontal() {
+            continue;
+        }
+        let Ok(kind) = subtable.kind() else { continue };
+        let value = match kind {
+            SubtableKind::Format0(f) => f.kerning(left, right),
+            SubtableKind::Format2(f) => f.kerning(left, right),
+            SubtableKind::Format3(f) => f.kerning(left, right),
+            SubtableKind::Format1(_) => None, // state machine format, not supported
+        };
+        if let Some(v) = value {
+            return v as f32;
+        }
+    }
+    0.0
 }
