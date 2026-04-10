@@ -45,7 +45,7 @@ install.packages("string2path",
 
 If you want to install from source, you need to have Rust toolchain
 installed before trying to install this package. See
-<https://www.rust-lang.org/tools/install> for the installation
+<https://rust-lang.org/tools/install/> for the installation
 instructions.
 
 ## Example

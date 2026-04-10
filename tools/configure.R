@@ -151,7 +151,7 @@ cat(sprintf("
 [cargo check result]
 %s
 
-Please refer to <https://www.rust-lang.org/tools/install> to install Rust.
+Please refer to <https://rust-lang.org/tools/install/> to install Rust.
 
 ---------------------------------------------------------------
 
