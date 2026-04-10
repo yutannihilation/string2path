@@ -44,8 +44,7 @@ impl LyonPathBuilderForPath {
                         }
                         // i_overlay needs at least 3 distinct points to form a polygon.
                         if cur_contour.len() >= 3 {
-                            let gid =
-                                *self.glyph_id_map.get(&cur_path_id).unwrap_or(&0);
+                            let gid = *self.glyph_id_map.get(&cur_path_id).unwrap_or(&0);
                             if !glyph_order.contains(&gid) {
                                 glyph_order.push(gid);
                             }

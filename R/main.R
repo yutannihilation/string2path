@@ -9,7 +9,7 @@
 #' @param text A text to convert to paths.
 #' @param font A font family (e.g. `"Arial"`) or a path to a font file (e.g.
 #'   `"path/to/font.ttf"`).
-#' @param font_weight A font weight.
+#' @param font_weight A font weight (e.g. `"normal"`, `400`).
 #' @param font_style A font style.
 #' @param tolerance Maximum distance allowed between the curve and its
 #'   approximation. For more details, please refer to [the documentation of the
@@ -78,10 +78,10 @@ string2path <- function(
   text,
   font,
   font_weight = c(
-    "normal",
     "thin",
     "extra_thin",
     "light",
+    "normal",
     "medium",
     "semibold",
     "bold",
@@ -101,7 +101,12 @@ string2path <- function(
     font <- path.expand(font)
     tibble::as_tibble(string2path_file(text, font, tolerance))
   } else {
-    font_weight <- match.arg(font_weight)
+    font_weight <- if (missing(font_weight)) {
+      400.0
+    } else {
+      font_weight_to_number(font_weight)
+    }
+
     font_style <- match.arg(font_style)
 
     tibble::as_tibble(
@@ -116,10 +121,10 @@ string2stroke <- function(
   text,
   font,
   font_weight = c(
-    "normal",
     "thin",
     "extra_thin",
     "light",
+    "normal",
     "medium",
     "semibold",
     "bold",
@@ -140,7 +145,12 @@ string2stroke <- function(
     font <- path.expand(font)
     tibble::as_tibble(string2stroke_file(text, font, tolerance, line_width))
   } else {
-    font_weight <- match.arg(font_weight)
+    font_weight <- if (missing(font_weight)) {
+      400.0
+    } else {
+      font_weight_to_number(font_weight)
+    }
+
     font_style <- match.arg(font_style)
 
     tibble::as_tibble(
@@ -162,10 +172,10 @@ string2fill <- function(
   text,
   font,
   font_weight = c(
-    "normal",
     "thin",
     "extra_thin",
     "light",
+    "normal",
     "medium",
     "semibold",
     "bold",
@@ -185,7 +195,12 @@ string2fill <- function(
     font <- path.expand(font)
     tibble::as_tibble(string2fill_file(text, font, tolerance))
   } else {
-    font_weight <- match.arg(font_weight)
+    font_weight <- if (missing(font_weight)) {
+      400.0
+    } else {
+      font_weight_to_number(font_weight)
+    }
+
     font_style <- match.arg(font_style)
 
     tibble::as_tibble(
@@ -197,4 +212,44 @@ string2fill <- function(
 # Hope there's no fonts whose family name ends with .ttf or .otf!
 is_font_file <- function(x) {
   isTRUE(endsWith(x, ".ttf") || endsWith(x, ".otf"))
+}
+
+FONT_WEIGHTS <- c(
+  "thin",
+  "extra_thin",
+  "light",
+  "normal",
+  "medium",
+  "semibold",
+  "bold",
+  "extra_bold",
+  "black"
+)
+
+font_weight_to_number <- function(x) {
+  if (length(x) != 1) {
+    cli::cli_abort(
+      "{.arg font_weight} must be a positive numeric or a character"
+    )
+  }
+
+  if (is.numeric(x)) {
+    if (isTRUE(x > 0.0) && is.finite(x)) {
+      return(as.numeric(x))
+    } else {
+      cli::cli_abort(
+        "{.arg font_weight} must be a positive numeric or a character"
+      )
+    }
+  }
+
+  idx <- match(x, FONT_WEIGHTS)
+
+  if (isTRUE(!is.na(idx))) {
+    100 * idx
+  } else {
+    cli::cli_abort(
+      "{.arg font_weight} must be a positive numeric or a character"
+    )
+  }
 }

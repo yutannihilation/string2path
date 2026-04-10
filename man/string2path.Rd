@@ -9,7 +9,7 @@
 string2path(
   text,
   font,
-  font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold", "bold",
+  font_weight = c("thin", "extra_thin", "light", "normal", "medium", "semibold", "bold",
     "extra_bold", "black"),
   font_style = c("normal", "italic", "oblique"),
   tolerance = 5e-05
@@ -18,7 +18,7 @@ string2path(
 string2stroke(
   text,
   font,
-  font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold", "bold",
+  font_weight = c("thin", "extra_thin", "light", "normal", "medium", "semibold", "bold",
     "extra_bold", "black"),
   font_style = c("normal", "italic", "oblique"),
   tolerance = 5e-05,
@@ -28,7 +28,7 @@ string2stroke(
 string2fill(
   text,
   font,
-  font_weight = c("normal", "thin", "extra_thin", "light", "medium", "semibold", "bold",
+  font_weight = c("thin", "extra_thin", "light", "normal", "medium", "semibold", "bold",
     "extra_bold", "black"),
   font_style = c("normal", "italic", "oblique"),
   tolerance = 5e-05
@@ -40,7 +40,7 @@ string2fill(
 \item{font}{A font family (e.g. \code{"Arial"}) or a path to a font file (e.g.
 \code{"path/to/font.ttf"}).}
 
-\item{font_weight}{A font weight.}
+\item{font_weight}{A font weight (e.g. \code{"normal"}, \code{400}).}
 
 \item{font_style}{A font style.}
 

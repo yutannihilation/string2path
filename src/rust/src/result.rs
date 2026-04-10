@@ -73,7 +73,7 @@ impl TryFrom<PathTibble> for savvy::Sexp {
 pub struct FontDBTibble {
     pub index: Vec<i32>,
     pub family: Vec<String>,
-    pub weight: Vec<String>,
+    pub weight: Vec<f64>,
     pub style: Vec<String>,
 }
 
@@ -95,7 +95,7 @@ impl TryFrom<FontDBTibble> for savvy::Sexp {
         out.set_name_and_value(
             2,
             "weight",
-            <OwnedStringSexp>::try_from(value.weight.as_slice())?,
+            <OwnedRealSexp>::try_from(value.weight.as_slice())?,
         )?;
         out.set_name_and_value(
             3,
