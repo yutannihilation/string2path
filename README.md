@@ -3,8 +3,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/yutannihilation/string2path/actions/workflows/check-full.yaml/badge.svg)](https://github.com/yutannihilation/string2path/actions/workflows/check-full.yaml)
-[![Lifecycle:
+[![R-CMD-check](https://github.com/yutannihilation/string2path/actions/workflows/check-full.yaml/badge.svg)](https://github.com/yutannihilation/string2path/actions/workflows/check-full.yaml)[![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/string2path)](https://CRAN.R-project.org/package=string2path)
@@ -19,9 +18,8 @@ powered by [the savvy
 framework](https://yutannihilation.github.io/savvy/guide/) to use these
 two Rust crates:
 
-- [ttf-parser](https://github.com/harfbuzz/ttf-parser) for parsing
-  font data. TrueType font (`.ttf`) and OpenType font (`.otf`) are
-  supported.
+- [ttf-parser](https://github.com/harfbuzz/ttf-parser) for parsing font
+  data. TrueType font (`.ttf`) and OpenType font (`.otf`) are supported.
 - [lyon](https://github.com/nical/lyon/) for tessellation of polygons
   and flattening the curves.
 
@@ -59,12 +57,13 @@ library(string2path)
 library(ggplot2)
 
 d <- string2path("カラテが\n高まる。", "Noto Sans JP", font_weight = "bold")
-
 d <- tibble::rowid_to_column(d)
 
 ggplot(d) +
-  geom_path(aes(x, y, group = path_id, colour = factor(glyph_id)),
-            linewidth = 1.5) +
+  geom_path(
+    aes(x, y, group = path_id, colour = factor(glyph_id)),
+    linewidth = 1.5
+  ) +
   theme_minimal() +
   coord_equal() +
   theme(legend.position = "top") +
@@ -80,8 +79,12 @@ d <- string2path("蹴", "Noto Sans JP")
 d <- tibble::rowid_to_column(d)
 
 ggplot(d) +
-  geom_path(aes(x, y, group = path_id),
-            linewidth = 2, colour = "purple2", lineend = "round") +
+  geom_path(
+    aes(x, y, group = path_id),
+    linewidth = 2,
+    colour = "purple2",
+    lineend = "round"
+  ) +
   theme_minimal() +
   coord_equal() +
   transition_reveal(rowid)
@@ -91,7 +94,7 @@ ggplot(d) +
 
 #### `dump_fontdb()`
 
-Note that `"Noto Sans JP"` above (and `"Iosevka SS08"` below) is the
+Note that `"Noto Sans JP"` above (and `"Iosevka SS09"` below) is the
 font installed on my local machine, so the same code might not run on
 your environment. You can use `dump_fontdb()` to see the available
 combination of font family (e.g. `"Arial"`), weight (e.g. `"bold"`), and
@@ -99,20 +102,20 @@ style (e.g. `"italic"`).
 
 ``` r
 dump_fontdb()
-#> # A tibble: 449 × 5
-#>    source                                  index family        weight style 
-#>    <chr>                                   <int> <chr>         <chr>  <chr> 
-#>  1 "C:\\WINDOWS\\Fonts\\arial.ttf"             0 Arial         normal normal
-#>  2 "C:\\WINDOWS\\Fonts\\arialbd.ttf"           0 Arial         bold   normal
-#>  3 "C:\\WINDOWS\\Fonts\\arialbi.ttf"           0 Arial         bold   italic
-#>  4 "C:\\WINDOWS\\Fonts\\ariali.ttf"            0 Arial         normal italic
-#>  5 "C:\\WINDOWS\\Fonts\\ariblk.ttf"            0 Arial         black  normal
-#>  6 "C:\\WINDOWS\\Fonts\\bahnschrift.ttf"       0 Bahnschrift   normal normal
-#>  7 "C:\\WINDOWS\\Fonts\\BIZ-UDGothicB.ttc"     0 BIZ UDGothic  bold   normal
-#>  8 "C:\\WINDOWS\\Fonts\\BIZ-UDGothicB.ttc"     1 BIZ UDPGothic bold   normal
-#>  9 "C:\\WINDOWS\\Fonts\\BIZ-UDGothicR.ttc"     0 BIZ UDGothic  normal normal
-#> 10 "C:\\WINDOWS\\Fonts\\BIZ-UDGothicR.ttc"     1 BIZ UDPGothic normal normal
-#> # ℹ 439 more rows
+#> # A tibble: 2,420 × 5
+#>    source        index family                  weight   style 
+#>    <chr>         <int> <chr>                   <chr>    <chr> 
+#>  1 (system font)     0 Kohinoor Bangla         normal   normal
+#>  2 (system font)     1 Kohinoor Bangla         semibold normal
+#>  3 (system font)     2 Kohinoor Bangla         medium   normal
+#>  4 (system font)     3 Kohinoor Bangla         bold     normal
+#>  5 (system font)     4 Kohinoor Bangla         light    normal
+#>  6 (system font)     7 .PingFang UI Display MO medium   normal
+#>  7 (system font)    17 蘋方-繁                 medium   normal
+#>  8 (system font)     2 蘋方-繁                 normal   normal
+#>  9 (system font)     6 蘋方-繁                 medium   normal
+#> 10 (system font)    10 蘋方-繁                 semibold normal
+#> # ℹ 2,410 more rows
 ```
 
 You can also specify the font file directly. Pomicons is a font
@@ -143,11 +146,19 @@ ggplot(d_tmp) +
 ### `string2fill()`
 
 ``` r
-d <- string2fill("abc", "Iosevka SS08", font_weight = "bold", font_style = "italic")
+d <- string2fill(
+  "abc",
+  "Iosevka SS09",
+  font_weight = "bold",
+  font_style = "italic"
+)
 
 ggplot(d) +
-  geom_polygon(aes(x, y, group = triangle_id, fill = factor(triangle_id %% 7)),
-               colour = "grey", linewidth = 0.1) +
+  geom_polygon(
+    aes(x, y, group = triangle_id, fill = factor(triangle_id %% 7)),
+    colour = "grey",
+    linewidth = 0.1
+  ) +
   theme_minimal() +
   coord_equal() +
   theme(legend.position = "none") +
@@ -160,11 +171,20 @@ ggplot(d) +
 
 ``` r
 for (w in 1:9 * 0.01) {
-  d <- string2stroke("abc","Iosevka SS08", font_weight = "bold", font_style = "italic", line_width = w)
-  
+  d <- string2stroke(
+    "abc",
+    "Iosevka SS09",
+    font_weight = "bold",
+    font_style = "italic",
+    line_width = w
+  )
+
   p <- ggplot(d) +
-    geom_polygon(aes(x, y, group = triangle_id, fill = factor(triangle_id %% 2)),
-                 colour = "grey", linewidth = 0.1) +
+    geom_polygon(
+      aes(x, y, group = triangle_id, fill = factor(triangle_id %% 2)),
+      colour = "grey",
+      linewidth = 0.1
+    ) +
     theme_minimal() +
     coord_equal() +
     theme(legend.position = "none") +
@@ -185,11 +205,21 @@ document](https://docs.rs/lyon_geom/latest/lyon_geom/#flattening).
 
 ``` r
 for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
-  d <- string2fill("abc", "Iosevka SS08", font_weight = "bold", font_style = "italic", tolerance = tolerance)
-  
+  d <- string2fill(
+    "abc",
+    "Iosevka SS09",
+    font_weight = "bold",
+    font_style = "italic",
+    tolerance = tolerance
+  )
+
   p <- ggplot(d) +
-    geom_polygon(aes(x, y, group = triangle_id),
-                 fill = "transparent", colour = "black", linewidth = 0.5) +
+    geom_polygon(
+      aes(x, y, group = triangle_id),
+      fill = "transparent",
+      colour = "black",
+      linewidth = 0.5
+    ) +
     theme_minimal() +
     coord_equal() +
     ggtitle(paste0("tolerance: ", tolerance))
