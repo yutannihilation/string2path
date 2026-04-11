@@ -14,14 +14,13 @@ Source:
 [`DESCRIPTION`](https://github.com/yutannihilation/string2path/blob/main/DESCRIPTION)
 
 Yutani H (2026). *string2path: Rendering Font into 'data.frame'*. R
-package version 0.2.2.9000,
-<https://yutannihilation.github.io/string2path/>.
+package version 0.3.0, <https://yutannihilation.github.io/string2path/>.
 
     @Manual{,
       title = {string2path: Rendering Font into 'data.frame'},
       author = {Hiroaki Yutani},
       year = {2026},
-      note = {R package version 0.2.2.9000},
+      note = {R package version 0.3.0},
       url = {https://yutannihilation.github.io/string2path/},
     }
 
