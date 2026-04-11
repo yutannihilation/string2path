@@ -17,3 +17,5 @@ docs
 /.quarto/
 
 **/*.quarto_ipynb
+
+.claude

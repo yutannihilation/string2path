@@ -32,3 +32,5 @@
 
 ^src/rust/\.cargo$
 ^src/Makevars\.win$
+
+^\.claude$
