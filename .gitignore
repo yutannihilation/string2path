@@ -19,3 +19,4 @@ docs
 **/*.quarto_ipynb
 
 .claude
+src/rust/.claude

@@ -34,3 +34,4 @@
 ^src/Makevars\.win$
 
 ^\.claude$
+^src/rust/\.claude$
