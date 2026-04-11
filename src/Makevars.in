@@ -20,11 +20,11 @@ $(STATLIB):
 	    cp ./cargo_vendor_config.toml ./rust/.cargo/config.toml; \
 	fi
 
+	export CC="$(CC)" && \
+	export CFLAGS="$(CFLAGS)" && \
 	if [ "$(TARGET)" != "wasm32-unknown-emscripten" ]; then \
 	  @BEFORE_CARGO_BUILD@ cd ./rust && cargo build --jobs 1 --lib --release $(OFFLINE_OPTION); \
 	else \
-	  export CC="$(CC)" && \
-	  export CFLAGS="$(CFLAGS)" && \
 	  export CARGO_PROFILE_RELEASE_PANIC="abort" && \
 	  export RUSTFLAGS="$(RUSTFLAGS) -Zdefault-visibility=hidden" && \
 	  @BEFORE_CARGO_BUILD@ cd ./rust && cargo +nightly build --lib --release --target $(TARGET) -Zbuild-std=panic_abort,std $(OFFLINE_OPTION); \
