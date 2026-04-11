@@ -2,10 +2,14 @@
 
 ## string2path 0.3.0
 
+- Fix a CRAN warning about macOS deployment target mismatch on M1.
+
 - Migrate to fontique and skrifa
   ([\#99](https://github.com/yutannihilation/string2path/issues/99)).
+
   - Support variable fonts.
   - Drop support for WASM for now.
+
 - `font_weight` now accepts numeric values (e.g. `400`) in addition to
   character strings (e.g. `"normal"`).
 
