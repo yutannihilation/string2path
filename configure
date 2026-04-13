@@ -59,10 +59,9 @@ fi
 # the fallback SDK version (e.g. 26.2) can be newer than the version R's
 # compiler targets, producing an ld warning about version mismatch.
 #
-# We default to 11.0, the minimum deployment target for arm64 macOS. This is
-# safe because unwind_protect_wrapper.c uses no version-specific APIs, and a
-# lower deployment target never triggers the ld warning (which only fires when
-# an object targets a *newer* version than the link target).
+# We default to 11.0, the minimum deployment target for arm64 macOS. This
+# should be safe because unwind_protect_wrapper.c is a fairly simple C code
+# and uses no version-specific APIs.
 #
 # Note: this works for savvy, but may not hold if other crates use the cc
 # crate to build more complex C/C++ code that requires newer macOS APIs.
