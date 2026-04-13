@@ -1,5 +1,4 @@
-This is a resubmission. The previous submission had a linker warning on
-M1 macOS about an object file built for a newer macOS version than being
-linked. This was because the C compiler flags (including
-`-mmacos-version-min`) were not passed through to a C file compiled
-during the Rust build. This should be now fixed.
+This is a third submission. I'm sorry that the previous submission didn't
+succeed to fix a linker warning on M1 macOS about an object file built for a
+newer macOS version than being linked. This is now fixed by setting
+`MACOSX_DEPLOYMENT_TARGET` in `configure` before invoking cargo.

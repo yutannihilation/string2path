@@ -50,51 +50,26 @@ else
   echo "*** Detected DEBUG=true, do not override CARGO_HOME"
 fi
 
-# Detect macOS deployment target for Rust cc crate.
-# Although we export CC and CFLAGS to cargo, the cc crate does not derive the
-# deployment target from these flags. Instead, it has its own lookup:
-# MACOSX_DEPLOYMENT_TARGET env var first, then `xcrun --show-sdk-version` as
-# fallback. It passes the result as -mmacosx-version-min=<value> to the compiler.
-# Without MACOSX_DEPLOYMENT_TARGET, the fallback SDK version (e.g. 26.2) can
-# exceed the target R's compiler uses, causing an ld warning about version mismatch.
+# Set macOS deployment target for the Rust cc crate.
 #
-# Credits:
-#   - clarabel-r: https://github.com/oxfordcontrol/clarabel-r/commit/a3d5ec6a
-#   - tinyimg: https://github.com/yihui/tinyimg/pull/20
+# The cc crate (used by savvy's build.rs to compile unwind_protect_wrapper.c)
+# does not derive the deployment target from CC/CFLAGS. Instead, it looks up
+# MACOSX_DEPLOYMENT_TARGET, falling back to `xcrun --show-sdk-version`, and
+# passes the result as -mmacosx-version-min=<value>. When the env var is unset,
+# the fallback SDK version (e.g. 26.2) can be newer than the version R's
+# compiler targets, producing an ld warning about version mismatch.
+#
+# We default to 11.0, the minimum deployment target for arm64 macOS. This
+# should be safe because unwind_protect_wrapper.c is a fairly simple C code
+# and uses no version-specific APIs.
+#
+# Note: this works for savvy, but may not hold if other crates use the cc
+# crate to build more complex C/C++ code that requires newer macOS APIs.
+# In that case, this value should be raised, or detected from R's compiler.
 if [ "$(uname)" = "Darwin" ]; then
-  if [ -z "$MACOSX_DEPLOYMENT_TARGET" ]; then
-    R_CC=$("${R_HOME}/bin/R" CMD config CC)
-    R_CFLAGS=$("${R_HOME}/bin/R" CMD config CFLAGS)
-
-    # First, check if R's CC or CFLAGS contain -mmacosx-version-min=.
-    # This is the most direct way to detect the deployment target R was
-    # configured with.
-    R_FLAGS="${R_CC} ${R_CFLAGS}"
-    MACOSX_DEPLOYMENT_TARGET=$(echo "${R_FLAGS}" | \
-      sed -n 's/.*-mmacosx-version-min=\([0-9][0-9.]*\).*/\1/p' | head -n 1)
-
-    if [ -z "${MACOSX_DEPLOYMENT_TARGET}" ]; then
-      # Fallback: __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ is a
-      # preprocessor macro that Apple clang defines to indicate the minimum
-      # macOS version the compiled code will target. It is an integer encoding
-      # of the version: major * 10000 + minor * 100 + patch (e.g. 150000 =
-      # macOS 15.0.0). We preprocess an empty file with R's CC to read this
-      # value, then convert it back to a "major.minor" version string.
-      MACOSX_VERSION_MIN=$(echo "" | ${R_CC} ${R_CFLAGS} -dM -E - 2>/dev/null | \
-        grep '__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__' | \
-        awk '{print $3}')
-      if [ -n "${MACOSX_VERSION_MIN}" ]; then
-        MAJOR=$(expr "${MACOSX_VERSION_MIN}" / 10000)
-        MINOR=$(expr "${MACOSX_VERSION_MIN}" / 100 % 100)
-        MACOSX_DEPLOYMENT_TARGET="${MAJOR}.${MINOR}"
-      fi
-    fi
-  fi
-  
-  if [ -n "${MACOSX_DEPLOYMENT_TARGET}" ]; then
-    echo "using macOS deployment target: ${MACOSX_DEPLOYMENT_TARGET}"
-    BEFORE_CARGO_BUILD="${BEFORE_CARGO_BUILD}"' export MACOSX_DEPLOYMENT_TARGET="'"${MACOSX_DEPLOYMENT_TARGET}"'" \&\&'
-  fi
+  MACOSX_DEPLOYMENT_TARGET="${MACOSX_DEPLOYMENT_TARGET:-11.0}"
+  echo "using macOS deployment target: ${MACOSX_DEPLOYMENT_TARGET}"
+  BEFORE_CARGO_BUILD="${BEFORE_CARGO_BUILD}"' export MACOSX_DEPLOYMENT_TARGET="'"${MACOSX_DEPLOYMENT_TARGET}"'" \&\&'
 fi
 
 sed \
