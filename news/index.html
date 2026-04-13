@@ -34,7 +34,7 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.0" id="string2path-030">string2path 0.3.0<a class="anchor" aria-label="anchor" href="#string2path-030"></a></h2>
-<ul><li><p>Fix a CRAN warning about macOS deployment target mismatch on M1.</p></li>
+<ul><li><p>Fix a CRAN linker warning about macOS deployment target mismatch on M1 by setting <code>MACOSX_DEPLOYMENT_TARGET</code> before invoking cargo (<a href="https://github.com/yutannihilation/string2path/issues/202" class="external-link">#202</a>, <a href="https://github.com/yutannihilation/string2path/issues/208" class="external-link">#208</a>).</p></li>
 <li>
 <p>Migrate to fontique and skrifa (<a href="https://github.com/yutannihilation/string2path/issues/99" class="external-link">#99</a>).</p>
 <ul><li>Support variable fonts.</li>

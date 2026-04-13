@@ -2,7 +2,10 @@
 
 ## string2path 0.3.0
 
-- Fix a CRAN warning about macOS deployment target mismatch on M1.
+- Fix a CRAN linker warning about macOS deployment target mismatch on M1
+  by setting `MACOSX_DEPLOYMENT_TARGET` before invoking cargo
+  ([\#202](https://github.com/yutannihilation/string2path/issues/202),
+  [\#208](https://github.com/yutannihilation/string2path/issues/208)).
 
 - Migrate to fontique and skrifa
   ([\#99](https://github.com/yutannihilation/string2path/issues/99)).
