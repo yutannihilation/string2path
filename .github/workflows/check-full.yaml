@@ -18,6 +18,7 @@ jobs:
         config:
           - {os: windows-latest, r: 'release',  rust: 'stable-msvc'}
           - {os: macOS-latest,   r: 'release',  rust: 'stable'     }
+          - {os: macos-15-intel, r: 'release',  rust: 'stable'     }
           - {os: ubuntu-latest,  r: 'release',  rust: 'stable'     }
           - {os: ubuntu-latest,  r: 'devel',    rust: 'stable'     }
           - {os: ubuntu-latest,  r: 'release',  rust: 'nightly'    }
