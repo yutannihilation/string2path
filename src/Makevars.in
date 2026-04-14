@@ -26,7 +26,7 @@ $(STATLIB):
 # plain `ar`, which doesn't record GCC LTO symbols, leaving
 # unwind_protect_impl undefined at dyn.load time.
 	export CC="$(CC)" && \
-	export CFLAGS="$(CFLAGS) -flto=10 -fno-lto" && \
+	export CFLAGS="$(CFLAGS) -fno-lto" && \
 	if [ "$(TARGET)" != "wasm32-unknown-emscripten" ]; then \
 	  @BEFORE_CARGO_BUILD@ cd ./rust && cargo build --jobs 1 --lib --release $(OFFLINE_OPTION); \
 	else \
