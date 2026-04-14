@@ -2,6 +2,12 @@
 
 ## string2path (development version)
 
+- Fix Intel macOS build
+  ([\#209](https://github.com/yutannihilation/string2path/issues/209)).
+
+- Fix the case when `-flto=*` is passed to `CFLAGS`
+  ([\#210](https://github.com/yutannihilation/string2path/issues/210)).
+
 ## string2path 0.3.0
 
 CRAN release: 2026-04-13
