@@ -1,3 +1,5 @@
+# string2path (development version)
+
 # string2path 0.3.0
 
 * Fix a CRAN linker warning about macOS deployment target mismatch on M1
