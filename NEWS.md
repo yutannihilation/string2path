@@ -1,5 +1,9 @@
 # string2path (development version)
 
+* Fix Intel macOS build (#209).
+
+* Fix the case when `-flto=*` is passed to `CFLAGS` (#210).
+
 # string2path 0.3.0
 
 * Fix a CRAN linker warning about macOS deployment target mismatch on M1

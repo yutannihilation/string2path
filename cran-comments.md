@@ -1,4 +1,4 @@
-This is a third submission. I'm sorry that the previous submission didn't
-succeed to fix a linker warning on M1 macOS about an object file built for a
-newer macOS version than being linked. This is now fixed by setting
-`MACOSX_DEPLOYMENT_TARGET` in `configure` before invoking cargo.
+This is a maintainance release to address failures on CRAN machines.
+
+- x86_64 macOS: added missing flags (e.g. `-framework Foundation`).
+- gcc-ASAN: ignore `-flto=*` on compiling intermediate objects in order to prevent the symbol from getting omitted.
