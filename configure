@@ -70,6 +70,14 @@ if [ "$(uname)" = "Darwin" ]; then
   MACOSX_DEPLOYMENT_TARGET="${MACOSX_DEPLOYMENT_TARGET:-11.0}"
   echo "using macOS deployment target: ${MACOSX_DEPLOYMENT_TARGET}"
   BEFORE_CARGO_BUILD="${BEFORE_CARGO_BUILD}"' export MACOSX_DEPLOYMENT_TARGET="'"${MACOSX_DEPLOYMENT_TARGET}"'" \&\&'
+
+  # Link Apple frameworks used transitively by the font-kit / core-text Rust
+  # crates. The `#[link(..., kind = "framework")]` attributes inside those
+  # crates are dropped when the crate is consumed as a staticlib, so the
+  # final R link step must request the frameworks explicitly. Otherwise
+  # symbols like `_kCTFontURLAttribute` end up unresolved in the flat
+  # namespace and fail at dyld load time (notably on x86_64 macOS builders).
+  ADDITIONAL_PKG_LIBS="${ADDITIONAL_PKG_LIBS} -framework Foundation -framework CoreText -framework CoreFoundation -framework CoreGraphics -framework AppKit"
 fi
 
 sed \
