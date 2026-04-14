@@ -11,7 +11,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/yutannihilation/string2path/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/yutannihilation/string2path/blob/v0.3.0/DESCRIPTION)
 
 Yutani H (2026). *string2path: Rendering Font into 'data.frame'*. R
 package version 0.3.0, <https://yutannihilation.github.io/string2path/>.
