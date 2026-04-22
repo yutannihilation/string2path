@@ -1,6 +1,8 @@
 # Changelog
 
-## string2path (development version)
+## string2path 0.3.1
+
+CRAN release: 2026-04-15
 
 - Fix Intel macOS build
   ([\#209](https://github.com/yutannihilation/string2path/issues/209)).
