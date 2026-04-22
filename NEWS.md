@@ -1,3 +1,5 @@
+# string2path (development version)
+
 # string2path 0.3.1
 
 * Fix Intel macOS build (#209).
