@@ -1,5 +1,7 @@
 # Changelog
 
+## string2path (development version)
+
 ## string2path 0.3.1
 
 CRAN release: 2026-04-15
