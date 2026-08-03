@@ -2,6 +2,9 @@
 
 ## string2path (development version)
 
+- Support ARM64 Windows
+  ([\#212](https://github.com/yutannihilation/string2path/issues/212)).
+
 ## string2path 0.3.1
 
 CRAN release: 2026-04-15

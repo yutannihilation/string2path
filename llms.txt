@@ -14,6 +14,7 @@ two Rust crates:
 ## Installation
 
 ``` r
+
 install.packages("string2path")
 ```
 
@@ -23,6 +24,7 @@ The development version is available on
 [R-universe](https://r-universe.dev/):
 
 ``` r
+
 install.packages("string2path",
   repos = c(
     yutannihilation = "https://yutannihilation.r-universe.dev",
@@ -41,6 +43,7 @@ instructions.
 ### `string2path()`
 
 ``` r
+
 library(string2path)
 library(ggplot2)
 
@@ -61,6 +64,7 @@ ggplot(d) +
 ![](reference/figures/README-example-1.png)
 
 ``` r
+
 
 library(gganimate)
 d <- string2path("蹴", "Noto Sans JP")
@@ -90,6 +94,7 @@ to see the available combination of font family (e.g. `"Arial"`), weight
 (e.g. `"bold"`), and style (e.g. `"italic"`).
 
 ``` r
+
 dump_fontdb()
 #> # A tibble: 479 × 4
 #>    index family           weight style 
@@ -113,6 +118,7 @@ available on
 licensed under SIL OFL 1.1.
 
 ``` r
+
 pomicons_file <- here::here("fonts", "Pomicons.ttf")
 if (!file.exists(pomicons_file)) {
   dir.create(dirname(pomicons_file))
@@ -135,6 +141,7 @@ ggplot(d_tmp) +
 ### `string2fill()`
 
 ``` r
+
 d <- string2fill(
   "abc",
   "Iosevka",
@@ -159,6 +166,7 @@ ggplot(d) +
 ### `string2stroke()`
 
 ``` r
+
 for (w in 1:9 * 0.01) {
   d <- string2stroke(
     "abc",
@@ -193,6 +201,7 @@ official
 document](https://docs.rs/lyon_geom/latest/lyon_geom/#flattening).
 
 ``` r
+
 for (tolerance in c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7)) {
   d <- string2fill(
     "abc",
