@@ -16,20 +16,22 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: 'release',  rust: 'stable-msvc'}
-          - {os: macOS-latest,   r: 'release',  rust: 'stable'     }
-          - {os: macos-15-intel, r: 'release',  rust: 'stable'     }
-          - {os: ubuntu-latest,  r: 'release',  rust: 'stable'     }
-          - {os: ubuntu-latest,  r: 'devel',    rust: 'stable'     }
-          - {os: ubuntu-latest,  r: 'release',  rust: 'nightly'    }
+          - { os: "windows-latest", r: "release", rust: "stable-msvc" }
+          - { os: "windows-11-arm", r: "release", rust: "stable-msvc", rust_target: "aarch64-pc-windows-gnullvm"}
+          - { os: "macOS-latest",   r: "release", rust: "stable" }
+          - { os: "macos-15-intel", r: "release", rust: "stable" }
+          - { os: "ubuntu-latest",  r: "release", rust: "stable" }
+          - { os: "ubuntu-latest",  r: "devel",   rust: "stable" }
+          - { os: "ubuntu-latest",  r: "release", rust: "nightly" }
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.config.rust }}
+          targets: ${{ matrix.config.rust_target }}
 
       # - name: Run cargo test
       #   run: cargo test --manifest-path ./src/rust/Cargo.toml
@@ -49,7 +51,7 @@ jobs:
 
       - uses: r-lib/actions/check-r-package@v2
         env:
-          MAKEFLAGS: -j2   # cf. https://github.com/yutannihilation/string2path/pull/149
+          MAKEFLAGS: -j2 # cf. https://github.com/yutannihilation/string2path/pull/149
 
       - name: debug
         run: cat ./check/*.Rcheck/00install.out
