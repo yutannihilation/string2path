@@ -1,4 +1,4 @@
-TARGET = x86_64-pc-windows-gnu
+TARGET = @TARGET@
 
 # Rtools42 doesn't have the linker in the location that cargo expects, so we
 # need to overwrite it via configuration.

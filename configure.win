@@ -4,6 +4,9 @@ BEFORE_CARGO_BUILD=''
 # Check the Rust installation, and abort if not available
 "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "./tools/configure.R"
 
+# choose the appropriate target
+TARGET="$("${R_HOME}/bin${R_ARCH_BIN}/Rscript" "tools/rustarch.R")"
+
 ret=$?
 
 if [ $ret -ne 0 ]; then
@@ -30,6 +33,7 @@ else
 fi
 
 sed \
+  -e "s|@TARGET@|${TARGET}|" \
   -e "s|@BEFORE_CARGO_BUILD@|${BEFORE_CARGO_BUILD}|" \
   -e "s|@VENDORING@|${VENDORING}|" \
   -e "s|@OFFLINE_OPTION@|${OFFLINE_OPTION}|" \
