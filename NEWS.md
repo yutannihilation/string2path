@@ -1,5 +1,7 @@
 # string2path (development version)
 
+* Support ARM64 Windows (#212).
+
 # string2path 0.3.1
 
 * Fix Intel macOS build (#209).
